@@ -1,0 +1,639 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Lab 5 &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Report Guidelines" href="reportguidelines.html" />
+    <link rel="prev" title="Lab 4" href="lab4.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lectures.html">Lectures</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="labs.html">Labs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="lab1.html">Lab 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab2.html">Lab 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab3.html">Lab 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab4.html">Lab 4</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Lab 5</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#designing-a-6th-order-elliptic-bandpass-filter">Designing a 6th order elliptic bandpass filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#variant-1-unoptimized-code">Variant 1: Unoptimized Code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#variant-2-optimized-code">Variant 2: Optimized Code</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#analyzing-the-assembly-code">Analyzing the assembly code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-the-filter-using-arm-cmsis">Building the filter using ARM CMSIS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Variant 1: Unoptimized Code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Variant 2: Optimized Code</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#wrapping-up">Wrapping Up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grading-rubric">Grading Rubric</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reportguidelines.html">Report Guidelines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="labs.html">Labs</a> &raquo;</li>
+        
+      <li>Lab 5</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lab5.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lab-5">
+<h1>Lab 5<a class="headerlink" href="#lab-5" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this assignment is as follows.</p>
+<ul class="simple">
+<li>to analyze the assembly code of a 6-stage biquad filter,</li>
+<li>to analyze the impact of compiler optimization on the assembly code,</li>
+<li>to build a version of this filter using the ARM CMSIS library,</li>
+<li>to compare the performance of these filters under different compiler optimization levels.</li>
+</ul>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">To implement this lab, you can start from the code developed for Lab 3.
+If you were unable to build the code for this lab, contact the TA or the
+instructor to receive a sample solution.</p>
+</div>
+<div class="section" id="designing-a-6th-order-elliptic-bandpass-filter">
+<h2>Designing a 6th order elliptic bandpass filter<a class="headerlink" href="#designing-a-6th-order-elliptic-bandpass-filter" title="Permalink to this headline">¶</a></h2>
+<p>The filter that you will implement and study for this lab has the following specifications.</p>
+<ul class="simple">
+<li>Sample frequency: 32 KHz</li>
+<li>Elliptic IIR Bandpass Type</li>
+<li>Passband: 3500 Hz to 4500Hz</li>
+<li>Stopband 1: DC - 3300 Hz</li>
+<li>Stopband 2: 4700 Hz - fs/2</li>
+<li>Passband ripple &lt; 1dB</li>
+<li>Stopband suppression &gt; 60dB</li>
+<li>Floating Point (single-precision) design</li>
+</ul>
+<p>Compared to filters we created earlier, this is a rather challenging specification because of the steepness of the transition bands. Use Matlab’s <code class="docutils literal notranslate"><span class="pre">filterDesigner</span></code> to create this filter’s coefficients. You should be able to show that this filter requires a 12th order design, which can be implemented using 6 biquad stages.</p>
+<p>Your first task is to implement this filter in a C program for your MSP432 kit. You can build your implementation based on the solutions you created for Lab 3; simply substitute the new coefficients in the old filter, and adjust the design to use the proper number of biquad filter stages.
+You can refer to this <a class="reference external" href="https://github.com/wpi-ece4703-b20/assignment3_solved">solved Lab 3 on Github</a>, in case you don’t have fully solved Lab 3. If you use this solved design, don’t forget to
+update the coefficients with the filter specs listed above!</p>
+<p>Next, you have to optimize this 12th order filter using the C compiler under <strong>two</strong> different optimization settings. For each of the resulting implementations, you have to collect the following information.</p>
+<div class="section" id="variant-1-unoptimized-code">
+<h3>Variant 1: Unoptimized Code<a class="headerlink" href="#variant-1-unoptimized-code" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Configure the compiler to disable all optimization <em>(Project Properties - CCS Build -
+ARM Compiler - Optimization - Optimization Level Off)</em>. Compile the code.
+Collect the assembly listing for this design (main.lst) and set it aside for futher analysis later in this lab.</li>
+<li>Run the code on your board and determine the sample rate achieved by the code by measuring the
+sample frequency on the DAC SYNC pin. It is highly likely that your design will not run at the required 32 KHz, but at a lower frequency. This is because the <code class="docutils literal notranslate"><span class="pre">processSample</span></code> function
+consumes more cycles than are available in the sample period (1/(32 KHz)).</li>
+<li>Determine the clock cycle count needed to execute the processSample function.</li>
+</ol>
+<p>If you find a frequency below 32 KHz, it means that your filter design is no longer running in real-time, and therefore will no longer implement the filter characteristic you designed earlier. When the sample rate of the filter is too slow, you can observe a shift of the passband when you measure the spectrum of the filter to noise. This is an optional experiment that you can perform after you completed steps 1-3 above.</p>
+</div>
+<div class="section" id="variant-2-optimized-code">
+<h3>Variant 2: Optimized Code<a class="headerlink" href="#variant-2-optimized-code" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Configure the compiler to compiler for speed and function inlining
+<em>(Project Properties - CCS Build - ARM Compiler - Optimization -
+Interprocedure Optimizations - Optimize for Speed)</em>. Compile the code.
+Collect the assembly listing for this design (main.lst) and set it aside for futher analysis later in this lab.</li>
+<li>Run the code on your board and determine the sample rate achieved by the code by measuring the
+sample frequency of the DAC SYNC pin. It is expected that the optimized design can run at
+the required
+32KHz sample rate. If it does not run fast enough, reconsider the C code to identify any glaring issues in inefficiency.</li>
+<li>Determine the clock cycle count needed to execute the processSample function.</li>
+</ol>
+<p>Assuming that the filter sample rate is fast enough (32KHz), you will be able to observe the spectrum of the filter at the correct frequencies given in the filter specification.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Question 1: Report on the cycle count observed for each case (unoptimized and optimized), and report on the observed sample frequency produced by the DAC SYNC pin. Please make sure that
+your filter is operational, and that it is using the correct filter coefficients.
+An easy (but optional) way demonstrate this, is to show a plot of  the filter spectrum,
+as obtained using Bitscope.</p>
+</div>
+</div>
+</div>
+<div class="section" id="analyzing-the-assembly-code">
+<h2>Analyzing the assembly code<a class="headerlink" href="#analyzing-the-assembly-code" title="Permalink to this headline">¶</a></h2>
+<p>Next, you have analyze the assembly listing files collected from compiling the code.
+The objective is to create a table similar to the <a href="#id3"><span class="problematic" id="id4">asmtable_</span></a> discussed in Lecture 7.
+This table will analyze the assembly code by counting assembly instructions. You will
+collect the following information:</p>
+<ol class="arabic simple">
+<li>The number of instructions in the static program image.
+This metric represents the cost of storing instructions.</li>
+<li>The number of instructions executed to deal with data movement,
+including address expressions, and load/store operations.</li>
+<li>The number of instructions executed to deal with control,
+including loop counting and branches.</li>
+<li>The number of instructions executed for actual IIR calculations, such as
+multiply and accumulate.</li>
+</ol>
+<p>The analysis techniques are discussed in Lecture 7: you have to find a mapping between C and the assembly listing. Here are some guidelines.</p>
+<ul class="simple">
+<li>Whereas in Lecture 7 there was only a single sampleProcess function, with this new design, there may
+be nested function calls. For example, in the Lab 3 sample solution, the <cite>sampleProcess()</cite> function is calling
+six times a biquad section called <cite>iir2()</cite>. Therefore, you would apply the assembly code analysis to
+both <cite>sampleProcess()</cite> and <cite>iir2()</cite>. You do not have to analyze library code functions such as <cite>adc14_to_f32()</cite>,
+but you have to analyze all nested functions that you wrote yourself.</li>
+<li>Use an analysis process similar to the one discussed in Lecture 7. Start by looking for the
+implementation of <code class="docutils literal notranslate"><span class="pre">processSample</span></code>, and isolate the assembly instructions executed for that function as
+well as the nest functions called by it. You have to perform an analysis that partitions the instructions
+in control-related instructions, data-movement related instructions, and compute-related instructions. In case you
+are not sure about the category, please make an educated guess.</li>
+<li>The assembly code contains floating-point instructions, since the filter is running floating point precision.
+If you find instructions that you don’t recognize, you can consult the <a class="reference external" href="https://developer.arm.com/documentation/ddi0439/b/Programmers-Model/Instruction-set-summary/Cortex-M4-instructions?lang=en">list of Cortex M4 instructions</a>
+online, as well as the <a class="reference external" href="https://developer.arm.com/documentation/ddi0439/b/Floating-Point-Unit/FPU-Functional-Description/FPU-instruction-set">list of Floating Point instructions</a>.</li>
+</ul>
+<p>Here is an example, taken from the direct form I filter solution of Lab 3. The Assembly code we will analyze is that of the <code class="docutils literal notranslate"><span class="pre">iir2</span></code> function.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">float32_t</span> <span class="n">iir2</span><span class="p">(</span><span class="n">float32_t</span> <span class="n">x</span><span class="p">,</span>
+               <span class="n">float32_t</span> <span class="n">ntaps</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+               <span class="n">float32_t</span> <span class="n">dtaps</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+               <span class="n">const</span> <span class="n">float32_t</span> <span class="n">G</span><span class="p">,</span>
+               <span class="n">const</span> <span class="n">float32_t</span> <span class="n">N</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+               <span class="n">const</span> <span class="n">float32_t</span> <span class="n">D</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">float32_t</span> <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+
+    <span class="n">k1</span> <span class="o">=</span> <span class="n">N</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ntaps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">N</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">ntaps</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">k3</span> <span class="o">=</span> <span class="n">N</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">k1</span><span class="p">;</span>
+
+    <span class="n">k2</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">dtaps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">D</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">dtaps</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">y</span>  <span class="o">=</span> <span class="n">k3</span> <span class="o">-</span> <span class="n">k2</span><span class="p">;</span>
+
+    <span class="n">ntaps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ntaps</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="n">ntaps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+
+    <span class="n">dtaps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtaps</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="n">dtaps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">y</span> <span class="o">*</span> <span class="n">G</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the assembly-level analysis, you should be looking to classify each instruction in one of three categories: control, data movement, and computations. It is not required, but it may help, to take apart the meaning of every assembly instruction. This is illustrated in the comments of this listing. Note that the listing was produced using C compilation with no optimization.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iir2</span><span class="p">:</span>
+        <span class="n">SUB</span>       <span class="n">SP</span><span class="p">,</span> <span class="n">SP</span><span class="p">,</span> <span class="c1">#40           // CONTROL // control</span>
+        <span class="n">STR</span>       <span class="n">A4</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#20]         // DATA    // base address D</span>
+        <span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#16]         // DATA    // base address N</span>
+        <span class="n">STR</span>       <span class="n">A2</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#8]          // DATA    // base address dtaps</span>
+        <span class="n">VSTR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#12]         // DATA    // save S1</span>
+        <span class="n">STR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#4]          // DATA    // base address ntaps</span>
+        <span class="n">VSTR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S0</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#0]          // DATA    // save S0</span>
+
+        <span class="p">;</span> <span class="n">k1</span> <span class="o">=</span> <span class="n">N</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ntaps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">N</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">ntaps</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#16]         // DATA    // base address N</span>
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S0</span><span class="p">,</span> <span class="p">[</span><span class="n">A1</span><span class="p">,</span> <span class="c1">#8]          // DATA    // S0 = N[2]</span>
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#4]          // DATA    // taps nbase address</span>
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S1</span><span class="p">,</span> <span class="p">[</span><span class="n">A1</span><span class="p">,</span> <span class="c1">#4]          // DATA    // S1 = ntaps[1]</span>
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#16]         // DATA    // base address N</span>
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S2</span><span class="p">,</span> <span class="p">[</span><span class="n">A1</span><span class="p">,</span> <span class="c1">#4]          // DATA    // S2 = N[1]</span>
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#4]          // DATA    // base address ntaps</span>
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S3</span><span class="p">,</span> <span class="p">[</span><span class="n">A1</span><span class="p">,</span> <span class="c1">#0]          // DATA    // S3 = ntaps[0]</span>
+        <span class="n">VMUL</span><span class="o">.</span><span class="n">F32</span>  <span class="n">S0</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S0</span>            <span class="o">//</span> <span class="n">COMPUTE</span> <span class="o">//</span> <span class="n">N</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">ntaps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">VMLA</span><span class="o">.</span><span class="n">F32</span>  <span class="n">S0</span><span class="p">,</span> <span class="n">S3</span><span class="p">,</span> <span class="n">S2</span>            <span class="o">//</span> <span class="n">COMPUTE</span> <span class="o">//</span> <span class="o">+</span> <span class="n">N</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ntaps</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">VSTR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S0</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#24]         // DATA    // save in k1</span>
+
+        <span class="p">;</span> <span class="n">k3</span> <span class="o">=</span> <span class="n">N</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">k1</span><span class="p">;</span>
+
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#24]         // DATA    // k1</span>
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S0</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#0]          // DATA    // x</span>
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#16]         // DATA    // base address N</span>
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S2</span><span class="p">,</span> <span class="p">[</span><span class="n">A1</span><span class="p">,</span> <span class="c1">#0]          // DATA    // N[0]</span>
+        <span class="n">VMLA</span><span class="o">.</span><span class="n">F32</span>  <span class="n">S1</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">S2</span>            <span class="o">//</span> <span class="n">COMPUTE</span> <span class="o">//</span> <span class="n">N</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">k1</span>
+        <span class="n">VSTR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#32]         // DATA    // save N[0] * x</span>
+
+        <span class="p">;</span> <span class="n">k2</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">dtaps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">D</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">dtaps</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#20]         // DATA    // base address D</span>
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S0</span><span class="p">,</span> <span class="p">[</span><span class="n">A1</span><span class="p">,</span> <span class="c1">#8]          // DATA    // D[2]</span>
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#8]          // DATA    // base address dtaps</span>
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S1</span><span class="p">,</span> <span class="p">[</span><span class="n">A1</span><span class="p">,</span> <span class="c1">#4]          // DATA    // dtaps[1]</span>
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#20]         // DATA    // base address D</span>
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S2</span><span class="p">,</span> <span class="p">[</span><span class="n">A1</span><span class="p">,</span> <span class="c1">#4]          // DATA    // D[1]</span>
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#8]          // DATA    // base address dtaps</span>
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S3</span><span class="p">,</span> <span class="p">[</span><span class="n">A1</span><span class="p">,</span> <span class="c1">#0]          // DATA    // dtaps[0]</span>
+        <span class="n">VMUL</span><span class="o">.</span><span class="n">F32</span>  <span class="n">S0</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S0</span>            <span class="o">//</span> <span class="n">COMPUTE</span> <span class="o">//</span> <span class="n">D</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">dtaps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">VMLA</span><span class="o">.</span><span class="n">F32</span>  <span class="n">S0</span><span class="p">,</span> <span class="n">S3</span><span class="p">,</span> <span class="n">S2</span>            <span class="o">//</span> <span class="n">DATA</span>    <span class="o">//</span> <span class="o">+</span> <span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">dtaps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">VSTR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S0</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#28]         // DATA    // save in k2</span>
+
+        <span class="p">;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">k3</span> <span class="o">-</span> <span class="n">k2</span><span class="p">;</span>
+
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#32]         // DATA    // k3</span>
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S0</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#28]         // DATA    // k2</span>
+        <span class="n">VSUB</span><span class="o">.</span><span class="n">F32</span>  <span class="n">S0</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S0</span>            <span class="o">//</span> <span class="n">COMPUTE</span> <span class="o">//</span> <span class="n">k3</span> <span class="o">-</span> <span class="n">k2</span>
+        <span class="n">VSTR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S0</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#36]         // DATA    // save in y</span>
+
+        <span class="p">;</span> <span class="n">ntaps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ntaps</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#4]          // DATA    // base address ntaps</span>
+        <span class="n">LDR</span>       <span class="n">A2</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#4]          // DATA    // base address ntaps</span>
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">A1</span><span class="p">,</span> <span class="c1">#0]          // DATA    // ntaps[0]</span>
+        <span class="n">STR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">A2</span><span class="p">,</span> <span class="c1">#4]          // DATA    // save in ntaps[1]</span>
+
+        <span class="p">;</span> <span class="n">ntaps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#0]          // DATA    // x</span>
+        <span class="n">LDR</span>       <span class="n">A2</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#4]          // DATA    // base address ntaps</span>
+        <span class="n">STR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">A2</span><span class="p">,</span> <span class="c1">#0]          // DATA    // save x in ntaps[0]</span>
+
+        <span class="p">;</span> <span class="n">dtaps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtaps</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#8]          // DATA    // base address ntaps</span>
+        <span class="n">LDR</span>       <span class="n">A2</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#8]          // DATA    // base address ntaps</span>
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">A1</span><span class="p">,</span> <span class="c1">#0]          // DATA    // ntaps[0]</span>
+        <span class="n">STR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">A2</span><span class="p">,</span> <span class="c1">#4]          // DATA    // save in ntaps[1]</span>
+
+        <span class="p">;</span> <span class="n">dtaps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+        <span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#36]         // DATA    // y</span>
+        <span class="n">LDR</span>       <span class="n">A2</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#8]          // DATA    // base address dtaps</span>
+        <span class="n">STR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">A2</span><span class="p">,</span> <span class="c1">#0]          // DATA    // save y in dtaps[0]</span>
+
+        <span class="p">;</span> <span class="k">return</span> <span class="n">y</span><span class="o">*</span><span class="n">G</span>
+
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S0</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#36]         // DATA    // y</span>
+        <span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#12]         // DATA    // G</span>
+        <span class="n">VMUL</span><span class="o">.</span><span class="n">F32</span>  <span class="n">S0</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S0</span>            <span class="o">//</span> <span class="n">COMPUTE</span> <span class="o">//</span> <span class="n">y</span><span class="o">*</span><span class="n">G</span>
+        <span class="n">ADD</span>       <span class="n">SP</span><span class="p">,</span> <span class="n">SP</span><span class="p">,</span> <span class="c1">#40           // CONTROL</span>
+        <span class="n">BX</span>        <span class="n">LR</span>                    <span class="o">//</span> <span class="n">CONTROL</span>
+</pre></div>
+</div>
+<p>After this analysis, you can produce a table with the requested information.
+As a reminder, the table that you need to produce, needs to report on the
+processSample function, not just a single iir2.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="53%" />
+<col width="47%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">iir2</th>
+<th class="head">Non-optimized</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Instructions in Binary</td>
+<td>58</td>
+</tr>
+<tr class="row-odd"><td>Exec Ins Data Movement</td>
+<td>49</td>
+</tr>
+<tr class="row-even"><td>Exec Ins Control</td>
+<td>3</td>
+</tr>
+<tr class="row-odd"><td>Exec Ins Calculations</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Question 2: Analyze the complexity of the ProcessSample function using the methodology
+described above, and for both variants of your implementation: the non-optimized
+variant as well as the optimized variant.
+Please include, in your report, the assembly listings showing your work.</p>
+</div>
+</div>
+<div class="section" id="building-the-filter-using-arm-cmsis">
+<h2>Building the filter using ARM CMSIS<a class="headerlink" href="#building-the-filter-using-arm-cmsis" title="Permalink to this headline">¶</a></h2>
+<p>The ARM CMSIS library is a library with signal processing functions, optimized for the
+ARM platform. In the second half of the lab assignment, you will implement your filter
+using the ARM CMSIS library functions.</p>
+<p>The coefficients of the filter are identical to the ones you have used for your
+design for Question 1 and Question 2; you only have to perform the filtering using
+AMR CMSIS function call instead of writing your own code.</p>
+<p>A related example can be find in the code for Lecture 7, which demonstrates how
+to <a class="reference external" href="https://github.com/wpi-ece4703-b20/dsp_l7/tree/master/dsp_l7_cmsisfir">program an FIR using ARM CMSIS</a> . Documentation for the <a class="reference external" href="https://www.keil.com/pack/doc/CMSIS/DSP/html/index.html">ARM CMSIS Library</a> can be found online. The source code of ARM CMSIS is included in the MSP432 SimpleLink Software Development kit, so it’s already available on your computer.</p>
+<p>The ARM CMSIS library has a specific function to implement a series of biquads. I recommend to look into the <a class="reference external" href="https://www.keil.com/pack/doc/CMSIS/DSP/html/group__BiquadCascadeDF1.html">Biquad Implementation Direct Form I</a> functions, and in particular to <code class="docutils literal notranslate"><span class="pre">arm_biquad_cascade_df1_f32</span></code>.</p>
+<p>This function takes four arguments. Samples are filtered as a block of <code class="docutils literal notranslate"><span class="pre">blockSize</span></code> input samples stored in <code class="docutils literal notranslate"><span class="pre">pSrc</span></code> and output sampels returned in <code class="docutils literal notranslate"><span class="pre">pDst</span></code>. The filter coefficients and the filter state for all biquad sections are stored and configured in the <code class="docutils literal notranslate"><span class="pre">S</span></code> data structure.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">arm_biquad_cascade_df1_f32</span>  <span class="p">(</span> <span class="n">const</span> <span class="n">arm_biquad_casd_df1_inst_f32</span> <span class="o">*</span>  <span class="n">S</span><span class="p">,</span>
+                                   <span class="n">const</span> <span class="n">float32_t</span> <span class="o">*</span>   <span class="n">pSrc</span><span class="p">,</span>
+                                         <span class="n">float32_t</span> <span class="o">*</span>   <span class="n">pDst</span><span class="p">,</span>
+                                         <span class="n">uint32_t</span>  <span class="n">blockSize</span>
+                                 <span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">arm_biquad_casd_df1_inst_f32</span></code> data structure is a record with several fields, described in their own <a class="reference external" href="https://www.keil.com/pack/doc/CMSIS/DSP/html/structarm__biquad__casd__df1__inst__f32.html">documentation page</a>.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">struct</span>
+<span class="p">{</span>
+  <span class="n">uint32_t</span> <span class="n">numStages</span><span class="p">;</span>
+  <span class="n">float32_t</span> <span class="o">*</span><span class="n">pState</span><span class="p">;</span>
+  <span class="n">float32_t</span> <span class="o">*</span><span class="n">pCoeffs</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">arm_biquad_casd_df1_inst_f32</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>In this structure, <code class="docutils literal notranslate"><span class="pre">numStages</span></code> is the number of biquad (second-order) sections, <code class="docutils literal notranslate"><span class="pre">pState</span></code> is an
+array of <code class="docutils literal notranslate"><span class="pre">4</span> <span class="pre">*</span> <span class="pre">numStages</span></code> storing filter taps, and <code class="docutils literal notranslate"><span class="pre">pCoeffs</span></code> is an array of <code class="docutils literal notranslate"><span class="pre">5</span> <span class="pre">*</span> <span class="pre">numStages</span></code> storing filter coefficients. The coefficients are stored in the order <code class="docutils literal notranslate"><span class="pre">b0,</span> <span class="pre">b1,</span> <span class="pre">b2,</span> <span class="pre">a1,</span> <span class="pre">a2</span></code>, for each biquad sequentially. Refer to the documentation for a graphical representation of a biquad stage and its relationship to the <code class="docutils literal notranslate"><span class="pre">arm_biquad_casd_df1_inst_f32</span></code> structure.</p>
+<p>Your design will have to initialize this structure with the coefficients you computed earlier, and then run the filter using a DMA mechanism. DMA is needed because <code class="docutils literal notranslate"><span class="pre">arm_biquad_cascade_df1_f32</span></code> needs to work on a block of <code class="docutils literal notranslate"><span class="pre">blockSize</span></code> samples at a time, where <code class="docutils literal notranslate"><span class="pre">blockSize</span></code> would typically be 8.</p>
+<p>The resulting processBuffer call would look like this. It’s your job to implement the <code class="docutils literal notranslate"><span class="pre">initcascade</span></code> function that initializes the arm_biquad_casd_df1_inst_f32 with filter coefficients.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">processBuffer</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">[</span><span class="n">BUFLEN_SZ</span><span class="p">],</span> <span class="n">uint16_t</span> <span class="n">y</span><span class="p">[</span><span class="n">BUFLEN_SZ</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">adc14_to_f32_vec</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="n">BUFLEN_SZ</span><span class="p">);</span>
+    <span class="n">arm_biquad_cascade_df1_f32</span><span class="p">(</span><span class="o">&amp;</span><span class="n">S</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="n">yf</span><span class="p">,</span> <span class="n">BUFLEN_SZ</span><span class="p">);</span>
+    <span class="n">f32_to_dac14_vec</span><span class="p">(</span><span class="n">yf</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">BUFLEN_SZ</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">WDT_A_hold</span><span class="p">(</span><span class="n">WDT_A_BASE</span><span class="p">);</span>
+
+    <span class="n">initcascade</span><span class="p">(</span><span class="o">&amp;</span><span class="n">S</span><span class="p">);</span>
+    <span class="n">msp432_boostxl_init_dma</span><span class="p">(</span><span class="n">FS_32000_HZ</span><span class="p">,</span> <span class="n">BOOSTXL_J1_2_IN</span><span class="p">,</span> <span class="n">BUFLEN</span><span class="p">,</span> <span class="n">processBuffer</span><span class="p">);</span>
+
+    <span class="n">uint32_t</span> <span class="n">c</span> <span class="o">=</span> <span class="n">measurePerfBuffer</span><span class="p">(</span><span class="n">processBuffer</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Cycles </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+
+    <span class="n">msp432_boostxl_run</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>After you have completed the code, and verified that it works, you will do a performance analysis similar to Question 1. In particular, you will compile two versions of your code, a non-optimized one and an optimized one. You do not have to analyze the resulting assembly code; performance analysis is sufficient.</p>
+<div class="section" id="id1">
+<h3>Variant 1: Unoptimized Code<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Configure the compiler to disable all optimization <em>(Project Properties - CCS Build -
+ARM Compiler - Optimization - Optimization Level Off)</em>. Compile the code.</li>
+<li>Run the code on your board and determine the sample rate achieved by the code by measuring the
+sample frequency on the duty cycle pin (P5.7 on your MSP432 kit). In a DMA mechanism,
+the duty cycle pin is set high when processing PING buffers, and it is set low when processing
+PONG buffers. You should observe a regular square wave.</li>
+<li>Determine the clock cycle count needed to execute the processBuffer function.</li>
+</ol>
+</div>
+<div class="section" id="id2">
+<h3>Variant 2: Optimized Code<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Configure the compiler to compiler for speed and function inlining</li>
+</ol>
+<blockquote>
+<div><em>(Project Properties - CCS Build - ARM Compiler - Optimization -
+Interprocedure Optimizations - Optimize for Speed)</em>. Compile the code.</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Run the code on your board and determine the sample rate achieved by the code by measuring the
+sample frequency on the duty cycle pin (P5.7 on your MSP432 kit). In a DMA mechanism,
+the duty cycle pin is set high when processing PING buffers, and it is set low when processing
+PONG buffers. You should observe a regular square wave.</li>
+<li>Determine the clock cycle count needed to execute the processBuffer function.</li>
+</ol>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Question 3: Report on the cycle count observed for each case (unoptimized and optimized),
+and report on the observed block frequency produced by the duty cycle pin. Please make sure that
+your filter is operational, and that it is using the correct filter coefficients.
+An easy (but optional) way demonstrate this, is to show a plot of  the filter spectrum,
+as obtained using Bitscope.</p>
+</div>
+</div>
+</div>
+<div class="section" id="wrapping-up">
+<h2>Wrapping Up<a class="headerlink" href="#wrapping-up" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The answer to this lab consists of a written report which will be submitted on Canvas by the deadline. Refer to the General Lab Report Guidelines for details on report formatting. You will only submit your written report on Canvas. All code developed must be returned through GitHub.</li>
+<li>Follow the principal structure of the report you’ve used for Lab 4 (taking into account any feedback you have received).</li>
+<li>Follow the four questions outlined above to structure your report.  Use figures, screenshots and code examples where appropriate. Please work out the answers in sufficient detail to show your <em>analysis</em>.</li>
+<li>Make sure that you add newly developed projects to github: Use the Team - Share pop-up menu and select your repository for this lab. Further, make sure that you commit and push all changes to the github repository on GitHub classroom. Use the Team - Commit pop-up menu and push all changes.</li>
+<li>Be aware that each of the laboratory assignments in ECE4703 will require a significant investment in time and preparation if you expect to have a working system by the assignment’s due date. This course is run in “open lab” mode where it is not expected that you will be able to complete the laboratory in the scheduled official lab time. It is in your best interest to plan ahead so that you can use the TA and instructor’s office hours most efficiently.</li>
+</ul>
+<p><em>Good Luck</em></p>
+</div>
+<div class="section" id="grading-rubric">
+<h2>Grading Rubric<a class="headerlink" href="#grading-rubric" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="83%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Requirement</th>
+<th class="head">Points</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Question 1 Analysis</td>
+<td>20</td>
+</tr>
+<tr class="row-odd"><td>Question 2 Analysis</td>
+<td>30</td>
+</tr>
+<tr class="row-even"><td>Question 3 Analysis</td>
+<td>25</td>
+</tr>
+<tr class="row-odd"><td>All projects build without errors or warnings</td>
+<td>5</td>
+</tr>
+<tr class="row-even"><td>Code is well structured and commented</td>
+<td>5</td>
+</tr>
+<tr class="row-odd"><td>Git Repository is complete and up to date</td>
+<td>5</td>
+</tr>
+<tr class="row-even"><td>Overall Report Quality (Format, Outline, Grammar)</td>
+<td>10</td>
+</tr>
+<tr class="row-odd"><td><strong>TOTAL</strong></td>
+<td><strong>100</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="reportguidelines.html" class="btn btn-neutral float-right" title="Report Guidelines" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lab4.html" class="btn btn-neutral" title="Lab 4" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

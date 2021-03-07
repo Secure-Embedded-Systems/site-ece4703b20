@@ -1,0 +1,805 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>L4: FIR filter implementation &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="L5: IIR filters, and their implementation" href="lecture5.html" />
+    <link rel="prev" title="L3: DTFT, z-transform, and FIR filters" href="lecture3.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="lectures.html">Lectures</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture1.html">L1: Sampling and Quantization, Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture2.html">L2: Real-Time Input Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture3.html">L3: DTFT, z-transform, and FIR filters</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">L4: FIR filter implementation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#direct-form-and-transpose-form-fir-implementation">Direct-form and Transpose-form FIR implementation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#optimizing-for-symmetry-linear-phase-fir">Optimizing for Symmetry (Linear Phase FIR)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#optimizing-common-subexpressions">Optimizing Common Subexpressions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#cascade-form-fir-implementation">Cascade-form FIR implementation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-cascade-design-for-the-averager">Example - Cascade Design for the Averager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-c-code-for-the-averager-cascade-design">Example - C code for the Averager Cascade Design</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#frequency-sampling-fir">Frequency-sampling FIR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-management-in-fir">Memory Management in FIR</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#complexity-analysis">Complexity Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#optimization">Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lecture5.html">L5: IIR filters, and their implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture6.html">L6: Fixed Point Arithmetic in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture7.html">L7: Performance Optimization in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture8.html">L8: DMA and the ARM CMSIS Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture9.html">L9: Adaptive Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture10.html">L10: Frequency Synthesis and Detection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="labs.html">Labs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="lectures.html">Lectures</a> &raquo;</li>
+        
+      <li>L4: FIR filter implementation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lecture4.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="l4-fir-filter-implementation">
+<h1>L4: FIR filter implementation<a class="headerlink" href="#l4-fir-filter-implementation" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this lecture is as follows.</p>
+<ul class="simple">
+<li>To describe the direct-form and transpose-form implementations of FIR designs</li>
+<li>To describe the cascade-form implementations of FIR designs</li>
+<li>To describe frequency-sampling implementations of FIR designs</li>
+<li>To describe memory management optimization in FIR implementation</li>
+</ul>
+<div class="section" id="direct-form-and-transpose-form-fir-implementation">
+<h2>Direct-form and Transpose-form FIR implementation<a class="headerlink" href="#direct-form-and-transpose-form-fir-implementation" title="Permalink to this headline">¶</a></h2>
+<p>Let’s recap the standard, direct-form representation of an FIR filter as discussed last
+lecture.</p>
+<p>The Z-transform of an FIR is a polynomial in <img class="math" src="_images/math/1a4b8d0a55f4ac355c094e93f5fdef08d7c20762.png" alt="z^{-1}"/>.</p>
+<div class="math">
+<p><img src="_images/math/a66044a1cf8866461d8176e3271e3d4135474f99.png" alt="H(z) = \sum_{n=0}^{N} h(n) . z^{-n}"/></p>
+</div><p>The sequence <img class="math" src="_images/math/e03a27d36c5f27bfcbf3aff0a9ac8a69aa2961e2.png" alt="h(n)"/> is the <em>impulse response</em> of the FIR filter. This sequence is bounded.</p>
+<p>The classic <strong>direct-form implementation</strong> of an FIR filter is done by implementing a <em>tapped delay line</em>.
+The following is an example of a third-order FIR filter. Such a filter would have three zeroes in the z-plane
+and three poles at <img class="math" src="_images/math/b4a88b332e9885e000f4ad02238b759cf4b179b3.png" alt="z=0"/>.
+It has 4 multiplications with coefficients, 3 additions, and three delays.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/firdirect.jpg" src="_images/firdirect.jpg" />
+</div>
+<p>Interestingly, the impulse response of the FIR can be produced by an alternate structure, called the
+<strong>transpose-form implementation</strong>. Unlike the direct-form implementation, the
+transpose-form implementation multiplies an input sample with all filter coefficients at
+the same time, and then accumulates the result. Note that the order of the impulse
+response coefficients is reversed.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/transposefir.jpg" src="_images/transposefir.jpg" />
+</div>
+<div class="section" id="optimizing-for-symmetry-linear-phase-fir">
+<h3>Optimizing for Symmetry (Linear Phase FIR)<a class="headerlink" href="#optimizing-for-symmetry-linear-phase-fir" title="Permalink to this headline">¶</a></h3>
+<p>We already know that the time-domain shape of a signal is determined by both the phase information
+as well as the amplitude information of its frequency components. If phases are randomly
+changed, then the time-domain shape will be distored.</p>
+<p>Think, for example, about how we are measuring the spectrum of a filter, by injection random noise at the input. Random noise contains all frequencies, just like a Dirac impulse. But unlike a Dirac impulse, random noise has random phase. Therefore, we have a time domain response spread out over time, rather than a single, sharp impulse.</p>
+<p>Many applications in communications (digital modulation, software radio, etc) rely on precise
+time-domain representation of signals; we will discuss such an application in a later lecture
+of the course. In digital communications applications, filters with a <strong>linear phase response</strong> are desired,
+because such filters introduce a uniform delay as a function of frequency.  In other words: a signal that
+fits within the passband of a linear phase filter, will appear undistorted at the output
+of the filter.</p>
+<p>Indeed, assume that the phase response is of the form <img class="math" src="_images/math/6f7b51ac0fb39355dc4aa4626655ce75d6850dfb.png" alt="\phi(\omega) = k_1 . \omega + k_0"/>.
+A sinusoid <img class="math" src="_images/math/97780658e385303e26c1c58e5a336a0964d961fd.png" alt="sin(\omega.t)"/> that is affected by this phase change, becomes:</p>
+<div class="math">
+<p><img src="_images/math/bb30a1c945dd0acd28263945b9f3bde981189ac3.png" alt="y(t) =&amp; sin(\omega.t + k_1 . \omega + k_0) \\
+     =&amp; sin(\omega.(t + k1) + k_0)"/></p>
+</div><p>Thus, a linear phase response causes a time-shift of the sinusoid, independent of its frequency. This means
+that an arbitrarily complex signal, which can be written as a sum of phasors (sines/cosines), will also be
+affected by a time-shift, independent of its frequency.</p>
+<p>Linear phase filters have a symmetric impulse response, and there are four types of symmetry, depending
+on the odd/even number of taps, and the odd/even symmetry of the impulse response. All of these filters
+have a linear phase response.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/linearphasefir.jpg" src="_images/linearphasefir.jpg" />
+</div>
+<p>The symmetric response of linear FIR design enables an important optimization for either
+direct-form or else transpose form FIR designs: we can reduce the number of coefficient
+multiplications by half. For example, here is an optimized Type-III, 3-tap FIR:</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/firdirectfolded.jpg" src="_images/firdirectfolded.jpg" />
+</div>
+</div>
+<div class="section" id="optimizing-common-subexpressions">
+<h3>Optimizing Common Subexpressions<a class="headerlink" href="#optimizing-common-subexpressions" title="Permalink to this headline">¶</a></h3>
+<p>The transpose form is convenient when the implementation is able to perform parallel multiplications
+efficiently, or when parallel multiplications can be jointly optimized.</p>
+<p>For example, the following filter coefficient optimization is common in hardware designs of fixed-coefficient FIRs.  The transpose form can be optimized for common subexpressions. Since the same input x is
+multiplied with every filter coefficient at the same time, the common parts of the multiplication
+can be shared. Consider the impulse response <img class="math" src="_images/math/2f40be1a8d3093b4d3239e46df11c4032a0664cb.png" alt="h(n) = {3, 5, 5, 3}"/>. This series
+of coefficients is symmetric, meaning that only a single multiplication with 3 and with 5 is needed.
+In addition, the multiplications with 3 and with 5 share commonalities. Since 3 = 1 + 2 and 5 = 1 + 4,
+we can implement these multiplications using constant shifts by 2, and then accumulating the results:</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/transposefir3553.jpg" src="_images/transposefir3553.jpg" />
+</div>
+<p>In other words, we can rewrite the following set of expressions:</p>
+<pre class="code c literal-block">
+<span class="ln">1 </span><span class="comment single">// input x
+</span><span class="ln">2 </span><span class="comment single">// state_variable: d2, d1, d0
+</span><span class="ln">3 </span><span class="comment single">// output y
+</span><span class="ln">4 </span><span class="comment single"></span><span class="name">y</span>  <span class="operator">=</span> <span class="name">d2</span> <span class="operator">+</span> <span class="name">x</span> <span class="operator">*</span> <span class="literal number integer">3</span><span class="punctuation">;</span>
+<span class="ln">5 </span><span class="name">d2</span> <span class="operator">=</span> <span class="name">d1</span> <span class="operator">+</span> <span class="name">x</span> <span class="operator">*</span> <span class="literal number integer">5</span><span class="punctuation">;</span>
+<span class="ln">6 </span><span class="name">d1</span> <span class="operator">=</span> <span class="name">d0</span> <span class="operator">+</span> <span class="name">x</span> <span class="operator">*</span> <span class="literal number integer">5</span><span class="punctuation">;</span>
+<span class="ln">7 </span><span class="name">d0</span> <span class="operator">=</span>      <span class="name">x</span> <span class="operator">*</span> <span class="literal number integer">3</span><span class="punctuation">;</span>
+</pre>
+<p>into the following set of expressions - avoiding multiplications. This would be especially advantageous
+in a hardware design, because it significantly reduces the implementation cost. In software, where the
+cost of a  ‘*’ operation and a ‘+’ operation are similar, such optimization may have less (or no) impact.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="comment single">// input x
+</span><span class="ln"> 2 </span><span class="comment single">// temporary variable x2, x4, s3, s5;
+</span><span class="ln"> 3 </span><span class="comment single">// state_variable: d2, d1, d0
+</span><span class="ln"> 4 </span><span class="comment single">// output y
+</span><span class="ln"> 5 </span><span class="comment single"></span><span class="name">x2</span> <span class="operator">=</span> <span class="name">x</span>  <span class="operator">&lt;&lt;</span> <span class="literal number integer">1</span><span class="punctuation">;</span>
+<span class="ln"> 6 </span><span class="name">x4</span> <span class="operator">=</span> <span class="name">x2</span> <span class="operator">&lt;&lt;</span> <span class="literal number integer">1</span><span class="punctuation">;</span>
+<span class="ln"> 7 </span><span class="name">s3</span> <span class="operator">=</span> <span class="name">x</span>  <span class="operator">+</span>  <span class="name">x2</span><span class="punctuation">;</span>
+<span class="ln"> 8 </span><span class="name">s5</span> <span class="operator">=</span> <span class="name">x</span>  <span class="operator">+</span>  <span class="name">x4</span><span class="punctuation">;</span>
+<span class="ln"> 9 </span><span class="name">y</span>  <span class="operator">=</span> <span class="name">d2</span> <span class="operator">+</span>  <span class="name">s3</span><span class="punctuation">;</span>
+<span class="ln">10 </span><span class="name">d2</span> <span class="operator">=</span> <span class="name">d1</span> <span class="operator">+</span>  <span class="name">s5</span><span class="punctuation">;</span>
+<span class="ln">11 </span><span class="name">d1</span> <span class="operator">=</span> <span class="name">d0</span> <span class="operator">+</span>  <span class="name">s5</span><span class="punctuation">;</span>
+<span class="ln">12 </span><span class="name">d0</span> <span class="operator">=</span>       <span class="name">s3</span><span class="punctuation">;</span>
+</pre>
+</div>
+</div>
+<div class="section" id="cascade-form-fir-implementation">
+<h2>Cascade-form FIR implementation<a class="headerlink" href="#cascade-form-fir-implementation" title="Permalink to this headline">¶</a></h2>
+<p>A polynomial expression in H(z) can be factored into sub-expressions of first-order factors as follows.</p>
+<div class="math">
+<p><img src="_images/math/83ca02ef6d5b8a35e3d2ffbbf7ba3e456c85eb4d.png" alt="H(z) = \sum_{n=0}^{N} h(n) . z^{-n} = A \prod_{k=1}^{N}(1 - a_k.z^{-1})"/></p>
+</div><p>In the decomposed form, the first-order terms represent the zeroes for H(z). If h(n) is real, then the roots of H(z) will come in complex conjugate pairs, which can be combined into second-order expressions with real coefficients. Such real coefficients are preferable, of course, because they can be directly implemented using a single multiply operation.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/cascade.jpg" src="_images/cascade.jpg" />
+</div>
+<div class="section" id="example-cascade-design-for-the-averager">
+<h3>Example - Cascade Design for the Averager<a class="headerlink" href="#example-cascade-design-for-the-averager" title="Permalink to this headline">¶</a></h3>
+<p>Consider the moving average filter we discussed last lecture.</p>
+<div class="math">
+<p><img src="_images/math/e3b0f8c5626f4b43a019e82ce5f9f22e5c9b82a8.png" alt="G(z) = z^{-1} + z^{-2} + z^{-3} + z^{-4} + z^{-5} + z^{-6} + z^{-7} + z^{-8}"/></p>
+</div><p>This filter has seven zeroes, regularly distributed around the unit circle
+with the exception of the location z=1.</p>
+<div class="figure align-center" style="width: 300px">
+<img alt="_images/zplaneconjugate.jpg" src="_images/zplaneconjugate.jpg" />
+</div>
+<p>We can identify three complex conjugate zero pairs, which can be written as second-order sections.
+If a complex conjugate pair has zeroes at locations <img class="math" src="_images/math/fca52caa4396992ce59aca6222a9fd9fc5cf0534.png" alt="A.e^{\pm j \phi}"/>, then the second-order
+location can be written as follows.</p>
+<div class="math">
+<p><img src="_images/math/9d6dc45bab657c5267cd5fa239259a402fd723a3.png" alt="V(z) =&amp; (1 - A.e^{+ j \phi}.z^{-1}) . (1 - A.e^{- j \phi}.z^{-1}) \\
+V(z) =&amp; 1 - 2.A.cos(\phi).z^{-1} + A^2.z^{-2}"/></p>
+</div><p>The complex conjugate pairs are located at <img class="math" src="_images/math/0f6e7621a00c8287fb87bf723de9a9d71fcfab93.png" alt="e^{\pm j \pi /4}"/>, <img class="math" src="_images/math/9794f948e5fe4321a4be303ae08f22d6685b361a.png" alt="e^{\pm j \pi /2}"/>, <img class="math" src="_images/math/c63653a760222b6889305555d49f700ea619645e.png" alt="e^{\pm j 3 \pi /4}"/>, which leads to the following second order stages:</p>
+<div class="math">
+<p><img src="_images/math/7b62cc3ae29cf32dcb22a0f900539a05ab09d92c.png" alt="V1(z) &amp;= 1 + z^{-2} \\
+V2(z) &amp;= 1 + \sqrt{2}.z^{-1} + z^{-2} \\
+V3(z) &amp;= 1 - \sqrt{2}.z^{-1} + z^{-2}"/></p>
+</div><p>Putting everything together, we then obtain the following cascade filter. Note that this design
+has added an extra delay at the input, as well as an extra zero (at <img class="math" src="_images/math/8ce3b79951f64e00f80c7d486e404595e7a7fd60.png" alt="z=-1"/>).</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/cascadeexample.jpg" src="_images/cascadeexample.jpg" />
+</div>
+</div>
+<div class="section" id="example-c-code-for-the-averager-cascade-design">
+<h3>Example - C code for the Averager Cascade Design<a class="headerlink" href="#example-c-code-for-the-averager-cascade-design" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This example is available in the dsp_l4 repository as dsp_l4_cascade.</p>
+</div>
+<p>We will now implement this filter in C code.
+Since the cascade form is repetitive, it makes sense to implement it as a separate function.
+It’s worthwhile to consider the regularity of this problem. The filter, in
+essence, can be captured in four cascade filters. Therefore, we will write C code for a single
+cascade filter, and replicate it in order to create the overall filter.</p>
+<p>Let’s start with the single cascade stage. The <code class="docutils literal notranslate"><span class="pre">casecadestate_t</span></code> is a data type that
+stores the cascade filter taps as well as the coefficients. Since we are creating
+a repetition of filters, we have to keep the state as well as the coefficients of the individual
+stages separate, and this record helps us do that. Next, the <code class="docutils literal notranslate"><span class="pre">cascadefir</span></code> computes
+the response on a single casecade stage. The function evaluates the output, and updates
+the state as the result of entering a fresh sample x. Finally, the <code class="docutils literal notranslate"><span class="pre">createcascade</span></code>
+function is a helper function to initialize the coefficients in a <code class="docutils literal notranslate"><span class="pre">casecadestate_t</span></code> type.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="name">cascadestate</span> <span class="punctuation">{</span>
+<span class="ln"> 2 </span>    <span class="name">float32_t</span> <span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">2</span><span class="punctuation">];</span>  <span class="comment single">// filter state
+</span><span class="ln"> 3 </span><span class="comment single"></span>    <span class="name">float32_t</span> <span class="name">c</span><span class="punctuation">[</span><span class="literal number integer">2</span><span class="punctuation">];</span>  <span class="comment single">// filter coefficients
+</span><span class="ln"> 4 </span><span class="comment single"></span><span class="punctuation">}</span> <span class="name">cascadestate_t</span><span class="punctuation">;</span>
+<span class="ln"> 5 </span>
+<span class="ln"> 6 </span><span class="name">float32_t</span> <span class="name function">cascadefir</span><span class="punctuation">(</span><span class="name">float32_t</span> <span class="name">x</span><span class="punctuation">,</span> <span class="name">cascadestate_t</span> <span class="operator">*</span><span class="name">p</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 7 </span>    <span class="name">float32_t</span> <span class="name">r</span> <span class="operator">=</span> <span class="name">x</span> <span class="operator">+</span> <span class="punctuation">(</span><span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">*</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">c</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">])</span> <span class="operator">+</span>  <span class="punctuation">(</span><span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]</span> <span class="operator">*</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">c</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]);</span>
+<span class="ln"> 8 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">];</span>
+<span class="ln"> 9 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">x</span><span class="punctuation">;</span>
+<span class="ln">10 </span>    <span class="keyword">return</span> <span class="name">r</span><span class="punctuation">;</span>
+<span class="ln">11 </span><span class="punctuation">}</span>
+<span class="ln">12 </span>
+<span class="ln">13 </span><span class="keyword type">void</span> <span class="name function">createcascade</span><span class="punctuation">(</span><span class="name">float32_t</span> <span class="name">c0</span><span class="punctuation">,</span>
+<span class="ln">14 </span>                   <span class="name">float32_t</span> <span class="name">c1</span><span class="punctuation">,</span>
+<span class="ln">15 </span>                   <span class="name">cascadestate_t</span> <span class="operator">*</span><span class="name">p</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln">16 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">c</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">c0</span><span class="punctuation">;</span>
+<span class="ln">17 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">c</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">c1</span><span class="punctuation">;</span>
+<span class="ln">18 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="literal number float">0.0f</span><span class="punctuation">;</span>
+<span class="ln">19 </span><span class="punctuation">}</span>
+</pre>
+<p>We are now ready to build the overall filter. This will break down into two functions, the first one to initialize the individual cascade states according to the filter specifications, and the second one to execute the processing of a single sample. The four cascade filters are created as global variables, so that they are easy to access from withing the ADC interrupt callback. The <cite>initcascade</cite> function defines the coefficients as defined earlier. The <code class="docutils literal notranslate"><span class="pre">M_SQRT2</span></code> macro is a pre-defined macro in the C math library that holds the square root of 2. The <code class="docutils literal notranslate"><span class="pre">processCascade</span></code> function computes the output of the input. The overall
+filter includes an extra delay (to implement <img class="math" src="_images/math/56bfc497955c67343d7f1748de66080c15068f1b.png" alt="G(z) = z^{-1} + z^{-2} + z^{-3} + z^{-4} + z^{-5} + z^{-6} + z^{-7} + z^{-8}"/>), which is captured with the local <code class="docutils literal notranslate"><span class="pre">static</span></code> variable d.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="name">cascadestate_t</span> <span class="name">stage1</span><span class="punctuation">;</span>
+<span class="ln"> 2 </span><span class="name">cascadestate_t</span> <span class="name">stage2</span><span class="punctuation">;</span>
+<span class="ln"> 3 </span><span class="name">cascadestate_t</span> <span class="name">stage3</span><span class="punctuation">;</span>
+<span class="ln"> 4 </span><span class="name">cascadestate_t</span> <span class="name">stage4</span><span class="punctuation">;</span>
+<span class="ln"> 5 </span>
+<span class="ln"> 6 </span><span class="keyword type">void</span> <span class="name function">initcascade</span><span class="punctuation">()</span> <span class="punctuation">{</span>
+<span class="ln"> 7 </span>    <span class="name">createcascade</span><span class="punctuation">(</span>    <span class="literal number float">0.0f</span><span class="punctuation">,</span>  <span class="literal number float">1.0f</span><span class="punctuation">,</span> <span class="operator">&amp;</span><span class="name">stage1</span><span class="punctuation">);</span>
+<span class="ln"> 8 </span>    <span class="name">createcascade</span><span class="punctuation">(</span> <span class="name">M_SQRT2</span><span class="punctuation">,</span>  <span class="literal number float">1.0f</span><span class="punctuation">,</span> <span class="operator">&amp;</span><span class="name">stage2</span><span class="punctuation">);</span>
+<span class="ln"> 9 </span>    <span class="name">createcascade</span><span class="punctuation">(</span><span class="operator">-</span><span class="name">M_SQRT2</span><span class="punctuation">,</span>  <span class="literal number float">1.0f</span><span class="punctuation">,</span> <span class="operator">&amp;</span><span class="name">stage3</span><span class="punctuation">);</span>
+<span class="ln">10 </span>    <span class="name">createcascade</span><span class="punctuation">(</span>    <span class="literal number float">1.0f</span><span class="punctuation">,</span>  <span class="literal number float">0.0f</span><span class="punctuation">,</span> <span class="operator">&amp;</span><span class="name">stage4</span><span class="punctuation">);</span>
+<span class="ln">11 </span><span class="punctuation">}</span>
+<span class="ln">12 </span>
+<span class="ln">13 </span><span class="keyword type">uint16_t</span> <span class="name function">processCascade</span><span class="punctuation">(</span><span class="keyword type">uint16_t</span> <span class="name">x</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln">14 </span>
+<span class="ln">15 </span>    <span class="name">float32_t</span> <span class="name">input</span> <span class="operator">=</span> <span class="name">adc14_to_f32</span><span class="punctuation">(</span><span class="literal number hex">0x1800</span> <span class="operator">+</span> <span class="name">rand</span><span class="punctuation">()</span> <span class="operator">%</span> <span class="literal number hex">0x1000</span><span class="punctuation">);</span>
+<span class="ln">16 </span>    <span class="name">float32_t</span> <span class="name">v</span><span class="punctuation">;</span>
+<span class="ln">17 </span>    <span class="keyword">static</span> <span class="name">float32_t</span> <span class="name">d</span><span class="punctuation">;</span>
+<span class="ln">18 </span>
+<span class="ln">19 </span>    <span class="name">v</span> <span class="operator">=</span> <span class="name">cascadefir</span><span class="punctuation">(</span><span class="name">d</span><span class="punctuation">,</span> <span class="operator">&amp;</span><span class="name">stage1</span><span class="punctuation">);</span>
+<span class="ln">20 </span>    <span class="name">v</span> <span class="operator">=</span> <span class="name">cascadefir</span><span class="punctuation">(</span><span class="name">v</span><span class="punctuation">,</span> <span class="operator">&amp;</span><span class="name">stage2</span><span class="punctuation">);</span>
+<span class="ln">21 </span>    <span class="name">v</span> <span class="operator">=</span> <span class="name">cascadefir</span><span class="punctuation">(</span><span class="name">v</span><span class="punctuation">,</span> <span class="operator">&amp;</span><span class="name">stage3</span><span class="punctuation">);</span>
+<span class="ln">22 </span>    <span class="name">v</span> <span class="operator">=</span> <span class="name">cascadefir</span><span class="punctuation">(</span><span class="name">v</span><span class="punctuation">,</span> <span class="operator">&amp;</span><span class="name">stage4</span><span class="punctuation">);</span>
+<span class="ln">23 </span>    <span class="name">d</span> <span class="operator">=</span> <span class="name">input</span><span class="punctuation">;</span>
+<span class="ln">24 </span>
+<span class="ln">25 </span>    <span class="keyword">return</span> <span class="name">f32_to_dac14</span><span class="punctuation">(</span><span class="name">v</span><span class="operator">*</span><span class="literal number float">0.125</span><span class="punctuation">);</span>
+<span class="ln">26 </span><span class="punctuation">}</span>
+</pre>
+<p>If we run the function and compute the output, we can find that this design has an
+identical response as the previous direct-form design.</p>
+<p>The appeal of the cascade form FIR is the regularity of the design, as well as (as discussed
+later), a better control over the precision and range of intermediate variables.</p>
+</div>
+</div>
+<div class="section" id="frequency-sampling-fir">
+<h2>Frequency-sampling FIR<a class="headerlink" href="#frequency-sampling-fir" title="Permalink to this headline">¶</a></h2>
+<p>A fourth form of FIR structure, next to direct-form, transpose-form and cascade-form design, is that of frequency sampling. Interestingly, the frequency-sampling structure is a recursive structure, despite
+the fact that its impulse response is finite in length.</p>
+<p>A basic building block of a frequency-sampling FIR is a <em>resonator</em>, a structure with a
+complex conjugate pole-pair on the unit circle, together with a double zero in the unit circle origin.</p>
+<div class="math">
+<p><img src="_images/math/8d9cb1cb1f5eedab8cd4b23466094a1ea6c7955e.png" alt="H(z) =&amp; \frac{z^2}{z^2 - 2.z.cos(\theta) + 1}        \\
+     =&amp; \frac{1}{1 - 2.z^{-1}.cos(\theta) + z^{-2}}  \\
+     =&amp; \frac{Y(z)}{X(z)}"/></p>
+</div><p>The time-domain response of this design is given by</p>
+<div class="math">
+<p><img src="_images/math/6361553c5f69dab1350dda0925c37cb15eb5b077.png" alt="y(n) = 2.cos(\theta).y(n-1) - y(n-2) + x(n)"/></p>
+</div><p>For example, if <img class="math" src="_images/math/0f6ff753fa620dad0678979377471454ba6812af.png" alt="\theta = \pi / 3"/> then the time-domain response is given by</p>
+<div class="math">
+<p><img src="_images/math/a566a80c91174070aa3066096fb7597f92bab027.png" alt="y(n) = y(n-1) - y(n-2) + x(n)"/></p>
+</div><p>The resonator by itself is not a useful filter.
+This structure is not stable, and after a single impulse response it keeps oscillating.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="23%" />
+<col width="25%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">x(n)</th>
+<th class="head">y(n-2)</th>
+<th class="head">y(n-1)</th>
+<th class="head">y(n)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="row-even"><td>0</td>
+<td>1</td>
+<td>0</td>
+<td>-1</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>0</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+<tr class="row-even"><td>0</td>
+<td>-1</td>
+<td>-1</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>-1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>etc</td>
+<td>etc</td>
+<td>etc</td>
+</tr>
+</tbody>
+</table>
+<p>However, when the resonator is combined with a comb filter structure, which
+we discussed last week, we obtain a <strong>frequency-sampling filter</strong>.
+A comb filter with <cite>m</cite> teeth is a FIR of the form</p>
+<div class="math">
+<p><img src="_images/math/880a535bded745385ef1ccc0543037d39c4d5097.png" alt="G(z) = 1 - z^m"/></p>
+</div><p>If a resonator is driven by the output of a comb filter, then the unstable characteristic
+of the resonator is cancelled by a matching zero of the comb filter.
+For example, let’s consider a comb filter with 24 teeth, i.e., a filter with zeroes
+on the unit circle at every <img class="math" src="_images/math/0e077989233cf05b99145cb0392227fa1f3d7daf.png" alt="\pi / 12"/>.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/frequencysampling.jpg" src="_images/frequencysampling.jpg" />
+</div>
+<p>This can be extended to an arbitrary response by adding additional resonator stages.
+The general design of a <strong>Frequency Sampling Filter</strong> then consists of (1) setting
+up a frequency grid as a comb filter, and (2) strategically eliminating zeroes using
+resonator stages in order to create
+the desired response. The design is fairly rudimentary, as we cannot select the gain
+of the filter at a particular frequency - we can only let a frequency pass or eliminate it.
+Furthermore, we can only constrain the response at a specific number of points, corresponding
+to the locations of zeroes defined by the comb filter.</p>
+<p>On the other hand, compared to a pure feedforward FIR design, the frequency sampling
+filter is more economical, and can be realized using fewer taps.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This example is available in the dsp_l4 repository as dsp_l4_fsampling.</p>
+</div>
+</div>
+<div class="section" id="memory-management-in-fir">
+<h2>Memory Management in FIR<a class="headerlink" href="#memory-management-in-fir" title="Permalink to this headline">¶</a></h2>
+<p>FIR designs can become relatively complex, up to a few hundred taps with coefficients.
+Hence, at some point the  implementation of the FIR delay line becomes an important factor in
+the filter performance.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This example is available in the dsp_l4 repository as dsp_l4_longfilters.</p>
+</div>
+<p>In a straightforward design, the filter taps are shifted every sample. For an N-tap
+filter, this means N memory reads and N memory writes. Furthermore, for each
+memory access, the memory address for the tap has to be computed.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="keyword type">uint16_t</span> <span class="name function">processSampleDirectFull</span><span class="punctuation">(</span><span class="keyword type">uint16_t</span> <span class="name">x</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 2 </span>    <span class="name">float32_t</span> <span class="name">input</span> <span class="operator">=</span> <span class="name">adc14_to_f32</span><span class="punctuation">(</span><span class="name">x</span><span class="punctuation">);</span>
+<span class="ln"> 3 </span>
+<span class="ln"> 4 </span>    <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">input</span><span class="punctuation">;</span>
+<span class="ln"> 5 </span>
+<span class="ln"> 6 </span>    <span class="name">float32_t</span> <span class="name">q</span> <span class="operator">=</span> <span class="literal number float">0.0</span><span class="punctuation">;</span>
+<span class="ln"> 7 </span>    <span class="keyword type">uint16_t</span> <span class="name">i</span><span class="punctuation">;</span>
+<span class="ln"> 8 </span>    <span class="keyword">for</span> <span class="punctuation">(</span><span class="name">i</span> <span class="operator">=</span> <span class="literal number integer">0</span><span class="punctuation">;</span> <span class="name">i</span><span class="operator">&lt;</span><span class="name">NUMTAPS</span><span class="punctuation">;</span> <span class="name">i</span><span class="operator">++</span><span class="punctuation">)</span>
+<span class="ln"> 9 </span>        <span class="name">q</span> <span class="operator">+=</span> <span class="name">taps</span><span class="punctuation">[</span><span class="name">i</span><span class="punctuation">]</span> <span class="operator">*</span> <span class="name">B</span><span class="punctuation">[</span><span class="name">i</span><span class="punctuation">];</span>
+<span class="ln">10 </span>
+<span class="ln">11 </span>    <span class="keyword">for</span> <span class="punctuation">(</span><span class="name">i</span> <span class="operator">=</span> <span class="name">NUMTAPS</span><span class="operator">-</span><span class="literal number integer">1</span><span class="punctuation">;</span> <span class="name">i</span><span class="operator">&gt;</span><span class="literal number integer">0</span><span class="punctuation">;</span> <span class="name">i</span><span class="operator">--</span><span class="punctuation">)</span>
+<span class="ln">12 </span>        <span class="name">taps</span><span class="punctuation">[</span><span class="name">i</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">taps</span><span class="punctuation">[</span><span class="name">i</span><span class="operator">-</span><span class="literal number integer">1</span><span class="punctuation">];</span>
+<span class="ln">13 </span>
+<span class="ln">14 </span>    <span class="keyword">return</span> <span class="name">f32_to_dac14</span><span class="punctuation">(</span><span class="name">q</span><span class="punctuation">);</span>
+<span class="ln">15 </span><span class="punctuation">}</span>
+</pre>
+<div class="section" id="complexity-analysis">
+<h3>Complexity Analysis<a class="headerlink" href="#complexity-analysis" title="Permalink to this headline">¶</a></h3>
+<p>To understand the complexity of this function, we can study the assembly code (found under <code class="docutils literal notranslate"><span class="pre">Debug/main.lst</span></code> in Code Composer Studio). We can clearly distinguish the loops by looking for the jump instructions and the jump target labels. The register names starting with <code class="docutils literal notranslate"><span class="pre">V</span></code> carry floating-point variables. It’s remarkable that the computational core of this algorithm, the expression <code class="docutils literal notranslate"><span class="pre">q</span> <span class="pre">+=</span> <span class="pre">taps[i]</span> <span class="pre">*</span> <span class="pre">B[i]</span></code> in the C program,
+is captured by a single instruction <code class="docutils literal notranslate"><span class="pre">VMLA</span></code> (floating-point multiply accumulate).</p>
+<pre class="code literal-block">
+<span class="ln"> 1 </span>processSampleDirectFull:
+<span class="ln"> 2 </span>        PUSH      {A4, V3, V4, LR}
+<span class="ln"> 3 </span>        BL        adc14_to_f32
+<span class="ln"> 4 </span>        VMOV.F32  S1, S0
+<span class="ln"> 5 </span>        LDR       A1, $C$FL4
+<span class="ln"> 6 </span>        LDR       A3, $C$CON15
+<span class="ln"> 7 </span>        LDR       A2, $C$CON14
+<span class="ln"> 8 </span>        VMOV      S0, A1
+<span class="ln"> 9 </span>        LDRH      V3, [A3, #0]
+<span class="ln">10 </span>        VSTR.32   S1, [A2, #0]
+<span class="ln">11 </span>        CBZ       V3, ||$C$L5||
+<span class="ln">12 </span>        LDR       A1, $C$CON17
+<span class="ln">13 </span>        MOV       V4, V3
+<span class="ln">14 </span>        MOV       A3, A2
+<span class="ln">15 </span>||$C$L4||:                                ;
+<span class="ln">16 </span>        LDR       A4, [A3], #4            ;
+<span class="ln">17 </span>        VMOV      S1, A4                  ;
+<span class="ln">18 </span>        LDR       A4, [A1], #4            ; for (i = 0; i&lt;NUMTAPS; i++)
+<span class="ln">19 </span>        VMOV      S2, A4                  ;   q += taps[i] * B[i];
+<span class="ln">20 </span>        SUBS      V4, V4, #1              ;
+<span class="ln">21 </span>        VMLA.F32  S0, S2, S1              ;
+<span class="ln">22 </span>        BNE       ||$C$L4||               ;
+<span class="ln">23 </span>        SUBS      V3, V3, #1
+<span class="ln">24 </span>        UXTH      A1, V3
+<span class="ln">25 </span>        CBZ       A1, ||$C$L7||
+<span class="ln">26 </span>        ADD       A2, A2, A1, LSL #2
+<span class="ln">27 </span>||$C$L6||:                                ;
+<span class="ln">28 </span>        VLDR.32   S1, [A2, #-4]           ;
+<span class="ln">29 </span>        SUBS      A1, A1, #1              ;
+<span class="ln">30 </span>        VMOV      A3, S1                  ; for (i = NUMTAPS-1; i&gt;0; i--)
+<span class="ln">31 </span>        UXTH      A1, A1                  ;   taps[i] = taps[i-1];
+<span class="ln">32 </span>        CMP       A1, #0                  ;
+<span class="ln">33 </span>        STR       A3, [A2], #-4           ;
+<span class="ln">34 </span>        BNE       ||$C$L6||               ;
+<span class="ln">35 </span>||$C$L7||:
+<span class="ln">36 </span>        BL        f32_to_dac14
+<span class="ln">37 </span>        POP       {A4, V3, V4, PC}
+</pre>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>The previous listing is an example of ARM assembly code. While I do not expect you to memorize
+the exact ARM mnemonics, it will be helpful (and interesting) to become used to the based
+form and format of assembly listings.
+A list of ARM Cortex-M4 instructions can be found on the <a class="reference external" href="https://developer.arm.com/documentation/ddi0439/b/Programmers-Model/Instruction-set-summary/Cortex-M4-instructions">ARM Developer Pages</a>.</p>
+<p>A line such as</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span>||$C$L6||:
+</pre></div>
+</div>
+<p>is a label; it represents the target address of the instruction just after the label.
+You can use labels and match them with jump instructions to establish the beginning
+and ending of a loop. The jump instruction matching <code class="docutils literal notranslate"><span class="pre">||$C$6||</span></code> is BNE:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span>||$C$L6||:
+     ...
+     BNE       ||$C$L6||
+</pre></div>
+</div>
+<p>ARM instructions are in the format &lt;instruction, destination, source&gt;. For example, the
+following instruction means <cite>move register A4 to register S2</cite>.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">VMOV</span>      <span class="n">S2</span><span class="p">,</span> <span class="n">A4</span>
+</pre></div>
+</div>
+<p>Memory operations include LDR (load register) and
+STR (store register). Memory operations specify a memory address, and ARM supports a
+range of addressing modes to specify the address. For example, the following instruction
+stores the contents of register A3 in the memory location pointed by register A2. Afterwards,
+modify register A2 by subtracting 4.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A2</span><span class="p">],</span> <span class="c1">#-4</span>
+</pre></div>
+</div>
+<p>As another example, the following instruction stores S1 to the memory address pointed to
+by A2 minus 4.</p>
+<div class="code last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">VLDR</span><span class="o">.</span><span class="mi">32</span>   <span class="n">S1</span><span class="p">,</span> <span class="p">[</span><span class="n">A2</span><span class="p">,</span> <span class="c1">#-4]</span>
+</pre></div>
+</div>
+</div>
+<p>Studying the assembly helps us to appreciate the overhead of data movement. First, note that the loop body of the filter delay-line shift (loop <code class="docutils literal notranslate"><span class="pre">||$C$L6||</span></code>) contains 7 instructions, while the loop body of the filter multiply-accumulate (loop <code class="docutils literal notranslate"><span class="pre">||$C$L4||</span></code>) contains 7 instructions as well! In addition, the delay-line shift contains a memory-read (<code class="docutils literal notranslate"><span class="pre">VLDR.32</span></code>) as well as a memory-write (<code class="docutils literal notranslate"><span class="pre">STR</span></code>), while the multiply-accumulate loop contains two memory-read (<code class="docutils literal notranslate"><span class="pre">LDR</span></code>).</p>
+</div>
+<div class="section" id="optimization">
+<h3>Optimization<a class="headerlink" href="#optimization" title="Permalink to this headline">¶</a></h3>
+<p>A common optimization of delay lines is the use of a <cite>circular buffer</cite>. To see how to use a circular buffer on a FIR, let’s first consider the memory-access operations for a regular FIR.
+Each sample period, a new sample enters the filter state. The filter state is then multiplied with the coefficients to compute the filter output, and finally, the filter state is shifted in order to accept the next sample. New samples are entered at a fixed location in the filter state.</p>
+<div class="figure align-center" style="width: 400px">
+<img alt="_images/firmemory.jpg" src="_images/firmemory.jpg" />
+</div>
+<p>In a circular buffer strategy, we avoid shifting the filter state, but rather change the position where new samples are inserted. New samples will overwrite the oldest sample in the filter state, so that each sample period, the ‘head’ of the filter shifts backward in the array. When the beginning of the array is reached, the head jumps to the back. In this configuration, the ‘first’ tap in the filter state is continuously shifting, and therefore the filter coefficients have to be rotated accordingly. However, this rotation operation is easier to implement than shifting: because the coefficients do not change, the rotation operation can be implemented using index operations.</p>
+<div class="figure align-center" style="width: 400px">
+<img alt="_images/firmemoryrot.jpg" src="_images/firmemoryrot.jpg" />
+</div>
+<p>This leads to the following FIR design. Observe that the tap-shift loop has disappeared, while the address expressions have become more complicated. A new <code class="docutils literal notranslate"><span class="pre">head</span></code> variable is used to indicated the first tap in the filter state. This <code class="docutils literal notranslate"><span class="pre">head</span></code> circulates to all positions of the delay line until it wraps around.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="keyword type">uint16_t</span> <span class="name function">processSampleDirectFullCircular64</span><span class="punctuation">(</span><span class="keyword type">uint16_t</span> <span class="name">x</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 2 </span>    <span class="name">float32_t</span> <span class="name">input</span> <span class="operator">=</span> <span class="name">adc14_to_f32</span><span class="punctuation">(</span><span class="name">x</span><span class="punctuation">);</span>
+<span class="ln"> 3 </span>
+<span class="ln"> 4 </span>    <span class="name">taps</span><span class="punctuation">[(</span><span class="literal number integer">64</span> <span class="operator">-</span> <span class="name">head</span><span class="punctuation">)</span> <span class="operator">%</span> <span class="literal number integer">64</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">input</span><span class="punctuation">;</span>
+<span class="ln"> 5 </span>
+<span class="ln"> 6 </span>    <span class="name">float32_t</span> <span class="name">q</span> <span class="operator">=</span> <span class="literal number float">0.0</span><span class="punctuation">;</span>
+<span class="ln"> 7 </span>    <span class="keyword type">uint16_t</span> <span class="name">i</span><span class="punctuation">;</span>
+<span class="ln"> 8 </span>    <span class="keyword">for</span> <span class="punctuation">(</span><span class="name">i</span> <span class="operator">=</span> <span class="literal number integer">0</span><span class="punctuation">;</span> <span class="name">i</span><span class="operator">&lt;</span><span class="literal number integer">64</span><span class="punctuation">;</span> <span class="name">i</span><span class="operator">++</span><span class="punctuation">)</span>
+<span class="ln"> 9 </span>        <span class="name">q</span> <span class="operator">+=</span> <span class="name">taps</span><span class="punctuation">[</span><span class="name">i</span><span class="punctuation">]</span> <span class="operator">*</span> <span class="name">B</span><span class="punctuation">[(</span><span class="name">i</span> <span class="operator">+</span> <span class="name">head</span><span class="punctuation">)</span> <span class="operator">%</span> <span class="literal number integer">64</span><span class="punctuation">];</span>
+<span class="ln">10 </span>
+<span class="ln">11 </span>    <span class="name">head</span> <span class="operator">=</span> <span class="punctuation">(</span><span class="name">head</span> <span class="operator">+</span> <span class="literal number integer">1</span><span class="punctuation">)</span> <span class="operator">%</span> <span class="literal number integer">64</span><span class="punctuation">;</span>
+<span class="ln">12 </span>
+<span class="ln">13 </span>    <span class="keyword">return</span> <span class="name">f32_to_dac14</span><span class="punctuation">(</span><span class="name">q</span><span class="punctuation">);</span>
+<span class="ln">14 </span><span class="punctuation">}</span>
+</pre>
+<p>The assembly code for this implementation now shows that there are 9 operations in the inner multiply-accumulate loop. Note that modulo addressing with an arbitrary modulo is still an
+expensive operation (integer division). By keeping the delay line length at a power of two, the modulo operations are however economical (bitwise AND, as demonstrated in the assembly code).</p>
+<pre class="code literal-block">
+<span class="ln"> 1 </span>processSampleDirectFullCircular64:
+<span class="ln"> 2 </span>        PUSH      {A4, V1, V2, V3, V4, LR}
+<span class="ln"> 3 </span>        BL        adc14_to_f32
+<span class="ln"> 4 </span>        MOVS      V4, #64
+<span class="ln"> 5 </span>        LDR       A3, $C$CON1
+<span class="ln"> 6 </span>        LDR       V2, $C$FL1
+<span class="ln"> 7 </span>        LDR       V3, $C$CON2
+<span class="ln"> 8 </span>        LDRH      A1, [A3, #0]
+<span class="ln"> 9 </span>        LDR       V1, $C$CON3
+<span class="ln">10 </span>        VMOV      V9, S0
+<span class="ln">11 </span>        RSB       A2, A1, #64
+<span class="ln">12 </span>        VMOV      S0, V2
+<span class="ln">13 </span>        ASRS      A4, A2, #5
+<span class="ln">14 </span>        ADD       A4, A2, A4, LSR #26
+<span class="ln">15 </span>        BIC       A4, A4, #63
+<span class="ln">16 </span>        SUBS      A2, A2, A4
+<span class="ln">17 </span>        LSLS      A4, A1, #2
+<span class="ln">18 </span>        STR       V9, [V3, +A2, LSL #2]
+<span class="ln">19 </span>||$C$L1||:
+<span class="ln">20 </span>        LDR       V2, [V3], #4
+<span class="ln">21 </span>        AND       A2, A4, #252
+<span class="ln">22 </span>        SUBS      V4, V4, #1
+<span class="ln">23 </span>        VMOV      S1, V2
+<span class="ln">24 </span>        ADD       A2, V1, A2
+<span class="ln">25 </span>        VLDR.32   S2, [A2, #0]
+<span class="ln">26 </span>        ADD       A4, A4, #4
+<span class="ln">27 </span>        VMLA.F32  S0, S2, S1
+<span class="ln">28 </span>        BNE       ||$C$L1||
+<span class="ln">29 </span>        ADDS      A1, A1, #1
+<span class="ln">30 </span>        AND       A1, A1, #63
+<span class="ln">31 </span>        STRH      A1, [A3, #0]
+<span class="ln">32 </span>        BL        f32_to_dac14
+<span class="ln">33 </span>        POP       {A4, V1, V2, V3, V4, PC}
+</pre>
+<p>Finally, using profiling, we compare the cycle cost of the original FIR design (with shifting) and the optimized FIR design (with a circular buffer). This shows a gain of</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="25%" />
+<col width="21%" />
+<col width="25%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">FIR Design</th>
+<th class="head">16 taps</th>
+<th class="head">32 taps</th>
+<th class="head">64 taps</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>tap-shift</td>
+<td>383</td>
+<td>703</td>
+<td>1343</td>
+</tr>
+<tr class="row-odd"><td>circular buffer</td>
+<td>306</td>
+<td>530</td>
+<td>913</td>
+</tr>
+<tr class="row-even"><td>throughput (circular)</td>
+<td>1.25x</td>
+<td>1.32x</td>
+<td>1.47x</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h2>
+<p>We reviewed four different implementation styles for FIR filters: direct-form, transpose-form, cascade-form and frequency-sampling filter. The first three are able to implement any filter for which you can specific an finite impulse response. The frequency-sampling filter is a specific design technique that combines filter
+design and filter implementation.</p>
+<p>Next, we also reviewed the impact of memory organization on FIR design. Memory operations are expensive, and the streaming nature of DSP tends to generate lots of memory accesses. FIR designs can be implemented using a circular buffer. The basic idea in memory optimization is to reduce data movement as much as possible, at the expense of more complex memory adderssing.</p>
+<p>We have not discussed the design of FIR filters; a tool such as Matlab filterDesigners helps you compute filter coefficients, quantize filter coefficients, and compute amplitude/phase response. Please refer to Lab 2.</p>
+<p><em>If time left: discuss Matlab filterDesigner</em></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lecture5.html" class="btn btn-neutral float-right" title="L5: IIR filters, and their implementation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lecture3.html" class="btn btn-neutral" title="L3: DTFT, z-transform, and FIR filters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

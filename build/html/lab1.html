@@ -1,0 +1,511 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Lab 1 &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Lab 2" href="lab2.html" />
+    <link rel="prev" title="Labs" href="labs.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lectures.html">Lectures</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="labs.html">Labs</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Lab 1</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#self-study-hardware-setup">Self-Study: Hardware Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#self-study-software-setup">Self-Study: Software Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#downloading-the-assignment-code-in-ccs">Downloading the Assignment code in CCS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#downloading-the-assignment-repository">Downloading the assignment repository</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#downloading-the-support-library">Downloading the support library</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#running-the-first-program-blinking-led">Running the first program: blinking LED</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-loopback-application">The loopback application</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#connecting-the-oscilloscope">Connecting the Oscilloscope</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#determining-the-range-and-resolution-of-a-d-and-d-a">Determining the range and resolution of A/D and D/A</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#real-time-signal-processing">Real-time signal processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wrapping-up">Wrapping Up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grading-rubric">Grading Rubric</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lab2.html">Lab 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab3.html">Lab 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab4.html">Lab 4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5.html">Lab 5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reportguidelines.html">Report Guidelines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="labs.html">Labs</a> &raquo;</li>
+        
+      <li>Lab 1</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lab1.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lab-1">
+<span id="lab1"></span><h1>Lab 1<a class="headerlink" href="#lab-1" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this assignment is as follows.</p>
+<ul class="simple">
+<li>to familiarize you with the basic MSPEXP432P401R hardware with the Audio kit,</li>
+<li>to familiarize you with the process of editing, compiling, and downloading software with Code Composer Studio,</li>
+<li>to familiarize you with the process of debugging software and measuring audio signals,</li>
+<li>to verify basic notions of signal sampling and reconstruction.</li>
+</ul>
+<div class="section" id="self-study-hardware-setup">
+<h2>Self-Study: Hardware Setup<a class="headerlink" href="#self-study-hardware-setup" title="Permalink to this headline">¶</a></h2>
+<p>The MSPEXP432P401R is a development kit for an MSP432P401R microcontroller. The microcontroller chip includes a 48MHz ARM Cortex M4 processor with floating point arithmetic unit, 64KB of SRAM (for variables) and 256KB of Flash memory (for code). The MSP432P401R includes a collection of hardware peripherals including a 14-bit Analog to Digital converter, among others. The board contains three chips, but only one of them, the <em>DUT</em>, will be used to run DSP programs. Two other microcontrollers are used to program the DUT, and the measure its energy consumption. The board also has two rows of expansion headers that can be used to fit additional boards.</p>
+<div class="figure align-center" style="width: 400px">
+<img alt="_images/mspexp432.jpg" src="_images/mspexp432.jpg" />
+</div>
+<p>The audio interface for this board is implemented on a BOOSTXL-AUDIO board. This board includes a 14-bit Digital to Analog converter, audio amplifier and speaker, microphone with pre-amplifier. The board also has a jack for a headset, which will override the microphone and audio speaker with the headset audio.</p>
+<div class="figure align-center" style="width: 500px">
+<img alt="_images/audioxl.jpg" src="_images/audioxl.jpg" />
+</div>
+<p>The expansion headers of the BOOSTXL-AUDIO board are compatible with the headers on the MSPEXP432P401R, and both boards can be connected together to yield the hardware configuration used for real-time DSP experiments. This combo takes one single connection through your computer using the micro-USB plug on the MSPEXP432P401R board. This provides power to both boards. To learn more about this setup, consult the <a class="reference external" href="https://www.ti.com/lit/pdf/slau597">MSPEXP432P401R User Guide</a> and the <a class="reference external" href="https://www.ti.com/lit/pdf/slau670">BOOSTXL-AUDIO User Guide</a>. These guides are useful to consult the connection details of the expansion headers, as well as the schematics of both boards.</p>
+<div class="figure align-center" style="width: 500px">
+<img alt="_images/mspwithaudio.jpg" src="_images/mspwithaudio.jpg" />
+</div>
+</div>
+<div class="section" id="self-study-software-setup">
+<h2>Self-Study: Software Setup<a class="headerlink" href="#self-study-software-setup" title="Permalink to this headline">¶</a></h2>
+<p>To complete this assignment, you will need to install the following software tools on your laptop.</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://hub.wpi.edu/software/576/code-composer-studio">Code Composer Studio v10</a></li>
+<li><a class="reference external" href="https://www.ti.com/tool/download/SIMPLELINK-MSP432-SDK">MSP432 Software Development Kit</a></li>
+</ul>
+</div></blockquote>
+<p>You will also need to sign up for a <a class="reference external" href="https://github.com">GitHub account</a>, in case you do not have one. All assignments in this course will be distributed as repositories and returned as updates on those repositories. If you have never worked with version control and repositories before, take some time to learn about the basics of git repositories. The <a class="reference external" href="https://guides.github.com/">GitHub Guides</a> contain several short tutorials in checking out, committing and pushing repositories. Code Composer Studio has built-in support for git repositories.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The general sequence of solving an assignment will take the following practical steps.</p>
+<ol class="last arabic simple">
+<li>You will navigate to a <a class="reference external" href="https://classroom.github.com/">GitHub Classroom</a> link which will create a personal repository for the assignment. Each assignment will have its own repository. This repository is <em>private</em> between you and the instructor and TA, meaning that only you, the instructor and the TA will have access to it.</li>
+<li>You will download the assignment repository into CCS. The assignments typically will come with some starter code that you need to further complete while solving the assignment. Using CCS, you can develop code, compile code, download binary programs to the hardware kit, and debug programs running on the hardware kit.</li>
+<li>When you have solved the assignment, you will upload the modifications that you made to the repository to GitHub. This can be done from within CCS. GitHub records the time of the uploads. The assignment turn-in time will be the most recent update to your assignment repository. The turn-in time is important as it determines if you have completed the assignment late.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="downloading-the-assignment-code-in-ccs">
+<h2>Downloading the Assignment code in CCS<a class="headerlink" href="#downloading-the-assignment-code-in-ccs" title="Permalink to this headline">¶</a></h2>
+<p>This assignment can be solved in teams of up to three people. Discuss among yourselves to form a team. When ready, navigate to GitHub classroom by clicking on the following link: <a class="reference external" href="https://classroom.github.com/g/rLOQExDq">https://classroom.github.com/g/rLOQExDq</a>. The link will ask you to either join an existing team or else form a new team. Your repository will then be created. The repository link will have your team name. For example, if your team is named <em>dsp</em>, you will find that the following repository is created.</p>
+<div class="figure align-center" style="width: 500px">
+<img alt="_images/githubclassroom.jpg" src="_images/githubclassroom.jpg" />
+</div>
+<div class="section" id="downloading-the-assignment-repository">
+<h3>Downloading the assignment repository<a class="headerlink" href="#downloading-the-assignment-repository" title="Permalink to this headline">¶</a></h3>
+<p>Copy the repository link, <a class="reference external" href="https://github.com/wpi-ece4703-b20/assignment-1-dsp">https://github.com/wpi-ece4703-b20/assignment-1-dsp</a> to the clipboard and start code composer studio. Take the following steps to download the repository into CCS.</p>
+<ul class="simple">
+<li>In the project explorer pane, right-click and select <em>Import ..</em> from the pulldown menu, followed by  <em>Import</em>.</li>
+<li>A source selection window opens. Select <em>Git</em> and <em>Projects from Git</em>.</li>
+<li>A repository selection window opens. Select <em>Clone URI</em>.</li>
+<li>Enter the Team repository URI, as well as your GitHub credentials, in the next Source Git Repository window.</li>
+</ul>
+<div class="figure align-center" style="width: 500px">
+<img alt="_images/githuburi.jpg" src="_images/githuburi.jpg" />
+</div>
+<ul class="simple">
+<li>Select the master branch, and choose an appropriate local destination for your repository. The local destination must be a directory on your local harddrive. The default selection of CCS is <em>R:/git/repositoryname</em> - which is most likely not a drive letter that you have available. Click <em>Browse</em> and find a good destination. That would typically be <em>C:/username/git</em>.</li>
+<li>Select all projects available from the Assignment Repository. That includes two projects: a1_blinking_led and a1_polled_loopback.</li>
+</ul>
+</div>
+<div class="section" id="downloading-the-support-library">
+<h3>Downloading the support library<a class="headerlink" href="#downloading-the-support-library" title="Permalink to this headline">¶</a></h3>
+<p>All projects also make use of a support library specifically developed for this class. The support library will be shared among all assignments and has to be downloaded only once. It is available in a repository by itself: <a class="reference external" href="https://github.com/wpi-ece4703-b20/msp432_boostxl_lib">https://github.com/wpi-ece4703-b20/msp432_boostxl_lib</a>. Download this library into CCS in the same manner as you did for your assignment code.</p>
+<ul class="simple">
+<li>In the project explorer pane,  right-click and select <em>Import ..</em> from the pulldown menu, followed by  <em>Import</em>.</li>
+<li>A source selection window opens. Select <em>Git</em> and <em>Projects from Git</em>.</li>
+<li>A repository selection window opens. Select <em>Clone URI</em>.</li>
+<li>Enter the support library URI, as well as your GitHub credentials, in the next Source Git Repository window.</li>
+</ul>
+<p>When the download completes, the CCS project explorer will now contain three projects as shown below. Two of these projects are part of Assignment 1. The third is a support library.</p>
+<div class="figure align-center" style="width: 300px">
+<img alt="_images/assignment1explore.jpg" src="_images/assignment1explore.jpg" />
+</div>
+</div>
+</div>
+<div class="section" id="running-the-first-program-blinking-led">
+<h2>Running the first program: blinking LED<a class="headerlink" href="#running-the-first-program-blinking-led" title="Permalink to this headline">¶</a></h2>
+<p>You are now ready to run the first example, <em>a1_blinking_led</em>.  This code blinks red LED on the main board. Study the code and analyze how it works.</p>
+<p>The function <code class="docutils literal notranslate"><span class="pre">msp432_boostxl_init()</span></code> is used to initialize the support library. It ensures that the ARM Cortex M4 will run at 48MHz. The <code class="docutils literal notranslate"><span class="pre">errorledon()</span></code> and <code class="docutils literal notranslate"><span class="pre">errorledoff()</span></code> functions are provided in the support library. Note how time is measured in this design, by counting clock cycles. Between each LED toggle, an artifical delay of 10,000,000 clock cycles is inserted.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="comment preproc">#include</span> <span class="comment preprocfile">&lt;ti/devices/msp432p4xx/driverlib/driverlib.h&gt;</span><span class="comment preproc">
+</span><span class="ln"> 2 </span><span class="comment preproc">#include</span> <span class="comment preprocfile">&quot;msp432_boostxl_init.h&quot;</span><span class="comment preproc">
+</span><span class="ln"> 3 </span><span class="comment preproc"></span>
+<span class="ln"> 4 </span><span class="keyword type">int</span> <span class="name function">main</span><span class="punctuation">(</span><span class="keyword type">void</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 5 </span>    <span class="name">WDT_A_hold</span><span class="punctuation">(</span><span class="name">WDT_A_BASE</span><span class="punctuation">);</span>
+<span class="ln"> 6 </span>
+<span class="ln"> 7 </span>    <span class="name">msp432_boostxl_init</span><span class="punctuation">();</span>
+<span class="ln"> 8 </span>
+<span class="ln"> 9 </span>    <span class="keyword">while</span> <span class="punctuation">(</span><span class="literal number integer">1</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln">10 </span>        <span class="name">errorledon</span><span class="punctuation">();</span>
+<span class="ln">11 </span>        <span class="name">__delay_cycles</span><span class="punctuation">(</span><span class="literal number integer">10000000</span><span class="punctuation">);</span>
+<span class="ln">12 </span>        <span class="name">errorledoff</span><span class="punctuation">();</span>
+<span class="ln">13 </span>        <span class="name">__delay_cycles</span><span class="punctuation">(</span><span class="literal number integer">10000000</span><span class="punctuation">);</span>
+<span class="ln">14 </span>    <span class="punctuation">}</span>
+<span class="ln">15 </span>
+<span class="ln">16 </span>    <span class="keyword">return</span> <span class="literal number integer">1</span><span class="punctuation">;</span>
+<span class="ln">17 </span><span class="punctuation">}</span>
+</pre>
+<p>To compile this program, you have to build the support library, as well as the application <em>a1_blinking_led</em>. To compile in CCS, right-click the library and select ‘build project’. Do the same for <em>a1_blinking_led</em>. When a program compiles, the <em>Build Console</em> in CCS displays diagnostic information such as warnings and errors. The diagnostic information is important. Verify the diagnostics and use this as a method to avoid errors in your software.</p>
+<p>Once the program successfully compiles, you can download it on the board and run it. The quickest to achieve this is to run the debugger, available by clicking the small bug in the top menu of CCS. As the debugger initializes, it will download the program to the board and halt execution just at the start of the main function. You can continue execution by pressing the green play button. The LED on the MSP432 board will now blink. To exit the debugger, press the stop button. This will return you to the edit window. Once you exit the debugger, the program loaded onto the hardware continues to execute. In this case, the LED continues to blink.</p>
+<p>Before moving on, take a moment to make sure you understand all the steps involved in editing, compiling, and running a program.</p>
+<ul class="simple">
+<li>Try to change the behavior of the blinking LED. For example, build a blinking LED that blinks three times per second with a 25% duty cycle. After you have made modifications to the application, build it in the compiler, and run it on the MSP432 board.</li>
+<li>Exit CCS, power off the board. Start CCS again and power up the board again. Go through the steps of reprogramming the blinking LED application.</li>
+<li>In the debugger, set a a breakpoint at <code class="docutils literal notranslate"><span class="pre">errorledoff()</span></code>. Single-step through the code (yellow arrow right besides the red stop button). Describe the implementation of the <code class="docutils literal notranslate"><span class="pre">errorledoff()</span></code> function. Single-step further into <code class="docutils literal notranslate"><span class="pre">GPIO_setAsOutputPin(</span> <span class="pre">GPIO_PORT_P1,</span> <span class="pre">GPIO_PIN0)</span></code>. The source code for this function, which is part of the MSP432 low-level library, is not known to the debugger. Find how the debugger deals with this. Finally remove the breakpoint and press the continue button.</li>
+</ul>
+<pre class="code c literal-block">
+<span class="ln">1 </span><span class="keyword type">void</span> <span class="name function">errorledoff</span><span class="punctuation">()</span> <span class="punctuation">{</span>
+<span class="ln">2 </span>    <span class="name">GPIO_setAsOutputPin</span><span class="punctuation">(</span> <span class="name">GPIO_PORT_P1</span><span class="punctuation">,</span> <span class="name">GPIO_PIN0</span><span class="punctuation">);</span>
+<span class="ln">3 </span>    <span class="name">GPIO_setOutputLowOnPin</span><span class="punctuation">(</span> <span class="name">GPIO_PORT_P1</span><span class="punctuation">,</span> <span class="name">GPIO_PIN0</span><span class="punctuation">);</span>
+<span class="ln">4 </span><span class="punctuation">}</span>
+</pre>
+</div>
+<div class="section" id="the-loopback-application">
+<h2>The loopback application<a class="headerlink" href="#the-loopback-application" title="Permalink to this headline">¶</a></h2>
+<p>You are now ready to work on the loopback application. Study the program as you did for the LED.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="comment preproc">#include</span> <span class="comment preprocfile">&lt;ti/devices/msp432p4xx/driverlib/driverlib.h&gt;</span><span class="comment preproc">
+</span><span class="ln"> 2 </span><span class="comment preproc">#include</span> <span class="comment preprocfile">&quot;msp432_boostxl_init.h&quot;</span><span class="comment preproc">
+</span><span class="ln"> 3 </span><span class="comment preproc"></span>
+<span class="ln"> 4 </span><span class="keyword type">uint16_t</span> <span class="name function">processSample</span><span class="punctuation">(</span><span class="keyword type">uint16_t</span> <span class="name">in</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 5 </span>    <span class="keyword">return</span> <span class="name">in</span><span class="punctuation">;</span>
+<span class="ln"> 6 </span><span class="punctuation">}</span>
+<span class="ln"> 7 </span>
+<span class="ln"> 8 </span><span class="keyword type">int</span> <span class="name function">main</span><span class="punctuation">(</span><span class="keyword type">void</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 9 </span>    <span class="name">WDT_A_hold</span><span class="punctuation">(</span><span class="name">WDT_A_BASE</span><span class="punctuation">);</span>
+<span class="ln">10 </span>
+<span class="ln">11 </span>    <span class="name">msp432_boostxl_init_poll</span><span class="punctuation">(</span><span class="name">BOOSTXL_MIC_IN</span><span class="punctuation">,</span>
+<span class="ln">12 </span>                             <span class="name">processSample</span><span class="punctuation">);</span>
+<span class="ln">13 </span>
+<span class="ln">14 </span>    <span class="name">msp432_boostxl_run</span><span class="punctuation">();</span>
+<span class="ln">15 </span>
+<span class="ln">16 </span>    <span class="keyword">return</span> <span class="literal number integer">1</span><span class="punctuation">;</span>
+<span class="ln">17 </span><span class="punctuation">}</span>
+</pre>
+<p>This program does a loopback function. It repeatedly reads a sample from the microphone, sends the value of the sample to <code class="docutils literal notranslate"><span class="pre">processSample</span></code> and returns the resulting ouptut to the audio amplifier.</p>
+<p>The function `` msp432_boostxl_init_poll(BOOSTXL_MIC_IN, processSample)`` sets up a <em>callback</em> function. Each time the analog-to-digital converter delivers a sample, it will pass on the value of that sample to <code class="docutils literal notranslate"><span class="pre">processSample</span></code>. The output of <code class="docutils literal notranslate"><span class="pre">processSample</span></code> will be delivered to the digital-to-analog converter, which eventually plays the sample on the speaker. Then the process starts over, and the next audio sample is converted from the microphone. This process happens as fast as possible, and is called a <em>polling-mode input-output</em> mechanism. As fast as possible does not mean ‘infinitely fast’. Making A/D conversions and sendind samples to the D/A converter takes time. In addition, the processor runs at 48MHz - quite fast, but not infinite. All these factors combined limit the speed at which samples are moved from the microphone to the speaker.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Question 1: Run the loopback application on the board. What do you hear? Explain what is happening.</p>
+</div>
+<div class="section" id="connecting-the-oscilloscope">
+<span id="connect-scope"></span><h3>Connecting the Oscilloscope<a class="headerlink" href="#connecting-the-oscilloscope" title="Permalink to this headline">¶</a></h3>
+<p>For the next experiment, you need to an oscilloscope - either one from a lab bench setup, or else a USB
+scope connected to your laptop. The examples on this page are made using an Analog Discovery USB Scope
+from Digilent - but other models are equally fine. Refer to the <span class="xref std std-ref">usb_scope</span> section in the Technical Documentation pages.</p>
+<p>The figure below shows the signal flow block diagram of the hardware along with various measurement points on the AUDIO XL board where these signals can be picked up. You may find additional measurement points of interest by studying the schematics of the <a class="reference internal" href="techdoc.html#hardware-manuals"><span class="std std-ref">MSP-EXP432P401R Kit</span></a> as well as the audio board.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/sample.jpg" src="_images/sample.jpg" />
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Question 2: Use an oscilloscope to determine the DAC sample rate of the polling input/output program. Explain how you came to that conclusion.</p>
+</div>
+<p>To determine the A/D and D/A conversion range, we will make a small change to the loopback program. Instead of reading input from the microphone, you will change the program to read input from pin J1.2.
+Change the function call to <code class="docutils literal notranslate"><span class="pre">msp432_boostxl_init_poll</span></code> as follows:</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">msp432_boostxl_init_poll</span><span class="p">(</span><span class="n">BOOSTXL_J1_2_IN</span><span class="p">,</span>
+                         <span class="n">processSample</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Take a signal generator and configure it to create a sine-shape signal with frequency of 1 KHz, amplitude of 1V and offset 1V. In other words, the input signal on pin J1.2 will vary sinusoidally from 0V to 2V. Run the program and capture the output on an oscilloscope.</p>
+<p>Does the signal appear undistorted?</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Question 3: Use an oscilloscope to capture the output to the audio amplifier. Does the signal appear undistorted? <em>Hint</em>: measure the signal both before and after the lowpass filter at the output of the DAC. Explain what you see. In particular, explain the distortions that appear on the sine wave.</p>
+</div>
+<div class="figure align-center" style="width: 500px">
+<img alt="_images/samplesine.jpg" src="_images/samplesine.jpg" />
+</div>
+</div>
+<div class="section" id="determining-the-range-and-resolution-of-a-d-and-d-a">
+<h3>Determining the range and resolution of A/D and D/A<a class="headerlink" href="#determining-the-range-and-resolution-of-a-d-and-d-a" title="Permalink to this headline">¶</a></h3>
+<p>Your next task is to determine the span and voltage resolution of the A/D and D/A conversion.
+Based on the technical specification, the resolution of the A/D and D/A are identical, and
+equal to 14 bit. The A/D and D/A codes are unsigned numbers with values from 0 (smallest code) to 2^14 - 1 = 16,383 (largest code). From the previous experiment, we also found that the analog range of voltages on the A/D side maps to the same range of voltages on the D/A side.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Question 4: Make changes to the loopback program so that you can test what D/A voltage corresponds to the lowest and largest code. Given these two analog values, determine the span of the D/A.
+Show your program and explain how it works.</p>
+</div>
+</div>
+</div>
+<div class="section" id="real-time-signal-processing">
+<h2>Real-time signal processing<a class="headerlink" href="#real-time-signal-processing" title="Permalink to this headline">¶</a></h2>
+<p>You will now develop a new application which will compute and return the sum over the last five input samples. Instead of polling, you will use a give sample rate of 24KHz. Refer to the documentation for the <a class="reference internal" href="techdoc.html#msp432-boostxl-lib"><span class="std std-ref">MSP432_BOOSTXL_LIB</span></a> library, and specifically to the function <code class="docutils literal notranslate"><span class="pre">msp432_boostxl_init_intr</span></code>.</p>
+<p>You can refer to the loopback example on how to set up your application.
+Create the application as a <em>new</em> project in Code Composer Studio.
+The name of the new application should be <em>a1_average</em>. The easiestway to create this application is to copy the loopback example and to rename that example; all these operations are supported directly in the GUI. Here is how the GUI should look like if you have copied the project.</p>
+<div class="figure align-center" style="width: 500px">
+<img alt="_images/a1_projectspace.jpg" src="_images/a1_projectspace.jpg" />
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Question 5: Write the averaging application according to the parameters specified above (24 KHz sample rate, 5-tap sum). Configure the application to read from input J1.2. At the input,
+apply a 2KHz square wave. The square wave has a 100mV amplitude and a 100mV offset, i.e. it switches up and down between 0V and 200mV. Use the scope to capture the output waveform. Explain the shape of the output waveform in function of the sample rate of the application, and the application that is running.</p>
+</div>
+</div>
+<div class="section" id="wrapping-up">
+<h2>Wrapping Up<a class="headerlink" href="#wrapping-up" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The answer to this lab consists of a written report which will be emailed to the instructor and the TA by the deadline. Refer to the General Lab Report Guidelines for details on report formatting. You will only submit your written report by email. All code developed must be returned through github.</li>
+<li>Not everybody in the class may be using the same setup to make oscilloscope measurements. Start your report with a short introduction on your measurement setup including the MSP-EXP432P401R kit, the oscilloscope and the signal generator that you have used for this lab.</li>
+<li>Follow the five questions outlined above to structure your report. Use figures, screenshots and code examples where appropriate. Please work out the answers in sufficient detail to show your <em>analysis</em>. For example, Question 3 asks about the distortion in the signal as it leaves the DAC. To answer that question, you have to describe what you see (the <em>observable</em> aspects), but you also have to analyze the cause of what you see (the <em>analytical</em> aspects).</li>
+<li>Make sure that you add newly developed projects to github: Use the Team - Share pop-up menu and select your repository for this lab, such as <a class="reference external" href="https://github.com/wpi-ece4703-b20/assignment-1-dsp">https://github.com/wpi-ece4703-b20/assignment-1-dsp</a>). Further, make sure that you commit and push all changes to the github repository on GitHub classroom. Use the Team - Commit pop-up menu and push all changes.</li>
+<li>Be aware that each of the laboratory assignments in ECE4703 will require a significant investment in time and preparation if you expect to have a working system by the assignment’s due date. This course is run in “open lab” mode where it is not expected that you will be able to complete the laboratory in the scheduled official lab time. It is in your best interest to plan ahead so that you can use the TA and instructor’s office hours most efficiently.</li>
+</ul>
+<p><em>Good Luck</em></p>
+</div>
+<div class="section" id="grading-rubric">
+<h2>Grading Rubric<a class="headerlink" href="#grading-rubric" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="83%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Requirement</th>
+<th class="head">Points</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Question 1 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-odd"><td>Question 2 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-even"><td>Question 3 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-odd"><td>Question 4 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-even"><td>Question 5 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-odd"><td>All projects build without errors or warnings</td>
+<td>5</td>
+</tr>
+<tr class="row-even"><td>Code is well structured and commented</td>
+<td>5</td>
+</tr>
+<tr class="row-odd"><td>Git Repository is complete and up to date</td>
+<td>5</td>
+</tr>
+<tr class="row-even"><td>Overall Report Quality (Format, Outline, Grammar)</td>
+<td>10</td>
+</tr>
+<tr class="row-odd"><td><strong>TOTAL</strong></td>
+<td><strong>100</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lab2.html" class="btn btn-neutral float-right" title="Lab 2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="labs.html" class="btn btn-neutral" title="Labs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>How-To Guides &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Technical Documentation" href="techdoc.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lectures.html">Lectures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="labs.html">Labs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How-To Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#measurements-and-experiments">Measurements and Experiments</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-find-the-com-port-used-by-bitscope">How do I find the COM port used by Bitscope?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-minimize-the-noise-in-the-measured-bitscope-signal">How do I minimize the noise in the measured bitscope signal?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#software-development">Software Development</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-we-add-a-project-to-our-local-github-repository">How do we add a project to our local Github repository?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-we-return-code-to-github-from-within-code-composer-studio">How do we return code to Github from within Code Composer Studio?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#digital-signal-processing-theory">Digital Signal Processing Theory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-go-from-z-plan-poles-and-zeroes-to-g-z-and-vice-versa">How do I go from z-plan poles and zeroes to G(z) and vice versa?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>How-To Guides</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/howto.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="how-to-guides">
+<h1>How-To Guides<a class="headerlink" href="#how-to-guides" title="Permalink to this headline">¶</a></h1>
+<p>On this page you find short instructional guides to project tasks and experimental work.</p>
+<div class="section" id="measurements-and-experiments">
+<h2>Measurements and Experiments<a class="headerlink" href="#measurements-and-experiments" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-do-i-find-the-com-port-used-by-bitscope">
+<h3>How do I find the COM port used by Bitscope?<a class="headerlink" href="#how-do-i-find-the-com-port-used-by-bitscope" title="Permalink to this headline">¶</a></h3>
+<p>For the Bitscope to function properly, you have to configure the proper COM port
+in the Bitscope setup. Here is how you can identify the proper COM port.</p>
+<p>On Windows, open the device manager (by running ‘Device Manager’ from the search prompt).
+Look for the entry <strong>Ports (COM &amp; LPT)</strong>. If the MSP-EXP432P401R kit and the bitscope are
+both connected, you will find three COM ports are in use.</p>
+<p>In the Bitscope setup, you would now use <strong>COMz</strong> as the proper configuration, where z is an integer.
+Examples are COM16, COM17, etc.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="48%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Device Manager Entry</th>
+<th class="head">Purpose</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>XDS110 Class Application/User UART (COMx)</td>
+<td>User UART for the MSP432P401R</td>
+</tr>
+<tr class="row-odd"><td>XDS110 Class Auxiliary Data Port (COMy)</td>
+<td>Programming/debug port for MSP432P401R</td>
+</tr>
+<tr class="row-even"><td>USB Serial Port (COMz)</td>
+<td>Bitscope data port</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="how-do-i-minimize-the-noise-in-the-measured-bitscope-signal">
+<h3>How do I minimize the noise in the measured bitscope signal?<a class="headerlink" href="#how-do-i-minimize-the-noise-in-the-measured-bitscope-signal" title="Permalink to this headline">¶</a></h3>
+<p>Even though we are measuring signals with a relatively small bandwidth, it’s still possible to
+pick up a lot of noise, such as shown in the following trace.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/noisy.jpg" src="_images/noisy.jpg" />
+</div>
+<p>This noisy image was recorded at 200mV/div, indicating there is significant disturbance.
+In this case, the noise was caused by improper grounding of the measurement setup.
+As shown in the setup, both the waveform generation signal, and the measured DAC output
+are measured using a single wire without ground. The net effect is a ‘ground loop’, where the common
+ground between MSP-432 kit and the bitscope runs through the USB cables.</p>
+<div class="figure align-center" style="width: 300px">
+<img alt="_images/nognd.jpg" src="_images/nognd.jpg" />
+</div>
+<p>With proper grounding, we obtain a clean signal.
+While grounding cannot eliminate all sources of interference, it will be
+a major contribution to measuring sharp traces in your DSP experiments.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/nomorenoisy.jpg" src="_images/nomorenoisy.jpg" />
+</div>
+<p>Provide a ground signal for every live signal. You can use wire pairs and
+connect the ground signal on the MSP-432 kit side as well as on the bitscope side. The bottom header pins of the
+Hammerhead extension are all grounded.</p>
+<div class="figure align-center" style="width: 300px">
+<img alt="_images/withgnd1.jpg" src="_images/withgnd1.jpg" />
+</div>
+<div class="figure align-center" style="width: 300px">
+<img alt="_images/withgnd2.jpg" src="_images/withgnd2.jpg" />
+</div>
+</div>
+</div>
+<div class="section" id="software-development">
+<h2>Software Development<a class="headerlink" href="#software-development" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-do-we-add-a-project-to-our-local-github-repository">
+<h3>How do we add a project to our local Github repository?<a class="headerlink" href="#how-do-we-add-a-project-to-our-local-github-repository" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Right-click on the non-repo project and select ‘Team .. share ..’</li>
+<li>In the project sharing window, select the repository you want to add it to. Use the pull-down selector to get a list of currently-used repositories</li>
+</ol>
+</div>
+<div class="section" id="how-do-we-return-code-to-github-from-within-code-composer-studio">
+<h3>How do we return code to Github from within Code Composer Studio?<a class="headerlink" href="#how-do-we-return-code-to-github-from-within-code-composer-studio" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Right-click on your project in the project explorer and select ‘Team .. commit ..’. Note: If you don’t see ‘Team .. commit ..’ but only ‘Team .. share ..’, then your project is not included in a repository yet. Consult the previous question (How do we add a project to our local Github repository)</li>
+<li>In the ‘Git Staging’ window that appears, make sure that all the files you have changed are in the ‘Staged Changes’ window. Drag them from ‘Unstaged Changes’ to ‘Staged Changes’ if needed.</li>
+<li>In the ‘Git Staging’ window, add a comment message</li>
+<li>In the ‘Git Staging’ window, click on ‘Commit and Push’. It’s a good idea to open a browser afterwards, go to github.com and verify that your repository has been updated with your code.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="digital-signal-processing-theory">
+<h2>Digital Signal Processing Theory<a class="headerlink" href="#digital-signal-processing-theory" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-do-i-go-from-z-plan-poles-and-zeroes-to-g-z-and-vice-versa">
+<h3>How do I go from z-plan poles and zeroes to G(z) and vice versa?<a class="headerlink" href="#how-do-i-go-from-z-plan-poles-and-zeroes-to-g-z-and-vice-versa" title="Permalink to this headline">¶</a></h3>
+<p>The filter transfer function <img class="math" src="_images/math/7122590e858a5e23ce3cd42f8a763e95334b868f.png" alt="G(z)"/> and its z-plane features are related as follows.
+Writing <img class="math" src="_images/math/7122590e858a5e23ce3cd42f8a763e95334b868f.png" alt="G(z)"/> as <img class="math" src="_images/math/109f8eb1f4fdf4965de96930fe8eb000f6708843.png" alt="\frac{N(z)}{D(z)}"/>, then the zeroes of <img class="math" src="_images/math/7122590e858a5e23ce3cd42f8a763e95334b868f.png" alt="G(z)"/> are the values of z
+where <img class="math" src="_images/math/b23662125c1fee29e362d84a88f2c37fa798d50b.png" alt="N(z)"/> is zero, and the poles of <img class="math" src="_images/math/7122590e858a5e23ce3cd42f8a763e95334b868f.png" alt="G(z)"/> are the values of z where <img class="math" src="_images/math/572def2232255620bab0bf4b255eaa1f3137a3d6.png" alt="D(z)"/> is zero.</p>
+<p><strong>From z-plane to G(z)</strong></p>
+<p>Here’s an example. Pick a point in the z-plane defined by <img class="math" src="_images/math/0abc8739a1844cbcb29d29b45a403a5ac35a9450.png" alt="A.e^{j.\phi}"/>. To create a zero, we would
+form the expression</p>
+<div class="math">
+<p><img src="_images/math/7b395868d6f54f2cc7daffc33c314ee8931b64bd.png" alt="N(z) = z - A.e^{j.\phi}"/></p>
+</div><p>We are used to see G(z) written in terms of <img class="math" src="_images/math/1a4b8d0a55f4ac355c094e93f5fdef08d7c20762.png" alt="z^{-1}"/>. So, let’s introduce <img class="math" src="_images/math/1da45c70472d66a4d3d45cb85d990d49e60494b2.png" alt="D(z) = z"/> and compute
+<img class="math" src="_images/math/7122590e858a5e23ce3cd42f8a763e95334b868f.png" alt="G(z)"/>.</p>
+<div class="math">
+<p><img src="_images/math/fa22eee1f87ff5a7d02c091117a685ed5a3edc68.png" alt="G(z) =&amp; \frac{N(z)}{D(z)} \\
+     =&amp; \frac{z - A.e^{j.\phi}}{z}      \\
+ =&amp; \frac{1 - A.e^{j.\phi}.z^{-1}}{z^{-1}}"/></p>
+</div><p>In order to make G(z) causal (i.e., only negative powers of z), we are introducing a pole at the
+center of the unit circle. G(z) has the following impulse response: <img class="math" src="_images/math/d839e144267ecbb8a87acbc8a7dfda7824a1693e.png" alt="1"/>, followed by <img class="math" src="_images/math/b0e99781d6d4370f9376d6745c4f3df8978eb8df.png" alt="- A.e^{j.\phi}"/>.</p>
+<p>When G(z) needs to have real coefficients, the zeroes (and poles) have to appear in conjugate pairs.
+Let’s for example create an H(z) containing two zeroes, one at <img class="math" src="_images/math/0abc8739a1844cbcb29d29b45a403a5ac35a9450.png" alt="A.e^{j.\phi}"/> and one at
+<img class="math" src="_images/math/f130718e36b39e18cf811637ca5da0869143fc4e.png" alt="A.e^{-j.\phi}"/>, then we would create:</p>
+<div class="math">
+<p><img src="_images/math/4aeb180c5f935e9d8bc53350970a0753ee76d524.png" alt="H(z) =&amp; \frac{(1 - A.e^{j.\phi}.z^{-1}).(1 - A.e^{-j.\phi}.z^{-1})}{z^{-2}}   \\
+ =&amp; \frac{1 - 2.A.cos(\phi).z^{-1} + z^{-2}}{z^{-2}}"/></p>
+</div><p>To make H(z) causal, we have to introduce a double pole at the center of the unit circle.</p>
+<p><strong>From G(z) to z-plane</strong></p>
+<p>We use a root finding program, such as the <code class="docutils literal notranslate"><span class="pre">roots</span></code> function in Matlab.</p>
+<p>Here’s an example. If you have the following G(z)</p>
+<div class="math">
+<p><img src="_images/math/cdb1020fd9f0042f8f37821c75270933fb1d1533.png" alt="G(z) = 1 + 2.z^{-1} + 4.z^{-2}"/></p>
+</div><p>Then we would have the following equation in terms of z:</p>
+<div class="math">
+<p><img src="_images/math/c727e86f0fa73b37220e46f628fc115ef87e2df1.png" alt="G(z) = \frac{z^2 + 2.z + 4}{z^2}"/></p>
+</div><p>In matlab we would compute <code class="docutils literal notranslate"><span class="pre">roots([1</span> <span class="pre">2</span> <span class="pre">4])</span></code> which gives a complex conjugate pair <img class="math" src="_images/math/a69f3927f7d5bd5c42135ac6b4fe643ca32c233c.png" alt="-1.0000 \pm 1.7321i"/>. This corresponds to two
+zeroes located outside of the unit circle.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="techdoc.html" class="btn btn-neutral" title="Technical Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

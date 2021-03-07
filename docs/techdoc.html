@@ -1,0 +1,585 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Technical Documentation &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="How-To Guides" href="howto.html" />
+    <link rel="prev" title="Report Guidelines" href="reportguidelines.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lectures.html">Lectures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="labs.html">Labs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Technical Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dsp-books">DSP Books</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-composer-studio">Code Composer Studio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#matlab">Matlab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#msp-exp432p401r-kit">MSP-EXP432P401R Kit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bitscope">Bitscope BS05</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#msp432-boostxl-lib">MSP432_BOOSTXL_LIB</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#msp432-boostxl-init">msp432_boostxl_init()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#msp432-boostxl-run">msp432_boostxl_run()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#msp432-boostxl-init-poll">msp432_boostxl_init_poll()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#msp432-boostxl-init-intr">msp432_boostxl_init_intr()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#msp432-boostxl-init-dma">msp432_boostxl_init_dma()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#measureperfsample">measurePerfSample()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#measureperfbuffer">measurePerfBuffer()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#errorledoff">errorledoff()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#errorledon">errorledon()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adc14-to-q15">adc14_to_q15</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adc14-to-q31">adc14_to_q31</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adc14-to-f32">adc14_to_f32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#q15-to-dac14">q15_to_dac14</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#q31-to-dac14">q31_to_dac14</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#f32-to-dac14">f32_to_dac14</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Technical Documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/techdoc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="technical-documentation">
+<h1>Technical Documentation<a class="headerlink" href="#technical-documentation" title="Permalink to this headline">¶</a></h1>
+<p>On this page you find pointers to relevant hardware and software documentation, downloads, and online references.
+In summary, you will need the following hardware and software to complete the assignments of this course.</p>
+<ul class="simple">
+<li>Software<ul>
+<li><a class="reference external" href="https://hub.wpi.edu/software/576/code-composer-studio">Code Composer Studio v10</a></li>
+<li><a class="reference external" href="https://www.ti.com/tool/download/SIMPLELINK-MSP432-SDK">MSP432 Software Development Kit</a></li>
+<li><a class="reference external" href="https://hub.wpi.edu/software/482/matlab">Matlab R2020</a></li>
+<li>A <a class="reference external" href="https://github.com/">GitHub</a> account</li>
+<li>A git client such as <a class="reference external" href="https://tortoisegit.org/">Turtoise GIT</a></li>
+</ul>
+</li>
+<li>Hardware<ul>
+<li><a class="reference external" href="https://www.ti.com/tool/MSP-EXP432P401R">MSP-EXP432P401R Launchpad</a>: Development board with 48 MHz ARM Cortex M4.</li>
+<li><a class="reference external" href="https://www.ti.com/tool/BOOSTXL-AUDIO">Audio Signal Processing Boosterpack</a>: Audio Extension board for MSP-EXP432.</li>
+<li>A USB Oscilloscope such as <a class="reference external" href="http://bitscope.com/product/BS05/">Bitscope BS05</a> or <a class="reference external" href="https://store.digilentinc.com/analog-discovery-2-100msps-usb-oscilloscope-logic-analyzer-and-variable-power-supply/">Analog Discovery 2</a>.</li>
+</ul>
+</li>
+</ul>
+<div class="section" id="dsp-books">
+<h2>DSP Books<a class="headerlink" href="#dsp-books" title="Permalink to this headline">¶</a></h2>
+<p>The official course textbook is <a class="reference external" href="https://www.wiley.com/en-us/Digital+Signal+Processing+Using+the+ARM+Cortex+M4-p-9781118859049">Digital Signal Processing Using the ARM Cortex-M4</a>. We will follow the overall outline of this book but will not literally depend on it. Hence, don’t feel compelled to buy the book as there will be ample documentation and supporting materials available for free.</p>
+<p>Here are several other good references on Digital Signal Processing. All of the following works focus on Digital Signal Processing, and not on writing DSP programs.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.pearson.com/us/higher-education/program/Proakis-Digital-Signal-Processing-4th-Edition/PGM258227.html">Digital Signal Processing, 4th Edition</a> by John G. Proakis and Dimitris K Manolakis is a standard text on DSP (and the book you’re familiar with from ECE 2312).</li>
+<li><a class="reference external" href="https://link.springer.com/book/10.1007/978-1-349-19719-4">An Introduction to the Analysis and Processing of Signals</a> by Paul Lynn is a brilliant summary text on digital signal processing. It’s pretty old, but it does a wonderful job at explaining the fundamentals without loosing itself in math.</li>
+<li><a class="reference external" href="https://www.mhprofessional.com/9780071635097-usa-schaums-outline-of-digital-signal-processing-2nd-edition">Schaums Outline Of Digital Signal Processing, 2nd Edition</a> discusses the essentials of Digital Signal Processing Theory.</li>
+</ul>
+</div>
+<div class="section" id="code-composer-studio">
+<h2>Code Composer Studio<a class="headerlink" href="#code-composer-studio" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://software-dl.ti.com/ccs/esd/documents/ccs_documentation-overview.html">CCS Documentation Tree</a></li>
+<li><a class="reference external" href="http://downloads.ti.com/docs/esd/SPNU118/">ARM Assembly Language Tools</a></li>
+<li><a class="reference external" href="http://downloads.ti.com/docs/esd/SPNU151/">ARM Optimizing C/C++ Compiler User Guide</a></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="matlab">
+<h2>Matlab<a class="headerlink" href="#matlab" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://www.mathworks.com/help/dsp/index.html">DSP System Toolbox</a></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="msp-exp432p401r-kit">
+<span id="hardware-manuals"></span><h2>MSP-EXP432P401R Kit<a class="headerlink" href="#msp-exp432p401r-kit" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://www.ti.com/lit/pdf/slau597">MSP-EXP432P401R Development Kit User’s Guide</a></li>
+<li><a class="reference external" href="http://dev.ti.com/tirex/explore/node?node=AJIAWhC7vhw.P.ggQJeRmw__z-lQYNj__LATEST">MSP432P401R Driver Library User’s Guide</a></li>
+<li><a class="reference external" href="https://www.ti.com/lit/ug/slau356i/slau356i.pdf">MSP432P4xx Technical Reference Manual</a></li>
+<li><a class="reference external" href="https://www.ti.com/lit/ds/symlink/msp432p401r.pdf">MSP432P401R Data Sheet</a></li>
+<li><a class="reference external" href="https://www.ti.com/lit/pdf/slau670">BOOSTXL-AUDIO User’s Guide</a></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="bitscope">
+<span id="id1"></span><h2>Bitscope BS05<a class="headerlink" href="#bitscope" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://www.bitscope.com/product/BS05/">Summary of features</a></li>
+<li><a class="reference external" href="https://docs.bitscope.com/KLTUKBXN/">Operating Manual</a></li>
+<li><a class="reference external" href="http://my.bitscope.com/download/">Software Download</a></li>
+</ul>
+</div></blockquote>
+<p>You need to install the <strong>Bitscope DSO software package</strong> for this course.
+The other software packages are optional.</p>
+<p>If you cannot go to the lab in the ECE Department to use the bench equipment, you will need a USB oscilloscope. The minimum requirements are relaxed, but make sure you have at least 10MHz input bandwith (20 Msamples/second) and two channels. Many USB scopes come with software that supports signal analysis functions such as computing the frequency spectrum. If your USB scope does not provide such software support, make sure that you can export data to Matlab (where you can compute the FFT).</p>
+<p>Here are a few other examples of suitable USB oscilloscopes.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://store.digilentinc.com/analog-discovery-2-100msps-usb-oscilloscope-logic-analyzer-and-variable-power-supply/">Analog Discovery 2</a> is a 100Ms/s USB scope with logic analyzer ($279). The device is currently on back-order - unless you already have it, you may look for model with better accessibility.</li>
+<li><a class="reference external" href="https://www.picotech.com/oscilloscope/2000/picoscope-2000-overview">Picoscope 2000</a> is a basic model with just enough capabilities and a good driver software package ($139). Also on back-order.</li>
+<li><a class="reference external" href="https://compocket.com/">Minis</a> (10Ms/s, 2MHz bandwidth) is a low-cost option that runs software on your mobile phone ($149).</li>
+</ul>
+</div>
+<div class="section" id="msp432-boostxl-lib">
+<span id="id3"></span><h2>MSP432_BOOSTXL_LIB<a class="headerlink" href="#msp432-boostxl-lib" title="Permalink to this headline">¶</a></h2>
+<p>MSP432_BOOSTXL_LIB is a support library that offers support for flexible input/output
+in a real-time DSP application. The library was specifically designed for this course and can be <a class="reference external" href="https://github.com/wpi-ece4703-b20/msp432_boostxl_lib">consulted on github</a>.</p>
+<p>The following is a list of the public functions defined in this library.</p>
+<div class="section" id="msp432-boostxl-init">
+<h3>msp432_boostxl_init()<a class="headerlink" href="#msp432-boostxl-init" title="Permalink to this headline">¶</a></h3>
+<p>This function configures the processor clock of the ARM Cortex M4 to 48MHz. The function can be used when neither D/A nor A/D conversions are required.</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_boostxl_init.h&quot;</span>
+
+<span class="n">void</span> <span class="n">msp432_boostxl_init</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="msp432-boostxl-run">
+<h3>msp432_boostxl_run()<a class="headerlink" href="#msp432-boostxl-run" title="Permalink to this headline">¶</a></h3>
+<p>This function starts the conversion process. Before calling this function the user must call one of the following initialization functions.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">msp432_boostxl_init_poll()</span></code> for polling mode conversion</li>
+<li><code class="docutils literal notranslate"><span class="pre">msp432_boostxl_init_intr()</span></code> for interrupt mode conversion</li>
+<li><code class="docutils literal notranslate"><span class="pre">msp432_boostxl_init_dma()</span></code> for dma mode conversion</li>
+</ul>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_boostxl_init.h&quot;</span>
+
+<span class="n">void</span> <span class="n">msp432_boostxl_run</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="msp432-boostxl-init-poll">
+<h3>msp432_boostxl_init_poll()<a class="headerlink" href="#msp432-boostxl-init-poll" title="Permalink to this headline">¶</a></h3>
+<p>This function configures the processor clock of the ARM Cortex M4 to 48MHz, turns on the microphone, and initializes the hardware in polling mode. In polling mode, the following steps are repeated as fast as the hardware allows: (1) An A/D conversion from a user-defined sources is completed, (2) a user-defined call-back function is executed with the converted sample as argument, (3) the value returned by the user-defined call-back function is forwarded to the D/A. The speed of A/D conversions is limited due to the speed of the successive approximation ADC in the MSP432. The speed of the D/A conversions is limited by the SPI connection between the MSP432 and the off-chip DAC8331.</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_boostxl_init.h&quot;</span>
+
+<span class="n">void</span> <span class="n">msp432_boostxl_init_poll</span><span class="p">(</span><span class="n">BOOSTXL_IN_enum_t</span>  <span class="n">_audioin</span><span class="p">,</span>
+                              <span class="n">msp432_sample_process_t</span> <span class="n">_cb</span>
+                              <span class="p">);</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">BOOSTXL_IN_enum_t</span>&#160; <span class="pre">_audioin</span></code> indicates the source used by the ADC converter, and is one of the following selections.<ul>
+<li><code class="docutils literal notranslate"><span class="pre">BOOSTXL_MIC_IN</span></code> the source signal is taken from the BOOSTXL board microphone</li>
+<li><code class="docutils literal notranslate"><span class="pre">BOOSTXL_J1_2_IN</span></code> the source signal is taken from pin 2 of header J1</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">msp432_sample_process_t</span> <span class="pre">_cb</span></code> is a pointer to the callback function called after ADC conversion.
+The callback function reads a 16-bit unsigned integer and returns a 16-bit unsigned integer, i.e.
+<code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">uint16_t</span> <span class="pre">(*msp432_sample_process_t)(uint16_t);</span></code></li>
+</ul>
+</div>
+<div class="section" id="msp432-boostxl-init-intr">
+<h3>msp432_boostxl_init_intr()<a class="headerlink" href="#msp432-boostxl-init-intr" title="Permalink to this headline">¶</a></h3>
+<p>This function configures the processor clock of the ARM Cortex M4 to 48MHz, turns on the microphone, and initializes the hardware in interrupt mode. In interrupt mode, a hardware timer is set to expire at a user-defined sample rate. When the hardware timer expires, an A/D conversion from a user-defined source is started. When the A/D conversion completes, a user-defined call-back function is called as part of the A/D interrupt service routine. The value returned from the user-defined call-back function is forwarded to the D/A. The audio processing thus proceeds at the user-defined sample rate. However, for correct operation, the processing time per sample must be smaller than the sample period. The processing time per sample is the sum of the execution time of the user-defined call-back function plus the time to make a D/A conversion. When the processing time per sample exceeds this sum, a timer interrupt will be lost and the sampling process will no longer reach the selected
+user-defined sample rate.</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_boostxl_init.h&quot;</span>
+
+<span class="n">void</span> <span class="n">msp432_boostxl_init_intr</span><span class="p">(</span><span class="n">FS_enum_t</span>          <span class="n">_fs</span><span class="p">,</span>
+                              <span class="n">BOOSTXL_IN_enum_t</span>  <span class="n">_audioin</span><span class="p">,</span>
+                              <span class="n">msp432_sample_process_t</span> <span class="n">_cb</span>
+                              <span class="p">);</span>
+</pre></div>
+</div>
+<ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">FS_enum_t</span> <span class="pre">_fs</span></code> selects the sample rate for the A/D and D/A conversion process.</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">FS_8000_HZ</span></code> selects a sample rate of 8,000 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_11025_HZ</span></code> selects a sample rate of 11,025 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_16000_HZ</span></code> selects a sample rate of 16,000 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_22050_HZ</span></code> selects a sample rate of 22,050 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_24000_HZ</span></code> selects a sample rate of 24,000 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_32000_HZ</span></code> selects a sample rate of 32,000 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_44100_HZ</span></code> selects a sample rate of 44,100 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_48000_HZ</span></code> selects a sample rate of 48,000 Hz</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">BOOSTXL_IN_enum_t</span>&#160; <span class="pre">_audioin</span></code> indicates the source used by the ADC converter, and is one of the following selections.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">BOOSTXL_MIC_IN</span></code> the source signal is taken from the BOOSTXL board microphone</li>
+<li><code class="docutils literal notranslate"><span class="pre">BOOSTXL_J1_2_IN</span></code> the source signal is taken from pin 2 of header J1</li>
+</ul>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">msp432_sample_process_t</span> <span class="pre">_cb</span></code> is a pointer to the callback function called after ADC conversion.
+The callback function reads a 16-bit unsigned integer and returns a 16-bit unsigned integer, i.e.
+<code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">uint16_t</span> <span class="pre">(*msp432_sample_process_t)(uint16_t);</span></code></p>
+</li>
+</ul>
+</div>
+<div class="section" id="msp432-boostxl-init-dma">
+<h3>msp432_boostxl_init_dma()<a class="headerlink" href="#msp432-boostxl-init-dma" title="Permalink to this headline">¶</a></h3>
+<p>This function configures the processor clock of the ARM Cortex M4 to 48MHz, turns on the microphone, and initializes the hardware in DMA mode. In DMA mode, a hardware timer is set to expire at a user-defined sample rate. When the hardware timer expires, an A/D conversion from a user-defined source is started. When the A/D conversion completes, the sample is copied by a Direct Memory Access (DMA) module into a buffer. When a user-defined number of samples are gathered in the buffer, a user-defined call-back is called to process a block of samples. The user-defined call-back function
+returns a block of samples from the same size. In dma mode, a hardware timer interrupt is then used to copy these output samples to the D/A module, one sample at a time. The DMA mode uses ping-pong
+buffers to keep the sampling process and the data processing apart. There are two pairs of
+ping-pong buffers: one pair is associated with the A/D conversion, and a second pair is associated with the D/A conversion.</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_boostxl_init.h&quot;</span>
+
+<span class="n">void</span> <span class="n">msp432_boostxl_init_dma</span> <span class="p">(</span><span class="n">FS_enum_t</span>          <span class="n">_fs</span><span class="p">,</span>
+                              <span class="n">BOOSTXL_IN_enum_t</span>  <span class="n">_audioin</span><span class="p">,</span>
+                              <span class="n">BUFLEN_enum_t</span>      <span class="n">_pplen</span><span class="p">,</span>
+                              <span class="n">msp432_buffer_process_t</span> <span class="n">_cb</span>
+                             <span class="p">);</span>
+</pre></div>
+</div>
+<ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">FS_enum_t</span> <span class="pre">_fs</span></code> selects the sample rate for the A/D and D/A conversion process.</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">FS_8000_HZ</span></code> selects a sample rate of 8,000 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_11025_HZ</span></code> selects a sample rate of 11,025 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_16000_HZ</span></code> selects a sample rate of 16,000 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_22050_HZ</span></code> selects a sample rate of 22,050 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_24000_HZ</span></code> selects a sample rate of 24,000 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_32000_HZ</span></code> selects a sample rate of 32,000 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_44100_HZ</span></code> selects a sample rate of 44,100 Hz</li>
+<li><code class="docutils literal notranslate"><span class="pre">FS_48000_HZ</span></code> selects a sample rate of 48,000 Hz</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">BOOSTXL_IN_enum_t</span> <span class="pre">_audioin</span></code> indicates the source used by the ADC converter, and is one of the following selections.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">BOOSTXL_MIC_IN</span></code> the source signal is taken from the BOOSTXL board microphone</li>
+<li><code class="docutils literal notranslate"><span class="pre">BOOSTXL_J1_2_IN</span></code> the source signal is taken from pin 2 of header J1</li>
+</ul>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">BUFLEN_enum_t</span> <span class="pre">_pplen</span></code> selects the size of the DMA ping-pong buffer.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">BUFLEN_8</span></code> selects a buffer size of 8 samples (for each ping buffer and each pong buffer)</li>
+<li><code class="docutils literal notranslate"><span class="pre">BUFLEN_16</span></code> selects a buffer size of 16 samples (for each ping buffer and each pong buffer)</li>
+<li><code class="docutils literal notranslate"><span class="pre">BUFLEN_32</span></code> selects a buffer size of 32 samples (for each ping buffer and each pong buffer)</li>
+<li><code class="docutils literal notranslate"><span class="pre">BUFLEN_64</span></code> selects a buffer size of 64 samples (for each ping buffer and each pong buffer)</li>
+<li><code class="docutils literal notranslate"><span class="pre">BUFLEN_128</span></code> selects a buffer size of 128 samples (for each ping buffer and each pong buffer)</li>
+</ul>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">msp432_buffer_process_t</span> <span class="pre">_cb</span></code> is a pointer to the callback function called after the ping-pong buffers have filled up. The calllback function has type <code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">void</span> <span class="pre">(*msp432_buffer_process_t)(uint16_t</span> <span class="pre">*,</span> <span class="pre">uint16_t</span> <span class="pre">*)</span></code> and takes two arguments. The first argument is a pointer to the input buffer of <code class="docutils literal notranslate"><span class="pre">_pplen</span></code> elements of type <code class="docutils literal notranslate"><span class="pre">uint16_t</span></code>. The second argument is a pointer to the output buffer of <code class="docutils literal notranslate"><span class="pre">_pplen</span></code> elements of type <code class="docutils literal notranslate"><span class="pre">uint16_t</span></code>. The callback function returns void.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="measureperfsample">
+<h3>measurePerfSample()<a class="headerlink" href="#measureperfsample" title="Permalink to this headline">¶</a></h3>
+<p>This function measures the median execution time, counted in clock cycles, of a sample-based callback function such as used in polled mode and in interrupt mode. The measurement process proceeds as follows. The callback function is called 11 times, using a dummy (0) input argument. The return value of the callback function is ignored, and it is not forwarded to the D/A. Each of the 11 executions are measured using a hardware timer. The resulting set of cycle counts is sorted and the median (middle) element is returned. The measurement function adjusts the result and subtracts measurement overhead.</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span>#include &quot;msp432_boostxl_init.h&quot;
+
+uint32_t measurePerfSample(msp432_sample_process_t _cb);
+
+* ``msp432_sample_process_t _cb`` is a pointer to the callback function called after ADC conversion. The callback function reads a 16-bit unsigned integer and returns a 16-bit unsigned integer, i.e. ``typedef uint16_t (*msp432_sample_process_t)(uint16_t);``
+</pre></div>
+</div>
+</div>
+<div class="section" id="measureperfbuffer">
+<h3>measurePerfBuffer()<a class="headerlink" href="#measureperfbuffer" title="Permalink to this headline">¶</a></h3>
+<p>This function measures the median execution time, counted in clock cycles, of a buffer-based callback function such as used in dma mode. The measurement process proceeds as follows. The callback function is called 11 times, using a dummy input buffer of zeroes. The return buffer is ignored, and it is not forwarded to the D/A. Each of the 11 executions are measured using a hardware timer. The resulting set of cycle counts is sorted and the median (middle) element is returned. The measurement function adjusts the result and subtracts measurement overhead.</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_boostxl_init.h&quot;</span>
+
+<span class="n">uint32_t</span> <span class="n">measurePerfBuffer</span><span class="p">(</span><span class="n">msp432_buffer_process_t</span> <span class="n">_cb</span><span class="p">);</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">msp432_buffer_process_t</span> <span class="pre">_cb</span></code> is a pointer to the callback function called after the ping-pong buffers have filled up. The calllback function has type <code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">void</span> <span class="pre">(*msp432_buffer_process_t)(uint16_t</span> <span class="pre">*,</span> <span class="pre">uint16_t</span> <span class="pre">*)</span></code> and takes two arguments. The first argument is a pointer to the input buffer of <code class="docutils literal notranslate"><span class="pre">_pplen</span></code> elements of type <code class="docutils literal notranslate"><span class="pre">uint16_t</span></code>. The second argument is a pointer to the output buffer of <code class="docutils literal notranslate"><span class="pre">_pplen</span></code> elements of type <code class="docutils literal notranslate"><span class="pre">uint16_t</span></code>. The callback function returns void.</li>
+</ul>
+</div>
+<div class="section" id="errorledoff">
+<h3>errorledoff()<a class="headerlink" href="#errorledoff" title="Permalink to this headline">¶</a></h3>
+<p>This function turns off LED 2 of the MSPEXP432P401R board.</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_boostxl_init.h&quot;</span>
+
+<span class="n">void</span> <span class="n">errorledon</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="errorledon">
+<h3>errorledon()<a class="headerlink" href="#errorledon" title="Permalink to this headline">¶</a></h3>
+<p>This function turns on LED 2 of the MSPEXP432P401R board.</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_boostxl_init.h&quot;</span>
+
+<span class="n">void</span> <span class="n">errorledoff</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adc14-to-q15">
+<h3>adc14_to_q15<a class="headerlink" href="#adc14-to-q15" title="Permalink to this headline">¶</a></h3>
+<p>This function converts a 14-bit ADC value to a fixed-point fix&lt;16,15&gt; Q15 value.
+The encoded range spans [-0.25,0.25] corresponding to the analog range [0v, 3v3].</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_arm_dsp.h&quot;</span>
+
+<span class="n">q15_t</span>     <span class="n">adc14_to_q15</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">v</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adc14-to-q31">
+<h3>adc14_to_q31<a class="headerlink" href="#adc14-to-q31" title="Permalink to this headline">¶</a></h3>
+<p>This function converts a 14-bit ADC value to a fixed-point fix&lt;32,31&gt; Q31 value.
+The encoded range spans [-0.25,0.25] corresponding to the analog range [0v, 3v3].</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_arm_dsp.h&quot;</span>
+
+<span class="n">q31_t</span>     <span class="n">adc14_to_q31</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">v</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adc14-to-f32">
+<h3>adc14_to_f32<a class="headerlink" href="#adc14-to-f32" title="Permalink to this headline">¶</a></h3>
+<p>This function converts a 14-bit ADC value to a single-precision floating point value.
+The encoded range spans [-0.25,0.25] corresponding to the analog range [0v, 3v3].</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_arm_dsp.h&quot;</span>
+
+<span class="n">float32_t</span> <span class="n">adc14_to_f32</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">v</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="q15-to-dac14">
+<h3>q15_to_dac14<a class="headerlink" href="#q15-to-dac14" title="Permalink to this headline">¶</a></h3>
+<p>This function converts a fixed-point fix&lt;16,15&gt; Q15 value to a 14-bit DAC value.
+The analog range spans [0v, 3v3] corresponding to range [-0.25,0.25].</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_arm_dsp.h&quot;</span>
+
+<span class="n">uint16_t</span>  <span class="n">q15_to_dac14</span><span class="p">(</span><span class="n">q15_t</span> <span class="n">v</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="q31-to-dac14">
+<h3>q31_to_dac14<a class="headerlink" href="#q31-to-dac14" title="Permalink to this headline">¶</a></h3>
+<p>This function converts a fixed-point fix&lt;16,15&gt; Q15 value to a 14-bit DAC value.
+The analog range spans [0v, 3v3] corresponding to range [-0.25,0.25].</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_arm_dsp.h&quot;</span>
+
+<span class="n">uint16_t</span>  <span class="n">q31_to_dac14</span><span class="p">(</span><span class="n">q31_t</span> <span class="n">v</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="f32-to-dac14">
+<h3>f32_to_dac14<a class="headerlink" href="#f32-to-dac14" title="Permalink to this headline">¶</a></h3>
+<p>This function converts a single-precision floating point value to a 14-bit DAC value.
+The analog range spans [0v, 3v3] corresponding to range [-0.25,0.25].</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;msp432_arm_dsp.h&quot;</span>
+
+<span class="n">uint16_t</span>  <span class="n">f32_to_dac14</span><span class="p">(</span><span class="n">float32_t</span> <span class="n">v</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<p>This program calls the A/D conversion in polled mode.</p>
+<div class="code c highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="ow">in</span><span class="p">)</span> <span class="p">{</span>
+   <span class="k">return</span> <span class="mh">0x3FFF</span> <span class="o">-</span> <span class="ow">in</span><span class="p">;</span>
+ <span class="p">}</span>
+
+ <span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">WDT_A_hold</span><span class="p">(</span><span class="n">WDT_A_BASE</span><span class="p">);</span>
+
+    <span class="n">msp432_boostxl_init_poll</span><span class="p">(</span><span class="n">BOOSTXL_J1_2_IN</span><span class="p">,</span> <span class="n">processSample</span><span class="p">);</span>
+
+    <span class="n">msp432_boostxl_run</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="howto.html" class="btn btn-neutral float-right" title="How-To Guides" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="reportguidelines.html" class="btn btn-neutral" title="Report Guidelines" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

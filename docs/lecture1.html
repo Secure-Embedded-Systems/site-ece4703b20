@@ -1,0 +1,629 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>L1: Sampling and Quantization, Reconstruction &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="L2: Real-Time Input Output" href="lecture2.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="lectures.html">Lectures</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">L1: Sampling and Quantization, Reconstruction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#signal-sampling">Signal Sampling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#frequency-domain-characterization-of-sampled-data-signals">Frequency-Domain Characterization of sampled-data signals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quantization-and-encoding">Quantization and Encoding</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#signal-sampling-on-the-msp432">Signal Sampling on the MSP432</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#microphone-pre-amp">Microphone Pre-amp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#msp432-microcontroller">MSP432 Microcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adc14-peripheral">ADC14 Peripheral</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#loopback-program">Loopback Program</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#signal-reconstruction">Signal Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#practical-signal-reconstruction">Practical Signal Reconstruction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#signal-reconstruction-on-the-msp432">Signal Reconstruction on the MSP432</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dac8311-chip">DAC8311 Chip</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#distortion-in-the-sampling-and-reconstruction-process">Distortion in the Sampling and Reconstruction Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#demonstration">Demonstration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lecture2.html">L2: Real-Time Input Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture3.html">L3: DTFT, z-transform, and FIR filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture4.html">L4: FIR filter implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture5.html">L5: IIR filters, and their implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture6.html">L6: Fixed Point Arithmetic in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture7.html">L7: Performance Optimization in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture8.html">L8: DMA and the ARM CMSIS Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture9.html">L9: Adaptive Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture10.html">L10: Frequency Synthesis and Detection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="labs.html">Labs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="lectures.html">Lectures</a> &raquo;</li>
+        
+      <li>L1: Sampling and Quantization, Reconstruction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lecture1.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="l1-sampling-and-quantization-reconstruction">
+<h1>L1: Sampling and Quantization, Reconstruction<a class="headerlink" href="#l1-sampling-and-quantization-reconstruction" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this lecture is as follows.</p>
+<ul class="simple">
+<li>To review the basic properties of the spectra of sampled-data signals</li>
+<li>To discuss the process of signal sampling and reconstruction</li>
+<li>To review the internal design of signal sampling (hardware and software) in our lab kit</li>
+</ul>
+<div class="section" id="signal-sampling">
+<h2>Signal Sampling<a class="headerlink" href="#signal-sampling" title="Permalink to this headline">¶</a></h2>
+<p>Where else can we start a course on Real Time Digital Signal Processing then at
+the interface between the physical world of signals and the digital world of numbers?
+We will discuss the process of converting analog signals to digital codes (integers
+and floating-point numbers), as well as the reverse process of reconstructing
+analog signals from those digital codes.</p>
+<p>A fundamental difference between the discrete world of numbers and the continuous
+world of signals, is the reduction of accuracy. The physical world is continuous
+(if we ignore quantum-mechanics).
+For example, a voltage between 0 Volt and 1 Volt can take on <em>any</em> value between
+those two boundaries. Furthermore, assume that that voltage will change
+at some time between 8 AM and 8:01 AM, the change could happen at <em>any</em> moment
+during that minute-long interval. Hence, the physical world is <em>continuous</em>.
+Physical quantities such as voltage, and physical time both are continuous.</p>
+<p>In Digital Signal Processing, we will represent these continuous values using discrete samples. Time, as well as values, become discrete.</p>
+<ul class="simple">
+<li>Time is characterized as a sequence of sample instants. The <em>sample period</em> is the time interval between sample instants. The <em>sample frequency</em> is the reciprocal,  the frequency at which samples are taken.</li>
+<li>Physical quantities are characterized by a sequence of discrete values  (integers with a limited resolution). The <em>resolution</em> is the number of  bits used to represent those physical quantities. The <em>span</em> is the difference between the smallest and the largest physical value represented. The <em>quantization step</em> is the smallest change of the physical quantity that will use a different discrete value.</li>
+</ul>
+<p>The conversion of a physical signal to a discrete set of finite-precision numbers is called <em>signal sampling</em>.
+It includes the following steps.</p>
+<ol class="arabic simple">
+<li><strong>Sample-and-hold</strong>: An analog signal <img class="math" src="_images/math/b095abf7eca3b91c249261a20f75959cf2d010bc.png" alt="x_a(t)"/> is sampled to a discrete-time signal <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/>.</li>
+<li><strong>Quantization</strong>: A discrete-time signal <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/> is converted to a quantized signal <img class="math" src="_images/math/23fb304f0692eefcbbde2542440919a4cda4b99a.png" alt="\hat{x}(n)"/>.</li>
+<li><strong>Encoding</strong>: A quantized discrete-time signal <img class="math" src="_images/math/23fb304f0692eefcbbde2542440919a4cda4b99a.png" alt="\hat{x}(n)"/> is converted to a digital code <img class="math" src="_images/math/5454199c895342d002f699586fb95a1bd396b2ab.png" alt="c(n)"/>.</li>
+</ol>
+<p>In the following, let’s focus on what happens in the sample-and-hold step.
+The discrete-time signal <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/> can be represented as a sampled continuous-time signal <img class="math" src="_images/math/a011597d4ee49573d33a5a7914ba31f229647238.png" alt="x_s(nT_s)"/> as
+follows. Given the sample period <img class="math" src="_images/math/a9768475a0024f74567dfa3db0f51240f0479382.png" alt="T_s"/>, form the pulse sequence <img class="math" src="_images/math/7145a02ef452de352adcef35ab715a0a899089c9.png" alt="s_a(t)"/> as follows:</p>
+<div class="math">
+<p><img src="_images/math/1a0c0142e5e22a6e8d4c067194d2c189b34130c5.png" alt="s_a(t) = \sum_{n} \delta(t - nT_s)"/></p>
+</div><p>Next, multiply the analog signal <img class="math" src="_images/math/b095abf7eca3b91c249261a20f75959cf2d010bc.png" alt="x_a(t)"/> with the pulse sequence to obtain <img class="math" src="_images/math/b8db972cf38ba9cc48f420f6e840502b60dc67a2.png" alt="x_s(t)"/>.</p>
+<div class="math">
+<p><img src="_images/math/ea7f630e80f6923aca41e0d8688efc57b21870a5.png" alt="x_s(t) = x_a(t) . s_a(t) = \sum_{n} x_a(nT_s) . \delta(t - nT_s)"/></p>
+</div><p>The discrete-time signal <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/> is the sequence of values taken on by <img class="math" src="_images/math/b8db972cf38ba9cc48f420f6e840502b60dc67a2.png" alt="x_s(t)"/> at the sample interval,
+so that <img class="math" src="_images/math/9eb5ff641d5f3caeaca18508866807cf41132b13.png" alt="x(n) = x_a(nT_s)"/>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Background reading:</p>
+<ul class="last simple">
+<li>Schaum’s outlines on Digital Signal Processing 2nd Ed. 3.1-3.3</li>
+</ul>
+</div>
+<div class="section" id="frequency-domain-characterization-of-sampled-data-signals">
+<h3>Frequency-Domain Characterization of sampled-data signals<a class="headerlink" href="#frequency-domain-characterization-of-sampled-data-signals" title="Permalink to this headline">¶</a></h3>
+<p>We look for the relationship between the frequency spectrum of <img class="math" src="_images/math/b095abf7eca3b91c249261a20f75959cf2d010bc.png" alt="x_a(t)"/> and <img class="math" src="_images/math/b8db972cf38ba9cc48f420f6e840502b60dc67a2.png" alt="x_s(t)"/>.</p>
+<p>Let <img class="math" src="_images/math/654115ad118072f0df64d5e213df8b61255df33f.png" alt="X_a(j\Omega)"/> be the continuous-time spectrum of <img class="math" src="_images/math/b095abf7eca3b91c249261a20f75959cf2d010bc.png" alt="x_a(t)"/>, and let <img class="math" src="_images/math/984b056f981b5b6dfcaa762e3d4a40efb83e0296.png" alt="X_s(j\Omega)"/>
+be the continuous-time spectrum of <img class="math" src="_images/math/b8db972cf38ba9cc48f420f6e840502b60dc67a2.png" alt="x_s(t)"/>. We also know that the spectrum of a pulse sequence
+is a pulse sequence, i.e. if <img class="math" src="_images/math/7145a02ef452de352adcef35ab715a0a899089c9.png" alt="s_a(t)"/> is a pulse sequence as defined above, then</p>
+<div class="math">
+<p><img src="_images/math/86fd7124d3162ddad5056735e7bcfb6e6b8ca007.png" alt="S_a(j\Omega) = \frac{2.\pi}{T_s} \sum_{n} \delta(\Omega - k\Omega_s)"/></p>
+</div><p>Now, the sampled-data signal <img class="math" src="_images/math/b8db972cf38ba9cc48f420f6e840502b60dc67a2.png" alt="x_s(t)"/> is defined by the product of the continuous-time signal
+<img class="math" src="_images/math/b095abf7eca3b91c249261a20f75959cf2d010bc.png" alt="x_a(t)"/> and the pulse sequence <img class="math" src="_images/math/7145a02ef452de352adcef35ab715a0a899089c9.png" alt="s_a(t)"/>. The spectrum of a signal which is given
+by the <em>multiplication</em> of two signals in the time domain, is equal to the <em>convolution</em> of the
+spectrum of each signal:</p>
+<div class="math">
+<p><img src="_images/math/969d2b938c6e0cac82ac84f62cc70f2bb02ea2ae.png" alt="x_s(t) = x_a(t) . s_a(t) \Leftrightarrow X_s(j\Omega) = X_a(j\Omega) \star S_a(j\Omega)"/></p>
+</div><p>Therefore, the spectrum <img class="math" src="_images/math/984b056f981b5b6dfcaa762e3d4a40efb83e0296.png" alt="X_s(j\Omega)"/> contains infinitely many copies of <img class="math" src="_images/math/654115ad118072f0df64d5e213df8b61255df33f.png" alt="X_a(j\Omega)"/>,
+spaced at an interval <img class="math" src="_images/math/8413d1afc84cdc65d0d53a6f508f2200c44fd5f4.png" alt="\Omega_s"/> apart.</p>
+<div class="math">
+<p><img src="_images/math/be92074f2aacac76547b80f501500182808bcd07.png" alt="X_s(j\Omega) = \frac{1}{T_s} \sum_{k} X_a(j\Omega - jk\Omega_s)"/></p>
+</div><p>Given the bandwidth-limited signal spectrum <img class="math" src="_images/math/654115ad118072f0df64d5e213df8b61255df33f.png" alt="X_a(j\Omega)"/>,
+we can draw the sampled-data signal spectrum as follows.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/nyquistrate.jpg" src="_images/nyquistrate.jpg" />
+</div>
+<p>It’s easy to see that, as long as <img class="math" src="_images/math/a039b2fd113724768d8cf296cdf1b15a237a0934.png" alt="\Omega_0 &lt; frac{\Omega_s}{2}"/>, the subsequent copies
+of <img class="math" src="_images/math/bc76db1ef22d825856672f1652924cfc6bf0861f.png" alt="X_a"/> in <img class="math" src="_images/math/59df47507c6f68756c71d0db478e61f7c850a0f3.png" alt="X_s"/> will not overlap, and <img class="math" src="_images/math/bc76db1ef22d825856672f1652924cfc6bf0861f.png" alt="X_a"/> can be perfectly reconstructed
+from <img class="math" src="_images/math/59df47507c6f68756c71d0db478e61f7c850a0f3.png" alt="X_s"/> using a filter operation. This is a remarkable property and it’s worth to let
+it sink in. The time-domain representation of <img class="math" src="_images/math/59df47507c6f68756c71d0db478e61f7c850a0f3.png" alt="X_s"/> is a series of impulse, corresponding
+to the values taken from <img class="math" src="_images/math/b095abf7eca3b91c249261a20f75959cf2d010bc.png" alt="x_a(t)"/>. Yet, because the frequency content of <img class="math" src="_images/math/b095abf7eca3b91c249261a20f75959cf2d010bc.png" alt="x_a(t)"/> is
+bounded, it’s possible to perfectly recreate every value between the samples. Formally, this
+property is called the Nyquist Sampling Theorem.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p><strong>Nyquist Sampling Theorem</strong>: If <img class="math" src="_images/math/cda8168880a5610fc6493a2962f1abdfca93d573.png" alt="X_a(j\Omega) = 0"/> when <img class="math" src="_images/math/68ba0232cb3dbd47e53f4e40d4d289df757eea74.png" alt="| \Omega | &gt; \Omega_0"/>, then <img class="math" src="_images/math/b095abf7eca3b91c249261a20f75959cf2d010bc.png" alt="x_a(t)"/> can be recovered from <img class="math" src="_images/math/bc9b22d2de46beb188013fd6b2d9ac660075e116.png" alt="x_a(nT_s)"/> as long as <img class="math" src="_images/math/5848f9f4284a807543fdb7a9fe16dbb797a3ac5e.png" alt="\Omega_s = \frac{2pi}{T_s} \geq 2.\Omega_0"/></p>
+<p class="last">The <strong>Nyquist rate</strong> of a signal is two times the highest frequency component of that signal.</p>
+</div>
+</div>
+<div class="section" id="quantization-and-encoding">
+<h3>Quantization and Encoding<a class="headerlink" href="#quantization-and-encoding" title="Permalink to this headline">¶</a></h3>
+<p>After sampling, the signal sequence <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/> is converted into a quantized sequence. A quantizer is a non-linear function that maps continuous values <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/> into quantized values <img class="math" src="_images/math/23fb304f0692eefcbbde2542440919a4cda4b99a.png" alt="\hat{x}(n)"/>. It’s easy to represent this graphically.</p>
+<p>The following shows a 3-bit uniform quantizer. The <em>quantization step</em> <img class="math" src="_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> is the smallest quantity by which the output can change. In total, there are 8 quantization levels, leading to a resolution of  <img class="math" src="_images/math/4b490d6ecb32911b8affd4ebc93bfe7aad0558bc.png" alt="r=3"/> bits. The <em>span</em> of the quantizer is <img class="math" src="_images/math/fb9ebb994897f833c8d06c06102e2afb6bde9a6e.png" alt="D.2^r"/> or <img class="math" src="_images/math/e6887150430998dcdfb6a9583c940ea33312bc5e.png" alt="8D"/>. The quantized values ranges from <img class="math" src="_images/math/5b98839a1dafc55ec0d05c92f4d2764a4ef6e5fb.png" alt="-4.5D"/> to <img class="math" src="_images/math/5aa1b84dc6ceec3dba5f680d498a19f50c7f0c42.png" alt="+3.5D"/>. Outside of  the span, the output of the quantizer is implementation-dependent. In the case of the figure, which is similar to most Analog to Digital Converter modules, the quantizer saturates at the most negative or most positive value.</p>
+<div class="figure align-center" style="width: 400px">
+<img alt="_images/quantizer.jpg" src="_images/quantizer.jpg" />
+</div>
+<p>Note that a quantizer does not have to be symmetric around zero. The following shows a uniform quantizer
+for strictly positive values.</p>
+<div class="figure align-center" style="width: 400px">
+<img alt="_images/quantizerplus.jpg" src="_images/quantizerplus.jpg" />
+</div>
+<p>Finally, the output of the quantizer  <img class="math" src="_images/math/23fb304f0692eefcbbde2542440919a4cda4b99a.png" alt="\hat{x}(n)"/> is mapped into a set of binary code words <img class="math" src="_images/math/5454199c895342d002f699586fb95a1bd396b2ab.png" alt="c(n)"/>.
+A straightforward implementation is to generate unsigned binary code words, which increment from 000..000 for
+the lowest quantization level to 111..111 for the highest quantization level.</p>
+</div>
+</div>
+<div class="section" id="signal-sampling-on-the-msp432">
+<h2>Signal Sampling on the MSP432<a class="headerlink" href="#signal-sampling-on-the-msp432" title="Permalink to this headline">¶</a></h2>
+<p>The MSP432 on the lab kit contains a 14-bit successive-approximation ADC.
+The ADC is fully configurable from software. In the following, we summarize
+the operation of the ADC as used by the <a class="reference internal" href="techdoc.html#msp432-boostxl-lib"><span class="std std-ref">MSP432_BOOSTXL_LIB</span></a>. Detailed
+information on the MSP432 ADC can be found in the <a class="reference external" href="https://www.ti.com/lit/ug/slau356i/slau356i.pdf">MSP432 Technical Reference
+Manual</a>.</p>
+<p>First, let’s summarize the design abstraction levels that are relevant
+to understand the operation of sampling from a technical perspective.
+From the lowest abstraction level (i.e., closest to hardware) to the highest abstraction level
+(i.e., closest to the software application), we enumerate the abstraction
+levels as follows.</p>
+<ol class="arabic simple">
+<li><strong>Hardware Schematics</strong>: The physical implementation of the MSPEXP432P401R board and the
+audio frontend BOOSTXL_AUDIO are each described in a user manual,
+the <a class="reference external" href="https://www.ti.com/lit/ug/slau597f/slau597f.pdf?ts=1603332612648">MSPEXP432P401R User Guide</a>
+and the <a class="reference external" href="https://www.ti.com/lit/ug/slau670a/slau670a.pdf?ts=1603332154881">AUDIO-BOOSTXL User Guide</a>.
+These user guides show the physical connections of components on the board, including
+the connector pin definitions as well as the schematics.</li>
+<li><strong>Hardware Details</strong>: Additional documentation on the hardware details of individual components on these PCB’s is
+captured in the datasheets for these components. For MSP432 is a fairly complex
+microcontroller, which has a <a class="reference external" href="https://www.ti.com/lit/ds/symlink/msp432p401r.pdf">datasheet</a>
+and a low-level <a class="reference external" href="https://www.ti.com/lit/ug/slau356i/slau356i.pdf">technical reference manual</a>.
+The datasheet lists device-specific information (such as the precise configuration of
+pin-to-peripheral assignments), while the technical reference manual describes how to
+program the MSP432 peripherals.</li>
+<li><strong>Hardware Abstraction Library</strong>: The low-level programming on the MSP432 is handled through a separate library (aptly named
+DriverLib) which is part of the MSP432P401R Software Development Kit. The documentation for
+this library can be found through CCS Resource Explorer. It can also be
+<a class="reference external" href="http://dev.ti.com/tirex/explore/node?node=AJIAWhC7vhw.P.ggQJeRmw__z-lQYNj__LATEST">downloaded as a PDF</a>
+This library introduces higher level functions that simplify peripheral programming.</li>
+<li><strong>DSP Application Library</strong>: The make the programming of DSP applications on the MSP432 easier, we have added
+a software layer on top of the DriverLib. This software library, called MSP432_BOOSTXL_LIB,
+was developed specifically for this class, and its documentation is
+<a class="reference external" href="https://schaumont.dyn.wpi.edu/ece4703b20draft/techdoc.html#msp432-boostxl-lib">avalailable on the course website</a>.</li>
+<li><strong>DSP Application</strong>: Finally, the application software forms the top of this stack. The application software for
+real-time DSP projects in this class will be written using a cyclic-executive model, ie.
+there is no RTOS involved.</li>
+</ol>
+<p>Let’s consider these abstraction levels for the case of the loopback application of Lab 1.</p>
+<div class="section" id="microphone-pre-amp">
+<h3>Microphone Pre-amp<a class="headerlink" href="#microphone-pre-amp" title="Permalink to this headline">¶</a></h3>
+<p>In the schematics of the AUDIO-BOOSTXL board, we find a schematic the microphone pre-amplifier:</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/micrpreamp.jpg" src="_images/micrpreamp.jpg" />
+</div>
+<p>This is a non-inverting op-amp configuration with a gain of approximately 250 (200000 / 820). At the output of the pre-amplifier, there’s a first-order low-pass filter with a cut-off frequency of <img class="math" src="_images/math/57e2403062f732b9e61d6348b6fc76f5a4c3c9bd.png" alt="\frac{1}{2 . \pi . 820 . 0.015\mu} = 12.9 KHz"/>. Such lowpass filters are very common before analog-to-digital conversion, as they help ensure that the analog input signal is bandwidth limited.</p>
+<p>Next, the amplified microphone signal is wired to a header pin of the AUDIO-BOOSTXL board, and from there to a corresponding header pin on the MSP432 board. To find the pin definitions of each of these headers, you have to consult the User Guide for each board. The microphone is wired to the ‘Analog In’ pin of the BoosterPack header, which in turn is connect to a pin labeled <cite>A10 RTCLK MCLK P4.3</cite>. The important piece of information is <cite>A10</cite>, which stands for ‘ADC input channel 10’. That input pin is shared with several other microcontroller functionalities (<cite>RTCLK MCLK P4.3</cite>) - which will be inactive when we use the pin as an analog input pin.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/audioboostxl-header.jpg" src="_images/audioboostxl-header.jpg" />
+</div>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/msp432exp-header.jpg" src="_images/msp432exp-header.jpg" />
+</div>
+</div>
+<div class="section" id="msp432-microcontroller">
+<h3>MSP432 Microcontroller<a class="headerlink" href="#msp432-microcontroller" title="Permalink to this headline">¶</a></h3>
+<p>We are now in the MSP432 microcontroller. The MSP432 datasheet gives a summary of the (large) amount of
+peripherals present in this microcontroller. One of them is the ADC. Signal samples are transported
+over the internal data bus to an ARM Cortex-M4F processor. The ARM Cortex-M4F is a RISC micro-processor with a three-stage
+pipeline.</p>
+<p>The ‘F’ suffix in ‘Cortex-M4F’ indicates that the micro-processor has a built-in floating point unit.
+For our DSP experiments, this is an advantage as we can write C code using floating-point numbers. While floating-point
+accuracy is standard (and expected) on high-end processing platforms such as your laptop, is it considered a prime feature on micro-controllers. We will come back to this aspect in one of the future lectures.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/msp432block.jpg" src="_images/msp432block.jpg" />
+</div>
+</div>
+<div class="section" id="adc14-peripheral">
+<span id="adc14peripheral"></span><h3>ADC14 Peripheral<a class="headerlink" href="#adc14-peripheral" title="Permalink to this headline">¶</a></h3>
+<p>Next, we zoom in to the ‘Precision ADC’ block and consider the internal operation.
+The ADC has in input multiplexer that can select between one out of 23 analog sources.
+The ADC has a 14-bit resolution and uses a successive approximation architecture.
+The sample-and-hold operation which we discussed at the start of the lecture, is at the center
+of the ADC. The ADC conversion is started by asserting <cite>SAMPCON</cite>. It can be asserted by software (called a ‘software trigger’), are by an external source such as a timer. When the ADC conversion finishes, the module can optionally generate an interrupt.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/adcblock.jpg" src="_images/adcblock.jpg" />
+</div>
+<p>In the Lab 1 loopback example, the ADC is used as follows. A timer module will trigger a conversion at regular
+intervals. With the <a class="reference internal" href="techdoc.html#msp432-boostxl-lib"><span class="std std-ref">MSP432_BOOSTXL_LIB</span></a>, the conversion rate can be selected between 8KHz and 48KHz. When the conversion in the ADC finishes, the ADC calls an <em>end-of-conversion</em> interrupt service routine (ISR). That ISR, in turn, can call a user-defined callback function. Your DSP code is integrated inside of this ISR callback function. Thus, with a conversion rate set at 16KHz, for example, your callback function is called 16,000 times per second, each time with a new converted output x.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/adc-chain.jpg" src="_images/adc-chain.jpg" />
+</div>
+<p>The resolution of the ADC is 14 bit. With the input voltage 0V, the output code is 0x0000.
+With the input voltage 3V3, the output code is 0x3FFF (that is, 14 bits all set to ‘1’).
+In between, the encoded value increases linearly.</p>
+</div>
+<div class="section" id="loopback-program">
+<h3>Loopback Program<a class="headerlink" href="#loopback-program" title="Permalink to this headline">¶</a></h3>
+<p>Here is the loopback program. It configures the BOOSTXL library in an interrupt-driven
+mode, in which the timer will initiate the ADC conversions 16,000 times per second.
+The input is taken from pin J1.2, and each time a sample is ready, it is passed
+on to the function <code class="docutils literal notranslate"><span class="pre">processSample</span></code>. The function <code class="docutils literal notranslate"><span class="pre">processSample</span></code> amplifies the
+signal by two and returns it. The BOOSTXL library then forwards the sample to the Digital
+to Analog Converter (to be discussed in the following section).</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="comment preproc">#include</span> <span class="comment preprocfile">&lt;ti/devices/msp432p4xx/driverlib/driverlib.h&gt;</span><span class="comment preproc">
+</span><span class="ln"> 2 </span><span class="comment preproc">#include</span> <span class="comment preprocfile">&quot;msp432_boostxl_init.h&quot;</span><span class="comment preproc">
+</span><span class="ln"> 3 </span><span class="comment preproc">#include</span> <span class="comment preprocfile">&quot;msp432_arm_dsp.h&quot;</span><span class="comment preproc">
+</span><span class="ln"> 4 </span><span class="comment preproc">#include</span> <span class="comment preprocfile">&lt;stdlib.h&gt;</span><span class="comment preproc">
+</span><span class="ln"> 5 </span><span class="comment preproc"></span>
+<span class="ln"> 6 </span><span class="keyword type">uint16_t</span> <span class="name function">processSample</span><span class="punctuation">(</span><span class="keyword type">uint16_t</span> <span class="name">x</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 7 </span>    <span class="keyword">return</span> <span class="literal number integer">2</span><span class="operator">*</span><span class="name">x</span><span class="punctuation">;</span>
+<span class="ln"> 8 </span><span class="punctuation">}</span>
+<span class="ln"> 9 </span>
+<span class="ln">10 </span><span class="comment preproc">#include</span> <span class="comment preprocfile">&lt;stdio.h&gt;</span><span class="comment preproc">
+</span><span class="ln">11 </span><span class="comment preproc"></span>
+<span class="ln">12 </span><span class="keyword type">int</span> <span class="name function">main</span><span class="punctuation">(</span><span class="keyword type">void</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln">13 </span>    <span class="name">WDT_A_hold</span><span class="punctuation">(</span><span class="name">WDT_A_BASE</span><span class="punctuation">);</span>
+<span class="ln">14 </span>
+<span class="ln">15 </span>    <span class="name">msp432_boostxl_init_intr</span><span class="punctuation">(</span><span class="name">FS_16000_HZ</span><span class="punctuation">,</span> <span class="name">BOOSTXL_J1_2_IN</span><span class="punctuation">,</span> <span class="name">processSample</span><span class="punctuation">);</span>
+<span class="ln">16 </span>    <span class="name">msp432_boostxl_run</span><span class="punctuation">();</span>
+<span class="ln">17 </span>
+<span class="ln">18 </span>    <span class="keyword">return</span> <span class="literal number integer">1</span><span class="punctuation">;</span>
+<span class="ln">19 </span><span class="punctuation">}</span>
+</pre>
+</div>
+</div>
+<div class="section" id="signal-reconstruction">
+<h2>Signal Reconstruction<a class="headerlink" href="#signal-reconstruction" title="Permalink to this headline">¶</a></h2>
+<p>The conversion of a discrete sequence of numbers <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/> to a continuous-time signal
+<img class="math" src="_images/math/b095abf7eca3b91c249261a20f75959cf2d010bc.png" alt="x_a(t)"/> is called <em>signal reconstruction</em>. Because of the Nyquist theorem, we know
+that <img class="math" src="_images/math/b095abf7eca3b91c249261a20f75959cf2d010bc.png" alt="x_a(t)"/> can be perfectly reconstructed by a simple filter operation.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/idealreconstruction.jpg" src="_images/idealreconstruction.jpg" />
+</div>
+<p>Such a brick-wall filter is called an <em>ideal reconstruction filter</em>. It has an impulse
+response in the shape of a sinc function.</p>
+<div class="math">
+<p><img src="_images/math/b8b4fb2a566a3e271cb58b4b7d810d491739fd5d.png" alt="h_r(t) = \frac{sin(\pi t) / T_s}{ \pi t / T_s}"/></p>
+</div><p>The sinc function interpolates between successive samples. <img class="math" src="_images/math/245a0cc59a8995e61d19e54991e1457474e2f08f.png" alt="h_r(n T_s) = 0"/> for every
+value of <img class="math" src="_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/> except for 0. The sinc function has a response for <img class="math" src="_images/math/b6de421a1bfb968789aef2bc4c795db346546709.png" alt="t &lt; 0"/>, which
+means that it is non-causal and therefore cannot be implemented as is.</p>
+<p>Here is the response of the filter on a single impulse in a stream of zero-valued samples.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/sinczero.jpg" src="_images/sinczero.jpg" />
+</div>
+<p>When the sample stream takes on random values, each of these random-valued pulses creates
+a sinc response, and all of these sinc combine to create an ideal (bandwidth-limited) interpolation
+of the sequence of random-valued pulses.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/sincrandom.jpg" src="_images/sincrandom.jpg" />
+</div>
+</div>
+<div class="section" id="practical-signal-reconstruction">
+<h2>Practical Signal Reconstruction<a class="headerlink" href="#practical-signal-reconstruction" title="Permalink to this headline">¶</a></h2>
+<p>Because the ideal reconstruction filter cannot be implemented, in practice it is approximated.
+Many Digital-to-Analog converters, including the one used in our AUDIO-BOOSTXL kit, uses
+a zero-order hold reconstruction. The idea of a zero-order hold is to maintain the signal level
+of the previous pulse until the next pulse arrives. This leads to a staircase curve:</p>
+<div class="figure align-center" style="width: 400px">
+<img alt="_images/zeroorderhold.jpg" src="_images/zeroorderhold.jpg" />
+</div>
+<p>It’s useful to consider the distortion resulting from the zero-order hold reconstruction.
+Clearly, the shape of the reconstructed <img class="math" src="_images/math/b095abf7eca3b91c249261a20f75959cf2d010bc.png" alt="x_a(t)"/> is quite different from the one
+which was originally sampled.</p>
+<p>The zero-order hold reconstruction filter has an impulse reponse <img class="math" src="_images/math/190e2512e632b5bfc2cd0b52737d47f327e29264.png" alt="h_0(t)"/>:</p>
+<div class="math">
+<p><img src="_images/math/2583d5a63805a210e8d114d5a28407432fc0a875.png" alt="h_0(t) =  \left\{
+              \begin{array}{ll}
+                1  ~~~ for ~ 0 &lt;= t &lt;= T_s\\
+                0  ~~~ otherwise
+              \end{array}
+            \right."/></p>
+</div><p>This reconstruction filter has the following frequency response:</p>
+<div class="math">
+<p><img src="_images/math/f6b98f39e1a678aa735d67c8770d10f7dd36a3c5.png" alt="H_0(j\Omega) = e^{-j\Omega T_s/2} \frac{sin(\Omega T_s / 2)}{ \Omega / 2}"/></p>
+</div><p>The important property of this frequency response is that it has zeroes at multiples
+of the sample frequency,  <img class="math" src="_images/math/5862eb0de7b9b54ebfca9bf25be9017f8fe120c9.png" alt="f_s = T_s^{-1}"/>. The effect of the zero-order hold filter on
+the frequency response of the sampled-data signal <img class="math" src="_images/math/b8db972cf38ba9cc48f420f6e840502b60dc67a2.png" alt="x_s(t)"/> shows the frequency
+response of the imperfectly reconstructed <img class="math" src="_images/math/b095abf7eca3b91c249261a20f75959cf2d010bc.png" alt="x_a(t)"/>.</p>
+<div class="figure align-center" style="width: 400px">
+<img alt="_images/zeroorderspectrum.jpg" src="_images/zeroorderspectrum.jpg" />
+</div>
+<div class="section" id="signal-reconstruction-on-the-msp432">
+<h3>Signal Reconstruction on the MSP432<a class="headerlink" href="#signal-reconstruction-on-the-msp432" title="Permalink to this headline">¶</a></h3>
+<p>The MSP432 does not have an on-board DAC. Instead, there is a 14-bit D/A converter on
+the AUDIO-XL board. This D/A converter is controller through an SPI interface
+on the MSP432, in addition to a SYNC pin.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/audioxldac.jpg" src="_images/audioxldac.jpg" />
+</div>
+<p>We first discuss the implementation on the AUDIOXL board, and next discuss the SPI
+interface between the MSP432 and the AUDIO-XL board. The DAC is driven through a serial
+SPI interface. The DAC has a zero-order hold response, and this response can be observed
+by connecting an oscilloscope probe to pin 2 or pin 4 of connector J5. However, the signal
+that is driving the audio amplifier is passed through a lowpass filter with a cutoff frequency
+of approximately <img class="math" src="_images/math/57fbbe5c64004571a63e862c8d71644a085dd112.png" alt="\frac{1}{2 \pi 100 0.082 \mu} = 19.4KHz"/>. This means that the sincx
+effect of the staircase reconstruction may roll off quicker at higher frequencies. However,
+when you generate signals with a sample frequency below 20KHz, you should be able to
+observe parts of the sampled-data spectrum <img class="math" src="_images/math/b8db972cf38ba9cc48f420f6e840502b60dc67a2.png" alt="x_s(t)"/> beyond the Nyquist frequency.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In high-end audio systems, a signal construction filter would be much more sophisticated; it
+would eliminate any frequency beyond the Nyquist frequency, and it would eliminate the
+amplitude distortion caused by zero-order hold below the Nyquist frequency. The simplicity
+of the signal reconstruction hardware on our lab kit allows you to investigate the consequences
+of ‘imperfect’ signal reconstruction.</p>
+</div>
+</div>
+<div class="section" id="dac8311-chip">
+<span id="dac8311chip"></span><h3>DAC8311 Chip<a class="headerlink" href="#dac8311-chip" title="Permalink to this headline">¶</a></h3>
+<p>Next, we discuss the communication between the MSP432 and the DAC chip.
+The SPI interface communicates one byte at a time, so 14 bits for the DAC are transferred
+using a high byte and a low byte. The DAC has a SYNC pin which is asserted to indicate
+when the first byte is transmitted. The bits are transmitted MSB to LSB, and the DAC datasheet (DAC8311) illustrates the timing.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/dac8311.jpg" src="_images/dac8311.jpg" />
+</div>
+<p>The MSP432_BOOSTXL library includes a software function, <code class="docutils literal notranslate"><span class="pre">DAC8311_updateDacOut(uint16_t</span> <span class="pre">value)</span></code>,
+which writes a new value to the DAC:</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="keyword type">void</span> <span class="name function">DAC8311_updateDacOut</span><span class="punctuation">(</span><span class="keyword type">uint16_t</span> <span class="name">value</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 2 </span>    <span class="comment single">// Set DB15 and DB14 to be 0 for normal mode
+</span><span class="ln"> 3 </span><span class="comment single"></span>    <span class="name">value</span> <span class="operator">&amp;=</span> <span class="operator">~</span><span class="punctuation">(</span><span class="literal number hex">0xC000</span><span class="punctuation">);</span>
+<span class="ln"> 4 </span>
+<span class="ln"> 5 </span>    <span class="name">DAC8311_writeRegister</span><span class="punctuation">(</span><span class="name">value</span><span class="punctuation">);</span>
+<span class="ln"> 6 </span><span class="punctuation">}</span>
+<span class="ln"> 7 </span>
+<span class="ln"> 8 </span><span class="keyword">static</span> <span class="keyword type">void</span> <span class="name function">DAC8311_writeRegister</span><span class="punctuation">(</span><span class="keyword type">uint16_t</span> <span class="name">data</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 9 </span>    <span class="comment single">// Falling edge on SYNC to trigger DAC
+</span><span class="ln">10 </span><span class="comment single"></span>    <span class="name">GPIO_setOutputLowOnPin</span><span class="punctuation">(</span><span class="name">DAC8311_SYNC_PORT</span><span class="punctuation">,</span>
+<span class="ln">11 </span>                           <span class="name">DAC8311_SYNC_PIN</span><span class="punctuation">);</span>
+<span class="ln">12 </span>
+<span class="ln">13 </span>    <span class="keyword">while</span> <span class="punctuation">(</span><span class="name">EUSCI_B_SPI_isBusy</span><span class="punctuation">(</span><span class="name">DAC8311_EUSCI_BASE</span><span class="punctuation">))</span> <span class="punctuation">;</span>
+<span class="ln">14 </span>    <span class="name">EUSCI_B_SPI_transmitData</span><span class="punctuation">(</span><span class="name">DAC8311_EUSCI_BASE</span><span class="punctuation">,</span> <span class="name">data</span> <span class="operator">&gt;&gt;</span> <span class="literal number integer">8</span><span class="punctuation">);</span> <span class="comment single">// high byte
+</span><span class="ln">15 </span><span class="comment single"></span>
+<span class="ln">16 </span>    <span class="keyword">while</span> <span class="punctuation">(</span><span class="name">EUSCI_B_SPI_isBusy</span><span class="punctuation">(</span><span class="name">DAC8311_EUSCI_BASE</span><span class="punctuation">))</span> <span class="punctuation">;</span>
+<span class="ln">17 </span>    <span class="name">EUSCI_B_SPI_transmitData</span><span class="punctuation">(</span><span class="name">DAC8311_EUSCI_BASE</span><span class="punctuation">,</span> <span class="name">data</span><span class="punctuation">);</span>  <span class="comment single">// low byte
+</span><span class="ln">18 </span><span class="comment single"></span>
+<span class="ln">19 </span>    <span class="keyword">while</span> <span class="punctuation">(</span><span class="name">EUSCI_B_SPI_isBusy</span><span class="punctuation">(</span><span class="name">DAC8311_EUSCI_BASE</span><span class="punctuation">))</span> <span class="punctuation">;</span>
+<span class="ln">20 </span>
+<span class="ln">21 </span>    <span class="comment single">// Set SYNC back high
+</span><span class="ln">22 </span><span class="comment single"></span>    <span class="name">GPIO_setOutputHighOnPin</span><span class="punctuation">(</span><span class="name">DAC8311_SYNC_PORT</span><span class="punctuation">,</span>
+<span class="ln">23 </span>                            <span class="name">DAC8311_SYNC_PIN</span><span class="punctuation">);</span>
+<span class="ln">24 </span><span class="punctuation">}</span>
+</pre>
+</div>
+</div>
+<div class="section" id="distortion-in-the-sampling-and-reconstruction-process">
+<h2>Distortion in the Sampling and Reconstruction Process<a class="headerlink" href="#distortion-in-the-sampling-and-reconstruction-process" title="Permalink to this headline">¶</a></h2>
+<p>Finally, we summarize the sources of distortion in the sampling and reconstruction
+process. We can now understand the causes and effect of each type of distortion.</p>
+<p>1. <strong>Aliasing</strong> is caused when a continuous-time signal is sampled at a rate below twice
+the highest frequency component in that continuous-time signal. Aliasing causes overlap
+between adjacent frequency bands in the discrete-time signal, and it causes
+non-recoverable distortion.</p>
+<p>2. <strong>Quantization Noise</strong> is caused because the disrete-time signal is quantized on a finite
+number of quantization steps. Quantization noise is a non-linear effect, and its effect is
+often modeled as additive noise. We will investigate quantization noise in more detail when
+we discuss filters.</p>
+<p>3. <strong>Jitter</strong> is caused by imperfect sampling, and is visible by random shifts back and forth in time.
+Jitter is a non-linear effect as well, and eventually appears as noise in the reconstructed signal.</p>
+<ol class="arabic simple" start="4">
+<li><strong>Zero-order Hold</strong> is an effect in the signal reconstruction process where imperfect reconstruction is used instead of ideal sinc interpolation. A zero-order hold is a linear (filter) effect, which can be compensated by proper reconstruction filter design.</li>
+</ol>
+</div>
+<div class="section" id="demonstration">
+<h2>Demonstration<a class="headerlink" href="#demonstration" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Loopback application</li>
+<li>Sample and reconstruct</li>
+<li>Look at the spectrum</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lecture2.html" class="btn btn-neutral float-right" title="L2: Real-Time Input Output" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="introduction.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

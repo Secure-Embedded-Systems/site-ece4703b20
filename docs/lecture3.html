@@ -1,0 +1,602 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>L3: DTFT, z-transform, and FIR filters &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="L4: FIR filter implementation" href="lecture4.html" />
+    <link rel="prev" title="L2: Real-Time Input Output" href="lecture2.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="lectures.html">Lectures</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture1.html">L1: Sampling and Quantization, Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture2.html">L2: Real-Time Input Output</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">L3: DTFT, z-transform, and FIR filters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#signal-processing-is-stream-processing">Signal Processing is Stream Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-discrete-time-fourier-transform">The Discrete Time Fourier Transform</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-dirac-impulse">The Dirac Impulse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-time-shifted-dirac-impulse">The time-shifted Dirac Impulse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">The Discrete Time Fourier Transform</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#the-z-transform">The z-Transform</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-unit-circle">The Unit Circle</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#fir-filters">FIR filters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fir-design-example">FIR Design Example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lecture4.html">L4: FIR filter implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture5.html">L5: IIR filters, and their implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture6.html">L6: Fixed Point Arithmetic in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture7.html">L7: Performance Optimization in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture8.html">L8: DMA and the ARM CMSIS Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture9.html">L9: Adaptive Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture10.html">L10: Frequency Synthesis and Detection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="labs.html">Labs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="lectures.html">Lectures</a> &raquo;</li>
+        
+      <li>L3: DTFT, z-transform, and FIR filters</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lecture3.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="l3-dtft-z-transform-and-fir-filters">
+<h1>L3: DTFT, z-transform, and FIR filters<a class="headerlink" href="#l3-dtft-z-transform-and-fir-filters" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this lecture is as follows.</p>
+<ul class="simple">
+<li>To review the fundamentals of the DTFT and its relation to discrete-time signal processing</li>
+<li>To review the fundamentals of the Z-transform</li>
+<li>To review frequency response analysis using the Z-transform</li>
+<li>To introduce FIR filter structures by means of examples</li>
+</ul>
+<div class="section" id="signal-processing-is-stream-processing">
+<h2>Signal Processing is Stream Processing<a class="headerlink" href="#signal-processing-is-stream-processing" title="Permalink to this headline">¶</a></h2>
+<p>Last lecture, we discussed the nature of real-time implementation for DSP. In a real-time DSP
+system, every sample period, a new signal sample is presented to the DSP algorithm.
+The DSP algorithm then must take this signal sample and compute an output sample before the
+next input sample arrives. We talked about three different software mechanisms
+to achieve this real-time constraint: (a) polling-driven processing, (b) interrupt-driven
+processing, and (c) DMA-driven processing.</p>
+<p>DSP algorithms are algorithms designed to compute on an infinite stream of samples.
+Due to the real-time nature of the DSP processing, these samples are spaced <img class="math" src="_images/math/a9768475a0024f74567dfa3db0f51240f0479382.png" alt="T_s"/> apart in time.
+A DSP algorithm describes the output as a function of the previous <img class="math" src="_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> input samples, and
+the previous <img class="math" src="_images/math/450a8e2c2320d77181e0d4fc68c947e9a5de8ecb.png" alt="M"/> computed outputs. Of course, <img class="math" src="_images/math/4195d04e7b38f694bcbd2f5a7198d1b634351211.png" alt="1 &lt; N, M &lt; \infty"/>.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/streamingprocessing.jpg" src="_images/streamingprocessing.jpg" />
+</div>
+<p>As time progresses, the DSP algorithm computes a stream of output samples from a stream of input
+samples. The implementation must handle not only the computations (ie. computing a new output from
+the previous inputs and previous outputs), but it must <em>also</em> handle the storage of those samples.</p>
+<p>For example, if <img class="math" src="_images/math/6008346e0d892d4c55e6d9b7df23b6e15bfed209.png" alt="N=3, M=4"/>, then a DSP algorithm for the design shown in the figure
+could be a C function similar to the following.</p>
+<pre class="code c literal-block">
+<span class="ln">1 </span><span class="keyword type">void</span> <span class="name">dsp</span><span class="punctuation">(</span><span class="name">input</span> <span class="name">x2</span><span class="punctuation">,</span>   <span class="comment single">// input 2 samples ago
+</span><span class="ln">2 </span><span class="comment single"></span>         <span class="name">input</span> <span class="name">x1</span><span class="punctuation">,</span>   <span class="comment single">// input 1 sample ogo
+</span><span class="ln">3 </span><span class="comment single"></span>         <span class="name">input</span> <span class="name">x0</span><span class="punctuation">,</span>   <span class="comment single">// input &#64;now
+</span><span class="ln">4 </span><span class="comment single"></span>         <span class="name">output</span> <span class="name">y3</span><span class="punctuation">,</span>  <span class="comment single">// output 3 samples ago
+</span><span class="ln">5 </span><span class="comment single"></span>         <span class="name">output</span> <span class="name">y2</span><span class="punctuation">,</span>  <span class="comment single">// output 2 samples ago
+</span><span class="ln">6 </span><span class="comment single"></span>         <span class="name">output</span> <span class="name">y1</span><span class="punctuation">,</span>  <span class="comment single">// output 1 sample ago
+</span><span class="ln">7 </span><span class="comment single"></span>         <span class="name">output</span> <span class="operator">*</span><span class="name">y0</span><span class="punctuation">)</span> <span class="comment single">// output &#64;now</span>
+</pre>
+<p>However, this is only part of the tasks of a streaming DSP implementation in C.
+When the next input sample arrives, the DSP implementation must relabel the inputs and
+outputs: the &#64;now input <cite>x0</cite> and output <cite>y0</cite> becomes the input <cite>x1</cite> and output <cite>y1</cite> of
+one sample ago; the input <cite>x1</cite> and output <cite>y1</cite> of one sample ago becomes the input <cite>x2</cite>
+and output <cite>y1</cite> of two samples ago; and so forth. For each new input sample, we have to
+process a <em>tick</em> function that handles this streaming.
+For example:</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="keyword type">int</span> <span class="name">x0</span><span class="punctuation">,</span> <span class="name">x1</span><span class="punctuation">,</span> <span class="name">x2</span><span class="punctuation">;</span>
+<span class="ln"> 2 </span><span class="keyword type">int</span> <span class="name">y0</span><span class="punctuation">,</span> <span class="name">y1</span><span class="punctuation">,</span> <span class="name">y2</span><span class="punctuation">,</span> <span class="name">y3</span><span class="punctuation">;</span>
+<span class="ln"> 3 </span>
+<span class="ln"> 4 </span><span class="keyword type">void</span> <span class="name function">tick</span><span class="punctuation">()</span> <span class="punctuation">{</span>
+<span class="ln"> 5 </span>  <span class="comment single">// shift the input stream
+</span><span class="ln"> 6 </span><span class="comment single"></span>  <span class="name">x2</span> <span class="operator">=</span> <span class="name">x1</span><span class="punctuation">;</span>
+<span class="ln"> 7 </span>  <span class="name">x1</span> <span class="operator">=</span> <span class="name">x0</span><span class="punctuation">;</span>
+<span class="ln"> 8 </span>  <span class="name">x0</span> <span class="operator">=</span> <span class="name">adc_output</span><span class="punctuation">();</span>
+<span class="ln"> 9 </span>
+<span class="ln">10 </span>  <span class="name">dsp</span><span class="punctuation">(</span><span class="name">x2</span><span class="punctuation">,</span> <span class="name">x1</span><span class="punctuation">,</span> <span class="name">x0</span><span class="punctuation">,</span> <span class="name">y3</span><span class="punctuation">,</span> <span class="name">y2</span><span class="punctuation">,</span> <span class="name">y1</span><span class="punctuation">,</span> <span class="operator">&amp;</span><span class="name">y0</span><span class="punctuation">);</span>
+<span class="ln">11 </span>
+<span class="ln">12 </span>  <span class="comment single">// shift the output stream (for next sample)
+</span><span class="ln">13 </span><span class="comment single"></span>  <span class="name">y3</span> <span class="operator">=</span> <span class="name">y2</span><span class="punctuation">;</span>
+<span class="ln">14 </span>  <span class="name">y2</span> <span class="operator">=</span> <span class="name">y1</span><span class="punctuation">;</span>
+<span class="ln">15 </span>  <span class="name">y1</span> <span class="operator">=</span> <span class="name">y0</span><span class="punctuation">;</span>
+<span class="ln">16 </span>
+<span class="ln">17 </span>  <span class="name">dac_input</span><span class="punctuation">(</span><span class="name">y0</span><span class="punctuation">);</span>
+<span class="ln">18 </span><span class="punctuation">}</span>
+</pre>
+<p>Hence, when you develop a DSP implementation, you have to think about both the algorithm (e.g., filter)
+design, as well as the stream processing.
+Your DSP implementation works with a very special data structure, a <em>stream</em>. Since C compilers
+don’t have a stream datatype, you have to program the stream behavior as part of the
+DSP algorithm implementation.</p>
+</div>
+<div class="section" id="the-discrete-time-fourier-transform">
+<h2>The Discrete Time Fourier Transform<a class="headerlink" href="#the-discrete-time-fourier-transform" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-dirac-impulse">
+<h3>The Dirac Impulse<a class="headerlink" href="#the-dirac-impulse" title="Permalink to this headline">¶</a></h3>
+<p>We will recap some of the basic properties of the
+spectra of discrete-time signals. Consider the basic Dirac pulse <img class="math" src="_images/math/9333e65dd8d7a11740df40cc99fb2219a911f3b1.png" alt="\delta(t)"/>
+at time <img class="math" src="_images/math/c9c0db14206d811c979283bc2269384bec23557d.png" alt="t=0"/>. The spectrum of this pulse is given by the Fourier Transform:</p>
+<div class="math">
+<p><img src="_images/math/504f515cb3387dfc7c495a4986f1e17973812dd9.png" alt="G(j\omega) = \int_{-\infty}^{\infty} \delta(t).e^{-j\omega t}.dt = e^{-j 0} = 1"/></p>
+</div><p>The spectrum of an impulse contains <em>every</em> frequency under the sun. Furthermore,
+the magnitude and the phase of <img class="math" src="_images/math/6c481beaa1a2c0bd670adaef3bcc45f8b1bae863.png" alt="G(j\omega)"/> have a particular format.</p>
+<div class="math">
+<p><img src="_images/math/c5bccdeb56bcc0b28c9ab17fdcfb141d9693864e.png" alt="| G(j\omega) |    &amp;= 1 \\
+phase(G(j\omega)) &amp;= 0"/></p>
+</div><p>The amplitude of every phasor making up <img class="math" src="_images/math/6c481beaa1a2c0bd670adaef3bcc45f8b1bae863.png" alt="G(j\omega)"/> is
+uniform, and they are all aligned with each other (at t=0). It is this alignment that causes such
+a sharp impulse to appear in the time domain.</p>
+<p>At any time besides t=0, the combination of frequencies in <img class="math" src="_images/math/6c481beaa1a2c0bd670adaef3bcc45f8b1bae863.png" alt="G(j\omega)"/> will cancel each other out,
+so that the time-domain value of <img class="math" src="_images/math/110af5ee6bc8114c269729f96650d5709943e216.png" alt="\delta(t) = 0 \leftrightarrow t \neq 0"/>.</p>
+<p>To see why, consider the behavior of the spectrum, as in the following picture.
+Since <img class="math" src="_images/math/72f3390b1d512753f1a461c48847df758152bc2a.png" alt="G(j\omega) = 1"/>, each frequency contains a phasor of unit length. As time progresses, all of these phasors start to rotate at the speed corresponding to its frequency.
+When <img class="math" src="_images/math/b51aa99e0bc8cc8c3d17c0b9cf822db73e13293e.png" alt="\omega"/> is positive, they rotate
+counter-clockwise. When <img class="math" src="_images/math/b51aa99e0bc8cc8c3d17c0b9cf822db73e13293e.png" alt="\omega"/> is negative, they rotate clockwise.</p>
+<p>The reponse of the function in the time domain is the sum of all these phasors.
+At time zero, all phasors (at every frequency) are aligned with the real axis, and
+pointing upward. This makes <img class="math" src="_images/math/28357f11668c210398e8bb7b862c285c25263620.png" alt="\delta(0)"/> an infinitely high and infinitely narrow pulse with area 1.
+If time advances one second, the phasors will rotate. After one second, the
+phasor at <img class="math" src="_images/math/448135f44e18b7786cd51cadfcd0cef458b0dceb.png" alt="\omega = \pi"/> has made a half turn, while the phasor at <img class="math" src="_images/math/44fc2e144f0fc6b15161fe35ae794ed4de5ca34c.png" alt="\omega = 2\pi"/> has made a
+full turn. The time domain response at time = 1 will be zero, since as the sum of all phasors (over all <img class="math" src="_images/math/b51aa99e0bc8cc8c3d17c0b9cf822db73e13293e.png" alt="\omega"/>) cancels out to 0. This is true for every <img class="math" src="_images/math/2fe241edb74dd9a894fb52a3e74474f47a58659f.png" alt="t = T"/>, since it is always possible to find
+a frequency <img class="math" src="_images/math/36b4a082c1a564d33055960a8b35fa4945d8c188.png" alt="\omega = 2 \pi / T"/> that has made a full turn at that moment, thereby cancelling out
+the response of frequencies between DC and <img class="math" src="_images/math/36b4a082c1a564d33055960a8b35fa4945d8c188.png" alt="\omega = 2 \pi / T"/>.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/pulsespectrum.jpg" src="_images/pulsespectrum.jpg" />
+</div>
+</div>
+<div class="section" id="the-time-shifted-dirac-impulse">
+<h3>The time-shifted Dirac Impulse<a class="headerlink" href="#the-time-shifted-dirac-impulse" title="Permalink to this headline">¶</a></h3>
+<p>Next, consider the spectrum of a Dirac pulse at a time different from zero, say  <img class="math" src="_images/math/290482be2c87b1d13ab6cf3d2ef656703a57f8ce.png" alt="\delta(t - T)"/> for a
+Dirac pulse at time <img class="math" src="_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/>. Clearly, this pulse must also contain the same frequency components as <img class="math" src="_images/math/9333e65dd8d7a11740df40cc99fb2219a911f3b1.png" alt="\delta(t)"/>. The only difference is that <img class="math" src="_images/math/290482be2c87b1d13ab6cf3d2ef656703a57f8ce.png" alt="\delta(t - T)"/> has shifted over time <img class="math" src="_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/>, which will induce a delay for all of these frequency components. The spectrum is now given by:</p>
+<div class="math">
+<p><img src="_images/math/67e6ad6ee10031278a3162efe4bbe81c010e9aba.png" alt="G(j\omega) = \int_{-\infty}^{\infty} \delta(t-T).e^{-j\omega t}.dt = e^{-j \omega T}"/></p>
+</div><p>The term <img class="math" src="_images/math/e950567ff418ed997bed800d1e4e672657d073b9.png" alt="e^{-j \omega T}"/> still has unit magnitude for all frequencies, but there is a phase shift
+of <img class="math" src="_images/math/081611cee89f28fd0dd89f87133568585ed096b0.png" alt="-\omega T"/> radians for the phasor at frequency <img class="math" src="_images/math/b51aa99e0bc8cc8c3d17c0b9cf822db73e13293e.png" alt="\omega"/>.</p>
+<p>The makes the term <img class="math" src="_images/math/e950567ff418ed997bed800d1e4e672657d073b9.png" alt="e^{-j \omega T}"/> pretty important. This term describes the spectrum of a pulse delayed by time T. When we think of a sampled-data signal as a sequence of weighted pulses, we can thus construct the spectrum of the sampled-data signal by summing up the contribution of each pulse individually. Since the complete sampled data signal is a linear combination of weighted time-delayed pulses, the spectrum of a sampled data signal is a linear combination of the spectrum of these individual pulses.</p>
+<p>Indeed, let’s say that you have a sampled-data signal <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/>.
+Then the signal can be written in the time domain
+as <img class="math" src="_images/math/a011597d4ee49573d33a5a7914ba31f229647238.png" alt="x_s(nT_s)"/> as follows:</p>
+<div class="math">
+<p><img src="_images/math/b6415b6e07c9c52df27b82a32a3d489ee812fd80.png" alt="x_s(nT_s) = x_0 . \delta(t) + x_1 . \delta(t - T_s) + x_2 . \delta(t - 2.T_s) + ..."/></p>
+</div><p>Now, making use of the linear property in frequency analysis, we can express the spectrum of <img class="math" src="_images/math/a011597d4ee49573d33a5a7914ba31f229647238.png" alt="x_s(nT_s)"/> as
+the sum of the spectra caused by each single sample pulse. Mathematically:</p>
+<div class="math">
+<p><img src="_images/math/99a743b95dd1faa6c26524f065f3f8998259fa75.png" alt="X_s(j\omega) = x_0  + x_1 . e^{-j\omega T_s} + x_2 . e^{-j\omega 2.T_s}  + ..."/></p>
+</div><p>This is quite cool: you can describe the frequency spectrum of a sampled-data signal simply by looking at the sampled-data values! This transformation also demonstrates that the spectrum of a sampled-data signal is periodic,
+since <img class="math" src="_images/math/d8c362d48d09fd6aba2344c7a8aa243cae835184.png" alt="e^{-j\omega T_s}"/> is periodic. In particular, the period is <img class="math" src="_images/math/20de1814e1ebe2174cc234c25c4fc745b8a32f53.png" alt="2 \pi / T_s"/>. Indeed, recall from Lecture 1 that the spectrum of a sampled data signal contains infinitely many copies
+of the spectrum of the baseband signal. When the baseband signal has no components below frequency <img class="math" src="_images/math/1cb06734dc3ac562ed2e1672a8e73a5302d60153.png" alt="\pi / T_s"/>, then the baseband signal can be perfectly recreated from the sampled-data signal.</p>
+</div>
+<div class="section" id="id1">
+<h3>The Discrete Time Fourier Transform<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>The previous expression is very close in form to the Discrete Time Fourier Transform.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>The Discrete Fourier Transform is the spectrum of a sample-data signal <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/> given a
+normalized sample period of <img class="math" src="_images/math/f19f960070fb9aa77a38bf704c1e9c2575b69b3d.png" alt="T_s = 1"/>.</p>
+<div class="last math">
+<p><img src="_images/math/909a55bdff4ad5fc42da21dc4311d83df5b4afb1.png" alt="X(e^{j\omega}) = \sum_{-\infty}^{\infty} x(n).e^{-jn\omega}"/></p>
+</div></div>
+<p>Here are some well-known DTFT pairs.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="63%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Sequence</th>
+<th class="head">Discrete-Time Fourier Transform</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><img class="math" src="_images/math/739c52b2c6d4c0046826e7ae895c8a4b99653eb9.png" alt="\delta(n)"/></td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><img class="math" src="_images/math/590978083a7b1c4a9df0a64b9a29f5098ec95918.png" alt="\delta(n-n_0)"/></td>
+<td rowspan="2"><img class="math" src="_images/math/86cded9bc918ee40e045ac37d6dfb9e7a4bf9587.png" alt="e^{-j.n_0.\omega}"/></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td>1</td>
+<td><img class="math" src="_images/math/472bcbd81040c8e9343af02fac8523612dd60982.png" alt="2\pi.\delta(\omega)"/></td>
+</tr>
+<tr class="row-even"><td><img class="math" src="_images/math/b092257086426f0fb238af77958f2ccb62a59fc0.png" alt="e^{j.n.\omega_0}"/></td>
+<td><img class="math" src="_images/math/ad52fb8fa27fa12cd856f612606a3bf77b5eabfa.png" alt="2\pi.\delta(\omega - \omega_0)"/></td>
+</tr>
+<tr class="row-odd"><td><img class="math" src="_images/math/b1c279cb5e55c04f15ad5141c14cb54afcbe3663.png" alt="cos(n.\omega_0)"/></td>
+<td><img class="math" src="_images/math/379ff62020ccdbffbf01adf6fc76cf181802b753.png" alt="\pi.\delta(\omega + \omega_0) + \pi.\delta(\omega - \omega_0)"/></td>
+</tr>
+</tbody>
+</table>
+<p>The last formula, for <img class="math" src="_images/math/b1c279cb5e55c04f15ad5141c14cb54afcbe3663.png" alt="cos(n.\omega_0)"/>, is somewhat particular, since for many sample sequences <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/> it’s
+not easy to find a closed form. That brings us to the z-Transform.</p>
+</div>
+</div>
+<div class="section" id="the-z-transform">
+<h2>The z-Transform<a class="headerlink" href="#the-z-transform" title="Permalink to this headline">¶</a></h2>
+<p>The z-transform is a generalization of the DTFT where we write a sampled-data sequence as a power series
+in <img class="math" src="_images/math/683f2dd9129a91d21aaf1c04afa6f78b39d4cb0a.png" alt="z"/>, where <img class="math" src="_images/math/cf8c3af68266ba1405888136652b5119033c9aa4.png" alt="z = e^{sT} = e^{(\sigma + j.\omega).T}"/> has both real and imaginary components.</p>
+<p>The z-transform of a sampled-data signal becomes:</p>
+<div class="math">
+<p><img src="_images/math/d7b9e6bc7c9eb4e9a4192d3aeffc830b467cb443.png" alt="G(z) = x_0 + x_1.z^{-1} + x_2.z^{-2} + ..."/></p>
+</div><p>When <img class="math" src="_images/math/683f2dd9129a91d21aaf1c04afa6f78b39d4cb0a.png" alt="z"/> equals the imaginary term <img class="math" src="_images/math/e65eafcc1c396bf413d0d201952a6d0938f41049.png" alt="z = e^{j\omega}"/>, then <img class="math" src="_images/math/e673882a964da5121d82bc7cde5840b169f427db.png" alt="G(z) = X(e^{j\omega})"/> as in the DTFT.
+However, in contrast to the DTFT, the z-transform is better at handling long series <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/> where summing
+up  <img class="math" src="_images/math/5ab2514ab76ad37cb54e984a96eb20243e91a9e8.png" alt="X(e^{j\omega})  = \sum_{-\infty}^{\infty} x(n).e^{-jn\omega}"/> is complicated.</p>
+<p>Here is an example. Suppose we have a unit step:</p>
+<div class="math">
+<p><img src="_images/math/e886ff963b926c653cc59cfd7ae02995639602c6.png" alt="U(z) &amp;= 1 + z^{-1} + z^{-2} + z^{-3} + ..."/></p>
+</div><p>Which is tricky to sum up using <img class="math" src="_images/math/f7e4223ac00db338a588641d2387b6c88aee8823.png" alt="X(e^{j\omega})"/>, since the sum does not converge for <img class="math" src="_images/math/70263036bd36ae3943e67584caadb0762001a941.png" alt="omega = 0"/>.
+In the z-transform expression, we can rewrite <img class="math" src="_images/math/55aaed5caeb38ed0b6b3367f9aef5c15b67074d1.png" alt="U(z)"/> as a power series. Namely</p>
+<div class="math">
+<p><img src="_images/math/d6cee8a8a3afbedffd03078c37f6176741ceea63.png" alt="G(z) &amp;= \frac{z}{z - \alpha} = 1 + \alpha.z^{-1} + \alpha^2.z^{-2} + \alpha^3.z^{-3} + ... \\
+G(z) &amp;= \frac{1}{1 - \alpha.z^{-1}}  \leftrightarrow |z| &gt; |\alpha|"/></p>
+</div><p>Hence, the z-transform of the unit step can be written as</p>
+<div class="math">
+<p><img src="_images/math/0289201f0608b814cd9ecba286bcc2a537533d4d.png" alt="U(z) &amp;= \frac{1}{1 - z^{-1}}"/></p>
+</div><p>The choice of <img class="math" src="_images/math/683f2dd9129a91d21aaf1c04afa6f78b39d4cb0a.png" alt="z"/> is inspired by the Laplace transform variable s. But unlike the Laplace transform,
+the <img class="math" src="_images/math/683f2dd9129a91d21aaf1c04afa6f78b39d4cb0a.png" alt="z"/> has built-in periodicity <img class="math" src="_images/math/8ec62e307378ba668cd013036e48b8122b123dac.png" alt="z = e^{sT + 2.\pi} = e^{sT}"/>.</p>
+<div class="section" id="the-unit-circle">
+<h3>The Unit Circle<a class="headerlink" href="#the-unit-circle" title="Permalink to this headline">¶</a></h3>
+<p>z-transform functions are commonly represented (and computed) on a unit circle presentation,
+which reflects the periodic nature of <img class="math" src="_images/math/683f2dd9129a91d21aaf1c04afa6f78b39d4cb0a.png" alt="z"/>. In fact, the z-plane (which contains the
+unit circle) is the discrete-time equivalent of the s-plane for continuous-time functions.
+The inside of the unit circle corresponds to the left side of the s-plane (stable side) while
+the outside of the unit circle corresponds to the right side of the s-plane. The unit circle
+itself maps to the frequency axis in the s-plane, and any feature in the z-plane at an angle <img class="math" src="_images/math/877d234f4cec6974ce218fc2e975a486a7972dfd.png" alt="\alpha"/>
+will repeat forever in the s-plane at <img class="math" src="_images/math/438a0265c34ecd7c77b5d249a7fece2aade33c35.png" alt="j\omega = (n.2\pi + \alpha)/T"/>.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/szplane.jpg" src="_images/szplane.jpg" />
+</div>
+<p>The unit circle is used to plot the poles and zeroes of the z-transform transfer function.
+Consider for example the following z-transform function <img class="math" src="_images/math/7122590e858a5e23ce3cd42f8a763e95334b868f.png" alt="G(z)"/>, which has 8 zeroes and 8 poles.</p>
+<div class="math">
+<p><img src="_images/math/aee72b6cddd48408a5583b02bd6dc92f1f9083d5.png" alt="G(z) = (1 - z^{-8}) = \frac{z^8 - 1}{z^8}"/></p>
+</div><p>As an 8th order demoninator and nominator polynomial, this function has 8 zeroes and 8 poles.
+The zeroes and poles are marked on the unit circle on the following figure. The zeroes are
+the 8th order root of unity (i.e. all solutions to <img class="math" src="_images/math/ab609c19ca61e90a802039ef467fc55be27002be.png" alt="z^8 = 1"/>, which is <img class="math" src="_images/math/9738bb57e0f4e0665be15d6a34e4167fc4ea1412.png" alt="z = e^{\frac{n.pi}{4}}"/> for <img class="math" src="_images/math/fdede118b6b1a795e10a0693fed0e4d0cb9174b6.png" alt="n = 0 .. 7"/>).</p>
+<p>The amplitude response is the magnitude response of G(z) while traveling along the unit circle.
+When we go through a zero, the response <img class="math" src="_images/math/7122590e858a5e23ce3cd42f8a763e95334b868f.png" alt="G(z)"/> is zero.</p>
+<p>The time domain impulse response can
+be read directly from the z-transform <img class="math" src="_images/math/3617fd8c34944ee75be5c836cbd77eabde56f99c.png" alt="1 - z^{-8}"/>.
+The time domain impulse response of G(z) is simply two pulses
+of opposite sign space eight sample periods apart.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/8thorderz.jpg" src="_images/8thorderz.jpg" />
+</div>
+<p>The following C program verifies this ‘Comb Filter’.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="keyword type">uint16_t</span> <span class="name function">processSample</span><span class="punctuation">(</span><span class="keyword type">uint16_t</span> <span class="name">x</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 2 </span>    <span class="keyword">static</span> <span class="name">float32_t</span> <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">9</span><span class="punctuation">];</span>
+<span class="ln"> 3 </span>
+<span class="ln"> 4 </span>    <span class="comment single">// use this to create white noise
+</span><span class="ln"> 5 </span><span class="comment single"></span>    <span class="name">float32_t</span> <span class="name">input</span> <span class="operator">=</span> <span class="name">adc14_to_f32</span><span class="punctuation">(</span><span class="literal number hex">0x1800</span> <span class="operator">+</span> <span class="name">rand</span><span class="punctuation">()</span> <span class="operator">%</span> <span class="literal number hex">0x1000</span><span class="punctuation">);</span>
+<span class="ln"> 6 </span>
+<span class="ln"> 7 </span>    <span class="comment single">// use this to use a test signal
+</span><span class="ln"> 8 </span><span class="comment single"></span>    <span class="comment single">// float32_t input = adc14_to_f32(x);
+</span><span class="ln"> 9 </span><span class="comment single"></span>
+<span class="ln">10 </span>    <span class="keyword type">uint32_t</span> <span class="name">i</span><span class="punctuation">;</span>
+<span class="ln">11 </span>    <span class="keyword">for</span> <span class="punctuation">(</span><span class="name">i</span><span class="operator">=</span><span class="literal number integer">0</span><span class="punctuation">;</span> <span class="name">i</span><span class="operator">&lt;</span><span class="literal number integer">8</span><span class="punctuation">;</span> <span class="name">i</span><span class="operator">++</span><span class="punctuation">)</span>
+<span class="ln">12 </span>        <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">8</span><span class="operator">-</span><span class="name">i</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">7</span><span class="operator">-</span><span class="name">i</span><span class="punctuation">];</span>
+<span class="ln">13 </span>    <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">input</span><span class="punctuation">;</span>
+<span class="ln">14 </span>
+<span class="ln">15 </span>    <span class="keyword">return</span> <span class="name">f32_to_dac14</span><span class="punctuation">(</span><span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">-</span> <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">8</span><span class="punctuation">]);</span>
+<span class="ln">16 </span>
+<span class="ln">17 </span>    <span class="keyword">return</span> <span class="name">x</span><span class="punctuation">;</span>
+<span class="ln">18 </span><span class="punctuation">}</span>
+</pre>
+<p>By injecting white noise into the filter, and taking the spectrum of the output, we can observe the 8 lobes
+of the frequency response. In the following graph, the central cursor line is at 32KHz, the sample frequency
+of the DSP system. The 8 lobes can be counted between DC and 32KHz, but the spectrum is distored by zero-order
+hold of the DAC.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/comb8.jpg" src="_images/comb8.jpg" />
+</div>
+</div>
+</div>
+<div class="section" id="fir-filters">
+<h2>FIR filters<a class="headerlink" href="#fir-filters" title="Permalink to this headline">¶</a></h2>
+<p>The Comb filter we discussed while constructing the Unit Circle is an FIR design - a <em>Finite Impulse Response</em>
+filter. This filter computes its output using only the past input values to the system.</p>
+<p>The Z-transform of an FIR is a polynomial in <img class="math" src="_images/math/1a4b8d0a55f4ac355c094e93f5fdef08d7c20762.png" alt="z^{-1}"/>.</p>
+<div class="math">
+<p><img src="_images/math/a66044a1cf8866461d8176e3271e3d4135474f99.png" alt="H(z) = \sum_{n=0}^{N} h(n) . z^{-n}"/></p>
+</div><p>The sequence <img class="math" src="_images/math/e03a27d36c5f27bfcbf3aff0a9ac8a69aa2961e2.png" alt="h(n)"/> is the <em>impulse response</em> of the FIR filter. This sequence is bounded.</p>
+<p>The response of an FIR filter is computed by the discrete-time convolution of an input sequence <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/> with
+the impulse response <img class="math" src="_images/math/e03a27d36c5f27bfcbf3aff0a9ac8a69aa2961e2.png" alt="h(n)"/>.</p>
+<div class="math">
+<p><img src="_images/math/2557b7699e3fb9c6b41a637e18fe30c075335f43.png" alt="y(n) = \sum_{k=0}^{N} h(k) . x(n-k)"/></p>
+</div><p>The classic <strong>direct-form implementation</strong> of an FIR filter is done by implementing a <em>tapped delay line</em>.
+The following is an example of a third-order FIR filter. Such a filter would have three zeroes in the z-plane
+and three poles at <img class="math" src="_images/math/b4a88b332e9885e000f4ad02238b759cf4b179b3.png" alt="z=0"/>.
+It has 4 multiplications with coefficients, 3 additions, and three delays.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/firdirect.jpg" src="_images/firdirect.jpg" />
+</div>
+<div class="section" id="fir-design-example">
+<h3>FIR Design Example<a class="headerlink" href="#fir-design-example" title="Permalink to this headline">¶</a></h3>
+<p>Let’s look at another simple example of a FIR filter with the following impulse reponse:</p>
+<blockquote>
+<div><div class="math">
+<p><img src="_images/math/e3b0f8c5626f4b43a019e82ce5f9f22e5c9b82a8.png" alt="G(z) = z^{-1} + z^{-2} + z^{-3} + z^{-4} + z^{-5} + z^{-6} + z^{-7} + z^{-8}"/></p>
+</div></div></blockquote>
+<p>Thus, the filter repeats on input pulse 8 times, starting with one sample delay.
+This has an averaging effect. To find the zeroes and poles of this filter, note
+that this FIR can be written as</p>
+<blockquote>
+<div><div class="math">
+<p><img src="_images/math/82964b4adbb0182c129489d6f4148be8142429a3.png" alt="G(z) = \frac{z^{8} + z^{7} + z^{6} + z^{5} + z^{4} + z^{3} + z^{2} + z^{1}}{z^8}"/></p>
+</div></div></blockquote>
+<p>And then you can use a root finding program to find the poles and zeroes of these
+polynomials. In Matlab, for example, you can use <cite>root([0 1 1 1 1 1 1 1 1])</cite> to find
+the location of these zeroes. Interestingly the zero locations are the same
+as for the impulse response <img class="math" src="_images/math/55a408e8f8dfa786f731cb84d7944f851695d48e.png" alt="(1 - z^{-8})"/>, except for the zero at <img class="math" src="_images/math/f8b2fa544218e7885380ddd5bf32bd875c3f1707.png" alt="z = 1"/>.
+With some extra sleuthing, you may be able to show that this averaging Z transform
+<img class="math" src="_images/math/56bfc497955c67343d7f1748de66080c15068f1b.png" alt="G(z) = z^{-1} + z^{-2} + z^{-3} + z^{-4} + z^{-5} + z^{-6} + z^{-7} + z^{-8}"/> can
+be converted into the comb filter by adding a zero at <img class="math" src="_images/math/f8b2fa544218e7885380ddd5bf32bd875c3f1707.png" alt="z = 1"/>.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/averagerfir.jpg" src="_images/averagerfir.jpg" />
+</div>
+<p>We can then implement a program and measure the spectrum, to verify that this design,
+indeed, has an averaging effect.
+The following C program verifies this ‘Averager’.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="keyword type">uint16_t</span> <span class="name function">processSample</span><span class="punctuation">(</span><span class="keyword type">uint16_t</span> <span class="name">x</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 2 </span>    <span class="keyword">static</span> <span class="name">float32_t</span> <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">9</span><span class="punctuation">];</span>
+<span class="ln"> 3 </span>
+<span class="ln"> 4 </span>    <span class="comment single">// white noise
+</span><span class="ln"> 5 </span><span class="comment single"></span>    <span class="name">float32_t</span> <span class="name">input</span> <span class="operator">=</span> <span class="name">adc14_to_f32</span><span class="punctuation">(</span><span class="literal number hex">0x1800</span> <span class="operator">+</span> <span class="name">rand</span><span class="punctuation">()</span> <span class="operator">%</span> <span class="literal number hex">0x1000</span><span class="punctuation">);</span>
+<span class="ln"> 6 </span>
+<span class="ln"> 7 </span>    <span class="comment single">// test signal
+</span><span class="ln"> 8 </span><span class="comment single"></span>    <span class="comment single">// float32_t input = adc14_to_f32(x);
+</span><span class="ln"> 9 </span><span class="comment single"></span>
+<span class="ln">10 </span>    <span class="keyword type">uint32_t</span> <span class="name">i</span><span class="punctuation">;</span>
+<span class="ln">11 </span>    <span class="keyword">for</span> <span class="punctuation">(</span><span class="name">i</span><span class="operator">=</span><span class="literal number integer">0</span><span class="punctuation">;</span> <span class="name">i</span><span class="operator">&lt;</span><span class="literal number integer">8</span><span class="punctuation">;</span> <span class="name">i</span><span class="operator">++</span><span class="punctuation">)</span>
+<span class="ln">12 </span>        <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">8</span><span class="operator">-</span><span class="name">i</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">7</span><span class="operator">-</span><span class="name">i</span><span class="punctuation">];</span>
+<span class="ln">13 </span>    <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">input</span><span class="punctuation">;</span>
+<span class="ln">14 </span>
+<span class="ln">15 </span>    <span class="comment single">// the filter. We're adding a scale factor to avoid overflow.
+</span><span class="ln">16 </span><span class="comment single"></span>    <span class="name">float32_t</span> <span class="name">r</span> <span class="operator">=</span> <span class="literal number float">0.125f</span> <span class="operator">*</span> <span class="punctuation">(</span><span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]</span> <span class="operator">+</span> <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">2</span><span class="punctuation">]</span> <span class="operator">+</span> <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">3</span><span class="punctuation">]</span> <span class="operator">+</span> <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">4</span><span class="punctuation">]</span> <span class="operator">+</span>
+<span class="ln">17 </span>                            <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">5</span><span class="punctuation">]</span> <span class="operator">+</span> <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">6</span><span class="punctuation">]</span> <span class="operator">+</span> <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">7</span><span class="punctuation">]</span> <span class="operator">+</span> <span class="name">taps</span><span class="punctuation">[</span><span class="literal number integer">8</span><span class="punctuation">]);</span>
+<span class="ln">18 </span>
+<span class="ln">19 </span>    <span class="keyword">return</span> <span class="name">f32_to_dac14</span><span class="punctuation">(</span><span class="name">r</span><span class="punctuation">);</span>
+<span class="ln">20 </span>
+<span class="ln">21 </span>    <span class="keyword">return</span> <span class="name">x</span><span class="punctuation">;</span>
+<span class="ln">22 </span><span class="punctuation">}</span>
+</pre>
+<p>The measured spectrum response confirms 8 lobes, with a big one around
+DC.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/averagerspectrum.jpg" src="_images/averagerspectrum.jpg" />
+</div>
+</div>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h2>
+<p>We discussed (the meaning of) the spectrum of a Dirac impulse, and how this leads
+to the Discrete Time Fourier Transform (DTFT). We then generalized the DTFT to
+the z-transform and discussed common notation and presentation (polynomials,
+unit filter).</p>
+<p>We applied that knowledge to the design of FIR filters, and we created two FIR
+filters: a comb filter, and an averaging filter. For both filters, we constructed
+the zero/pole plot, the impulse response, and we measured the frequency response
+using a C program.</p>
+<p>We discussed the symmetrical property of linear-phase filters - which leads to
+constant (group-)delay filters, as well as to optimized implementation.
+In next lecture, we will dive deeper into the various FIR implementation
+techniques (direct, transpose, lattice, ..) and their realization using Matlab
+and C programming.</p>
+<p><em>Optional: Discuss Matlab filter design tools</em></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lecture4.html" class="btn btn-neutral float-right" title="L4: FIR filter implementation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lecture2.html" class="btn btn-neutral" title="L2: Real-Time Input Output" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

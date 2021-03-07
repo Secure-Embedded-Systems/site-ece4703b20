@@ -1,0 +1,490 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Lab 4 &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Lab 5" href="lab5.html" />
+    <link rel="prev" title="Lab 3" href="lab3.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lectures.html">Lectures</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="labs.html">Labs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="lab1.html">Lab 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab2.html">Lab 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab3.html">Lab 3</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Lab 4</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fixed-point-implementation-requires-quantization">Fixed Point Implementation requires Quantization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#impact-of-quantization-in-the-time-and-frequency-domain">Impact of Quantization in the time and frequency domain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#impact-of-quantization-on-filter-characteristic">Impact of quantization on filter characteristic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#measuring-quantization-noise-of-a-fixed-point-filter-design">Measuring Quantization Noise of a Fixed-point Filter Design</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wrapping-up">Wrapping Up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grading-rubric">Grading Rubric</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lab5.html">Lab 5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reportguidelines.html">Report Guidelines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="labs.html">Labs</a> &raquo;</li>
+        
+      <li>Lab 4</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lab4.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lab-4">
+<h1>Lab 4<a class="headerlink" href="#lab-4" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this assignment is as follows.</p>
+<ul class="simple">
+<li>to study the impact of quantization on a signal spectrum,</li>
+<li>to study the impact of quantization on a filter characteristic,</li>
+<li>to measure quantization noise by comparing a floating-point and a fixed-point filter in real time.</li>
+</ul>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Before you start compiling code for this lab, make sure to update the MSP432_BOOSTXL library.
+In Code Composer Studio, select the library project, then right-click and select ‘Team..Pull’.
+Then, re-build the library before compiling the assignment 4 labs.
+The updated version includes support for the pushbuttons on your MSP432 kit.</p>
+</div>
+<div class="section" id="fixed-point-implementation-requires-quantization">
+<h2>Fixed Point Implementation requires Quantization<a class="headerlink" href="#fixed-point-implementation-requires-quantization" title="Permalink to this headline">¶</a></h2>
+<p>In Lecture 6, we discussed a technique to reduce the implementation cost (energy-wise or
+performance-wise) of a DSP design, by converting the floating-point computations to
+fixed-point computations. A side-effect of fixed-point design is the requirement to
+reduce the resolution (precision) of a signal representation. In a fixed-point
+representation of <code class="docutils literal notranslate"><span class="pre">fix&lt;N,k&gt;</span></code>, the weight of the least significant bit is the fixed value
+<img class="math" src="_images/math/ee47fcccf93ed351b826463df3413de69c10cd56.png" alt="2^{-k}"/>, and no signal changes smaller than that quantity can be represented.</p>
+<p>We will study the consequences of the conversion from floating-point representation to fixed-point representation by means of a series of three experiments. For each experiment, you will have to write (or modify) a short program, run it on your board and analyze the resulting signal in the time domain or in the frequency domain. The outcome of this lab consists of the software programs you will write as specified, and the written report with the analysis of the effects you observe.</p>
+</div>
+<div class="section" id="impact-of-quantization-in-the-time-and-frequency-domain">
+<h2>Impact of Quantization in the time and frequency domain<a class="headerlink" href="#impact-of-quantization-in-the-time-and-frequency-domain" title="Permalink to this headline">¶</a></h2>
+<p>To support your experiments, you must first write two functions.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">float2q</span><span class="p">(</span><span class="nb">float</span> <span class="n">x</span><span class="p">,</span> <span class="nb">int</span> <span class="n">f</span><span class="p">)</span> <span class="p">{</span>
+   <span class="o">//</span> <span class="o">..</span> <span class="n">written</span> <span class="n">by</span> <span class="n">you</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">float2q(x,f)</span></code> converts a floating point number <code class="docutils literal notranslate"><span class="pre">x</span></code> to a fixed point number <code class="docutils literal notranslate"><span class="pre">fix&lt;32,f&gt;</span></code>.
+The output datatype is an <code class="docutils literal notranslate"><span class="pre">int</span></code>, a signed integer. Consult Lecture 6 if you need to refresh your mind on the relation ship between floating point representation and fixed point representation.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span> <span class="n">q2float</span><span class="p">(</span><span class="nb">int</span> <span class="n">q</span><span class="p">,</span> <span class="nb">int</span> <span class="n">f</span><span class="p">)</span> <span class="p">{</span>
+   <span class="o">//</span> <span class="o">..</span> <span class="n">written</span> <span class="n">by</span> <span class="n">you</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">q2float(q,f)</span></code> converts a fixed point number <code class="docutils literal notranslate"><span class="pre">q</span></code> of type <code class="docutils literal notranslate"><span class="pre">fix&lt;32,f&gt;</span></code> to a floating point number. Again, consult Lecture 6 if you need to refresh your mind on the relation ship between floating point representation and fixed point representation.</p>
+<p>With these two functions in hand, we can easily study the effect of fixed-point refinement, that is, we can study the effect of quantization on a DSP program written with <code class="docutils literal notranslate"><span class="pre">float</span></code>. For example, to quantize the floating point number 0.1 to 5 fractional bits, we write:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span> <span class="n">p</span> <span class="o">=</span> <span class="n">q2float</span><span class="p">(</span><span class="n">float2q</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">5</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In this example, <code class="docutils literal notranslate"><span class="pre">p</span></code> will be quantized to 0.09375, which is <img class="math" src="_images/math/35138b22bf04bd484286bd48ce05eb28530bb80a.png" alt="2^{-4} + 2^{-5}"/>, or the fractional bitpattern <code class="docutils literal notranslate"><span class="pre">.00011</span></code>.</p>
+<p>Your first task is to write a program that passes the input to the output while quantizing the signal to <code class="docutils literal notranslate"><span class="pre">k</span></code> fractional bits (with <img class="math" src="_images/math/56ce79f3f2b10708f6c8acdb751b1909a9625107.png" alt="k \in \{3,5\}"/>). Then, you will apply a 1 KHz sinusoid to the input, and study the spectrum of the output signal with and without quantization. You can complete the program <code class="docutils literal notranslate"><span class="pre">a4_question1</span></code> to achieve the required implementation for this part.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/lab4q1.jpg" src="_images/lab4q1.jpg" />
+</div>
+<p>Once you have written the program, construct the setup as shown on the figure above. Using BitScope, apply a 1KHz sine wave, 3V peak-to-peak, 1.65V offset to the ADC input. Capture the output of the DAC (after the lowpass reconstruction filter), and monitor both input and output on the oscilloscope.</p>
+<p>Next, compare the following three designs.</p>
+<ol class="arabic simple">
+<li>The output is directly passed from the input:</li>
+</ol>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="nb">input</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>The output is quantized on a <code class="docutils literal notranslate"><span class="pre">fix&lt;32,5&gt;</span></code>:</li>
+</ol>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">q2float</span><span class="p">(</span><span class="n">float2q</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">5</span><span class="p">);</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>The output is quantized on a <code class="docutils literal notranslate"><span class="pre">fix&lt;32,3&gt;</span></code>:</li>
+</ol>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">q2float</span><span class="p">(</span><span class="n">float2q</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="mi">3</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Question 1: For each implementation case described above, answer the following questions.</p>
+<p>In the time domain, describe the waveform. Explain anomalies and non-linearities, and in particular try to explain the <em>cause</em> of anomalies and non-linearities.</p>
+<p>In the frequency domain, describe the spectrum over the entire band from DC to the sampling frequency. Identify anomalies and try to explain their <em>cause</em>.</p>
+<p class="last">Finally, make sure to compare these three cases to each other (i.e., compare the case of no quantization, to quantization with 5 fractional bits, to quantization with 3 fractional bits). We are looking for more than just a single line of text; make a good analysis of what you see.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Four new functions have been added to the MSP432_BOOSTXL library to help you write your test program.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">pushButtonLeftUp</span><span class="p">();</span>
+<span class="nb">int</span> <span class="n">pushButtonLeftDown</span><span class="p">();</span>
+<span class="nb">int</span> <span class="n">pushButtonRightUp</span><span class="p">();</span>
+<span class="nb">int</span> <span class="n">pushButtonRightDown</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>The functions indicate if the buttons on the side of the MSP432P401R board are depressed or not.
+You can use these functions for quick comparison of implementations. For example, you can write the <code class="docutils literal notranslate"><span class="pre">processSample</span></code> filtering
+function as follows.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nb">float</span> <span class="nb">input</span><span class="p">;</span>
+
+  <span class="nb">input</span> <span class="o">=</span> <span class="n">adc14_to_f32</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+
+  <span class="nb">float</span> <span class="n">v</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">pushButtonLeftDown</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="nb">input</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">q2float</span><span class="p">(</span><span class="n">float2q</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="mi">5</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">f32_to_dac14</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p class="last">This code will pass the input to the output, but will quantize the output to 5 fractional bits when you press
+the left button. This enables you to quickly compare the spectrum of the non-quantized case to the quantized case.</p>
+</div>
+</div>
+<div class="section" id="impact-of-quantization-on-filter-characteristic">
+<h2>Impact of quantization on filter characteristic<a class="headerlink" href="#impact-of-quantization-on-filter-characteristic" title="Permalink to this headline">¶</a></h2>
+<p>Next, we will study the impact of quantization on filter coefficients.
+Consider a first-order low-pass filter.</p>
+<div class="math">
+<p><img src="_images/math/5423c20239644c84f706c9276c99b6574e9d2d9d.png" alt="H(z) = \frac{1}{1 - a.z^{-1}}"/></p>
+</div><p>This filter has a single pole at location <img class="math" src="_images/math/aba67d612107ec04e34a537a68163b5ce61dd2a3.png" alt="z = a"/>. In a filter with quantized coefficients, the location of the poles (or zeroes) can shift compared to their original floating-point position. This, in turn, will affect the filter characteristic.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/lab4q2.jpg" src="_images/lab4q2.jpg" />
+</div>
+<p>Now construct a program that implements a first-order low-pass filter, where ONLY the filter coefficient is quantized.
+You can do this with the same functions as used earlier, i.e. to quantize floating-point coefficient a with k fractional
+bits, use <code class="docutils literal notranslate"><span class="pre">q2float(float2q(a,k),k)</span></code>. Implement the filter with a pole located at z = 0.9. You can complete the
+program <code class="docutils literal notranslate"><span class="pre">a4_question2</span></code> to achieve the required implementation for this part.</p>
+<p>Next, construct a measurement setup that applies a square wave at the input with 100 mVpp amplitude, 1.65V offset, and 100 Hz.
+Observe the output in the time domain, and compare three cases.</p>
+<ol class="arabic simple">
+<li>The filter coefficient a is unmodified</li>
+<li>The filter coefficient a is quantized to k=5 fractional bits</li>
+<li>The filter coefficient a is quantized to k=3 fractional bits</li>
+</ol>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Question 2: For each implementation case described above, precisely observe the output waveform in the time domain.
+Note the amplitude and offset of each output waveform. Are they identical or not? Explain the cause of your observations
+by your insight in the quantization process and its effect on the filter coefficient of <img class="math" src="_images/math/b2bb814f83e453bb6e93d3545dd2698eaab88e9d.png" alt="H(z)"/>.</p>
+</div>
+</div>
+<div class="section" id="measuring-quantization-noise-of-a-fixed-point-filter-design">
+<h2>Measuring Quantization Noise of a Fixed-point Filter Design<a class="headerlink" href="#measuring-quantization-noise-of-a-fixed-point-filter-design" title="Permalink to this headline">¶</a></h2>
+<p>The final part of the lab is to implement a complete filter as a fixed-point design.
+We will quantize the input and output, as well as the filter coefficients.
+Instead of doing floating-point computations, we will implement the
+entire filter using integer computations. We will measure the response of this
+quantized filter, and measure its quantization noise by comparing with a
+floating-point version of the same filter in real time.</p>
+<p>The filter you have to implement is a second-order filter described by the
+following pole-zero plot. The zeroes are located at <img class="math" src="_images/math/0e7a54529c5cb793b7c2a9626a1e7da5e0e5a665.png" alt="n_{1,2} = e^{\pm j \pi/2}"/>
+and the poles are located at <img class="math" src="_images/math/d52c8ab22240fa81a072169ea11e845843828cea.png" alt="p_{1,2} = 0.9 e^{\pm j \pi/8}"/>.</p>
+<div class="figure align-center" style="width: 400px">
+<img alt="_images/lab4q3zplane.jpg" src="_images/lab4q3zplane.jpg" />
+</div>
+<p>In selecting the filter coefficients, pay attention to the proper scaling
+of filter coefficients. Ideally, the sum of the absolute filter coefficients
+should be equal to 1. For example, if you scale
+each filter coefficient <img class="math" src="_images/math/d03a4b38f7e618d6826778cf0a8b906fbbaa935a.png" alt="h_i"/> by <img class="math" src="_images/math/0898c6cd51c0f6f94f51ac808eecb83725437c63.png" alt="\frac{1}{\sum_i (abs(h_i))}"/>,
+the filter has unit power. This scaling helps to prevent overflow at the output.</p>
+<p>Your filter design has to implement a floating point filter, a fixed point filter,
+as well as the difference between them. Thus, your DSP program will compute one
+of three possible outputs, as shown in the following flow diagram.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/lab4q3flow.jpg" src="_images/lab4q3flow.jpg" />
+</div>
+<p>A random signal generator is used at the filter’s input.</p>
+<p>The second-order section can be implemented using an architecture of your choice:
+direct-form I or II, or transposed direct-form. Refer to the examples
+given in Lecture 5 for sample implementations of such filters.</p>
+<p>The fixed-point design will compare the floating-point design for two
+different quantization levels: 8 bits and 10 bits. Scaling
+of the fixed-point design applies to all aspects of the filter: the
+coefficients, the signals as well as to the intermediate results.</p>
+<p>Use the following practical guidelines to build up your implementation.</p>
+<ol class="arabic simple">
+<li>Start with the floating-point implementation and verify that the filter works correctly, before building the fixed-point version. Write a small amount of code at a time and test extensively, after every modification.</li>
+<li>Use the pushbuttons to switch the filter output between floating-point version, fixed-point version, and difference, in order to quickly diagnose the difference.</li>
+<li>To scale the output of the ADC to 8 or 10 bits, work as follows. Use a <code class="docutils literal notranslate"><span class="pre">adc14_to_q15()</span></code> function to convert an ADC code to fix&lt;32,15&gt;. Then scale the input to the proper precision by additional shifts. For example, to get an 8-bit output, use <code class="docutils literal notranslate"><span class="pre">adc14_to_q15(...)</span> <span class="pre">&gt;&gt;</span> <span class="pre">(15</span> <span class="pre">-</span> <span class="pre">8)</span></code>.</li>
+<li>In selecting the random input signal, do not max out the range. For example, stay between 1/4 and 3/4 of the full input  scale of the ADC (refer also to the <a class="reference external" href="https://schaumont.dyn.wpi.edu/ece4703b20/lecture6.html#fixed-point-quantization-on-the-msp-432-kit">scale comparing voltage, floating point, and fixed point precision</a> as discussed in Lecture 6).</li>
+<li>To compare the output of the floating point filter with the fixed-point filter, convert the output of the fixed-point filter to floating point, and compute the difference in floating point. Since both filters were designed from the same coefficients and both filters compute the same signal, the difference is the quantization noise caused by the fixed point design. Realistically, the higher the number of fractional bits used by the fixed-point filter, the lower the quantization noise.</li>
+<li>You can complete the program <code class="docutils literal notranslate"><span class="pre">a4_question3</span></code> to achieve the required implementation for this part.</li>
+</ol>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Question 3: Build the filter design as described above, and compare the filter output in the time domain for quantized filters of 10 and 8 fractional bits respectively.</p>
+<p>Characterize the signal in the time domain as follows.</p>
+<blockquote class="last">
+<div><ol class="loweralpha simple">
+<li>Take a screen shot in Bitscope from the quantization noise signal as well as a screen shot of the fixed-point signal (for 10 and 8 fractional bits).</li>
+<li>Download the following signals (using the csv download feature): the floating-point output, and the quantization noise. Compute the following for each of these signals: the average, the minimum, the maximum, and the standard deviation (ie. the average power with the DC component removed).</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Question 4: Build the filter design as described above, and compare the filter output in the frequency domain for quantized filters of 10 and 8 fractional bits respectively.</p>
+<p class="last">Take a screen shot in Bitscope from the spectrum of the quantization noise signal as well as a screen shot of spectrum of the fixed-point filter output. Analyze your results and point out specific features in the signal spectrum.</p>
+</div>
+</div>
+<div class="section" id="wrapping-up">
+<h2>Wrapping Up<a class="headerlink" href="#wrapping-up" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The answer to this lab consists of a written report which will be submitted on Canvas by the deadline. Refer to the General Lab Report Guidelines for details on report formatting. You will only submit your written report on Canvas. All code developed must be returned through GitHub.</li>
+<li>Follow the principal structure of the report you’ve used for Lab 3 (taking into account any feedback you have received).</li>
+<li>Follow the four questions outlined above to structure your report.  Use figures, screenshots and code examples where appropriate. Please work out the answers in sufficient detail to show your <em>analysis</em>.</li>
+<li>Make sure that you add newly developed projects to github: Use the Team - Share pop-up menu and select your repository for this lab. Further, make sure that you commit and push all changes to the github repository on GitHub classroom. Use the Team - Commit pop-up menu and push all changes.</li>
+<li>Be aware that each of the laboratory assignments in ECE4703 will require a significant investment in time and preparation if you expect to have a working system by the assignment’s due date. This course is run in “open lab” mode where it is not expected that you will be able to complete the laboratory in the scheduled official lab time. It is in your best interest to plan ahead so that you can use the TA and instructor’s office hours most efficiently.</li>
+</ul>
+<p><em>Good Luck</em></p>
+</div>
+<div class="section" id="grading-rubric">
+<h2>Grading Rubric<a class="headerlink" href="#grading-rubric" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="83%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Requirement</th>
+<th class="head">Points</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Question 1 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-odd"><td>Question 2 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-even"><td>Question 3 Analysis</td>
+<td>25</td>
+</tr>
+<tr class="row-odd"><td>Question 4 Analysis</td>
+<td>20</td>
+</tr>
+<tr class="row-even"><td>All projects build without errors or warnings</td>
+<td>5</td>
+</tr>
+<tr class="row-odd"><td>Code is well structured and commented</td>
+<td>5</td>
+</tr>
+<tr class="row-even"><td>Git Repository is complete and up to date</td>
+<td>5</td>
+</tr>
+<tr class="row-odd"><td>Overall Report Quality (Format, Outline, Grammar)</td>
+<td>10</td>
+</tr>
+<tr class="row-even"><td><strong>TOTAL</strong></td>
+<td><strong>100</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lab5.html" class="btn btn-neutral float-right" title="Lab 5" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lab3.html" class="btn btn-neutral" title="Lab 3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

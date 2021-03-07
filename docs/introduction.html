@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="L1: Sampling and Quantization, Reconstruction" href="lecture1.html" />
+    <link rel="prev" title="Lectures" href="lectures.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="lectures.html">Lectures</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview-of-the-course">Overview of the course</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#navigating-the-course">Navigating the course</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lab-equipment">Lab Equipment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getting-started-checklist">Getting Started: Checklist</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lecture1.html">L1: Sampling and Quantization, Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture2.html">L2: Real-Time Input Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture3.html">L3: DTFT, z-transform, and FIR filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture4.html">L4: FIR filter implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture5.html">L5: IIR filters, and their implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture6.html">L6: Fixed Point Arithmetic in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture7.html">L7: Performance Optimization in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture8.html">L8: DMA and the ARM CMSIS Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture9.html">L9: Adaptive Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture10.html">L10: Frequency Synthesis and Detection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="labs.html">Labs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="lectures.html">Lectures</a> &raquo;</li>
+        
+      <li>Introduction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this lecture is as follows.</p>
+<ul class="simple">
+<li>Make an overview of the course including required work, prerequisites, exams/tests to complete.</li>
+<li>Describe the equipment used in the lab.</li>
+<li>Enumerate the software and hardware requirements.</li>
+<li>Introduce Lab 1.</li>
+</ul>
+<div class="section" id="overview-of-the-course">
+<h2>Overview of the course<a class="headerlink" href="#overview-of-the-course" title="Permalink to this headline">¶</a></h2>
+<p>The best place to start this course is by reading the <a class="reference internal" href="syllabus.html#syllabus"><span class="std std-ref">Syllabus</span></a>.</p>
+<ul class="simple">
+<li>Lectures as well as labs will be broadcast and recorded on <a class="reference external" href="https://wpi.zoom.us/j/95668047398">Zoom</a>.</li>
+<li>Lectures will be completely online, while labs will use a hybrid/online format.</li>
+<li>The syllabus includes a tentative schedule of the lectures and labs. This schedule may be adjusted and refined throughout the semester.</li>
+</ul>
+<div class="section" id="navigating-the-course">
+<h3>Navigating the course<a class="headerlink" href="#navigating-the-course" title="Permalink to this headline">¶</a></h3>
+<p>We will use three websites related to this course.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://canvas.wpi.edu/courses/22127">canvas.wpi.edu</a> is used for announcements, discussions (chat) and course grades. Make sure to refer to Canvas for announcements regarding the class meeting times, arrangements for labs and tests, and so forth. Also, there is a discussion forum where you can post questions. You can send me and/or the TA email, but if your question would benefit the class as a whole, then the answer will be posted on the discussion forum.</li>
+<li><a class="reference external" href="https://github.com/wpi-ece4703-b20">github.com</a> is used to exchange source code. Labs and in-class examples will appear as repositories on github. <strong>You must have a Github account to participate in this class</strong>. If you don’t have a Github account, prepare one as soon as possible. Github accounts are free.</li>
+<li><a class="reference external" href="https://schaumont.dyn.wpi.edu/ece4703b20/">schaumont.dyn.wpi.edu</a> is used to post Lectures, Lab assignments, Reading assignments, and more.</li>
+</ul>
+</div>
+<div class="section" id="lab-equipment">
+<h3>Lab Equipment<a class="headerlink" href="#lab-equipment" title="Permalink to this headline">¶</a></h3>
+<p>You will receive a loaner kit with an MSPEXP432P401R controller board, an BOOSTXL-AUDIO analog interface,
+and a BS05 bitscope (USB oscilloscope) with BNC probe connector. A ‘loaner’ kit means that you have to
+return the equipment at the end of the term. We will collect the instrument before the final exam.</p>
+<p>If your kit breaks during the term, please notfiy the TA or the instructor right away. In return for your
+broken kit you may receive a replacement kit.</p>
+</div>
+<div class="section" id="getting-started-checklist">
+<h3>Getting Started: Checklist<a class="headerlink" href="#getting-started-checklist" title="Permalink to this headline">¶</a></h3>
+<p>Before you start with the first Lab, you have to prepare the following.</p>
+<ul class="simple">
+<li>Form a team with up to three students per team.</li>
+<li>Install Code Composer Studio on your laptop.</li>
+<li>Install the Bitscope DSO software on your laptop.</li>
+<li>Unpack and assemble the hardware.</li>
+<li>Get a Github account, if needed.</li>
+<li>Follow the instructions for <a class="reference internal" href="lab1.html#lab1"><span class="std std-ref">Lab 1</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lecture1.html" class="btn btn-neutral float-right" title="L1: Sampling and Quantization, Reconstruction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lectures.html" class="btn btn-neutral" title="Lectures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,647 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>L5: IIR filters, and their implementation &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="L6: Fixed Point Arithmetic in DSP" href="lecture6.html" />
+    <link rel="prev" title="L4: FIR filter implementation" href="lecture4.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="lectures.html">Lectures</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture1.html">L1: Sampling and Quantization, Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture2.html">L2: Real-Time Input Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture3.html">L3: DTFT, z-transform, and FIR filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture4.html">L4: FIR filter implementation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">L5: IIR filters, and their implementation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#direct-form-iir-implementation">Direct-form IIR implementation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#direct-form-i-iir-implementation">Direct-form I IIR Implementation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#direct-form-ii-iir-implementation">Direct-form II IIR Implementation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cascade-iir-implementation">Cascade IIR Implementation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cascade-iir-example">Cascade IIR Example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#transposed-structures">Transposed Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parallel-structures">Parallel Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lecture6.html">L6: Fixed Point Arithmetic in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture7.html">L7: Performance Optimization in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture8.html">L8: DMA and the ARM CMSIS Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture9.html">L9: Adaptive Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture10.html">L10: Frequency Synthesis and Detection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="labs.html">Labs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="lectures.html">Lectures</a> &raquo;</li>
+        
+      <li>L5: IIR filters, and their implementation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lecture5.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="l5-iir-filters-and-their-implementation">
+<h1>L5: IIR filters, and their implementation<a class="headerlink" href="#l5-iir-filters-and-their-implementation" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this lecture is as follows.</p>
+<ul class="simple">
+<li>To describe the direct-form I and direct-form II implementations of IIR designs</li>
+<li>To describe the cascade-form implementations of IIR designs</li>
+<li>To describe transpose-form implementations of IIR designs</li>
+<li>To describe parallel-form implementations of IIR designs</li>
+<li>To make two side notes: one on computing zeroes/poles of G(z), and another on the meaning of filter tap</li>
+</ul>
+<div class="section" id="direct-form-iir-implementation">
+<h2>Direct-form IIR implementation<a class="headerlink" href="#direct-form-iir-implementation" title="Permalink to this headline">¶</a></h2>
+<p>An IIR filter is a digital filter described by the following input/output relationship</p>
+<div class="math">
+<p><img src="_images/math/1fbe8d3fbc967ca88bdd1aae5a8fe08f93789bca.png" alt="y[n] = \sum_{k=0}^{M} b[k] x[n-k] - \sum_{k=1}^{N} a[l] y[n-l]"/></p>
+</div><p>which means that the current output of an IIR filter is defined by both the previous
+inputs as well as the previous outputs.</p>
+<p>We can write this equivalently as a z-transform</p>
+<div class="math">
+<p><img src="_images/math/0162a6b12b6242759e8e8e28e89fedb2fbddae25.png" alt="Y(z) = X(z) . \sum_{k=0}^{M} b[k] z^{-k} - Y(z) . \sum_{k=1}^{N} a[k] z^{-k}"/></p>
+</div><p>Assume that the order of the numerator and denominator are identical, then we can write
+the filter transfer function as follows.</p>
+<div class="math">
+<p><img src="_images/math/16e98a106c490b26456944f5258e8aabd07bd825.png" alt="G(z) =&amp; \frac{Y(z)}{X(z)}  \\
+G(z) =&amp; \frac{\sum_{k=0}^{N} b[k] z^{-k}}{ 1 + \sum_{k=1}^{N} a[k] z^{-k}}"/></p>
+</div><p>Since these are N-th order polynomials in z, they contribute N zeroes and N poles.
+For an IIR system to be causal and stable, all poles must lie within the unit circle.</p>
+<p>We can find the locations of the zeroes and poles of an arbitrary <img class="math" src="_images/math/7122590e858a5e23ce3cd42f8a763e95334b868f.png" alt="G(z)"/> by
+multiplying the numerator and denominator by <img class="math" src="_images/math/a661102f731c124abe6ffcb31a27828b91d4001f.png" alt="z^N"/> and finding the zeroes
+of each polynomial.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Example: Find the zeroes and poles of</p>
+<div class="math">
+<p><img src="_images/math/4a7c91143c47c17057bd6ba3991cd81795b0c09a.png" alt="G(z) = \frac{1 + 0.2 . z^{-1} - z^{-2}}{ 1 - 0.5 . z^{-2}}"/></p>
+</div><p>Multiplying both equations by <img class="math" src="_images/math/495381f8cc85692f09b7b199afadc24801bd80dc.png" alt="z^2"/> we find</p>
+<div class="math">
+<p><img src="_images/math/66d78256da2de3cca85610e2ac00b900b459d945.png" alt="G(z) = \frac{z^2 + 0.2 . z - 1}{ z^2 - 0.5 }"/></p>
+</div><p>By finding the roots of these equations (or by using a root-finding program),
+we can find the following zeroes:</p>
+<div class="math">
+<p><img src="_images/math/7f48acbaf2e7f272c15bcf67613c62239126dc9e.png" alt="n_0 =&amp; -1.1050 \\
+n_1 =&amp; 0.9050"/></p>
+</div><p>as well as the following poles:</p>
+<div class="math">
+<p><img src="_images/math/f25ef94e4901e23f0ca9fbf09546a86257d86b72.png" alt="p_0 =&amp; 0.7071 \\
+p_1 =&amp; = -0.7071"/></p>
+</div><p>Finally, we can write G(z) in factored form as follows</p>
+<div class="math">
+<p><img src="_images/math/72544c9aec24be81723d482faeaf7b0c248a90b8.png" alt="G(z) =&amp; \frac{(z - n_0)(z - n_1)}{(z - p_0)(z - p_1])} \\
+G(z) =&amp; \frac{(z + 1.1050)(z - 0.9050)}{(z + 0.7071)(z - 0.7071)}"/></p>
+</div><p>This can then be written in regular z-transform format as</p>
+<div class="last math">
+<p><img src="_images/math/573844c4dcb4ff17613feb6850550b26002a3a6f.png" alt="G(z) =&amp; \frac{(1 + 1.1050.z^{-1})(1 - 0.9050.z^{-1})}{(1 + 0.7071.z^{-1})(1 - 0.7071.z^{-1})} \\"/></p>
+</div></div>
+<div class="section" id="direct-form-i-iir-implementation">
+<h3>Direct-form I IIR Implementation<a class="headerlink" href="#direct-form-i-iir-implementation" title="Permalink to this headline">¶</a></h3>
+<p>If we consider a transfer function of the form</p>
+<div class="math">
+<p><img src="_images/math/af430a3e71b690057c7653dad4c50403e48d9d30.png" alt="G(z) = \frac{B(z)}{A(z)}"/></p>
+</div><p>and we look for the output signal <img class="math" src="_images/math/a4ef9e30d554af4996cf2baaaa921c353de399bb.png" alt="Y(z)"/> in response to the input signal <img class="math" src="_images/math/bbc4135261f4ce1a786cfb9764452358a7e466f6.png" alt="X(z)"/>, then we compute:</p>
+<div class="math">
+<p><img src="_images/math/417493342f32943023e744764aac1aedcdae8259.png" alt="Y(z) &amp;= G(z).X(z)  \\
+     &amp;= \frac{B(z)}{A(z)}.X(z)"/></p>
+</div><p>A <strong>direct-form I IIR</strong> implementation first computes the zeroes, and then the poles:</p>
+<div class="math">
+<p><img src="_images/math/ee5439575012c035bf1bf52bf7fc38b24e536272.png" alt="Y(z) &amp;= \frac{1}{A(z)}.[B(z).X(z)]"/></p>
+</div><p>In the time domain we would implement</p>
+<div class="math">
+<p><img src="_images/math/fce6e025096c7e2613e0f7b5c92f57ad0af84887.png" alt="w(n) &amp;= \sum_{k=0}^{M} b[k] x[n-k]  \\
+y(n) &amp;= w(n) - \sum_{k=1}^{N} a[l] y[n-l]"/></p>
+</div><p>This formulation leads to a design as shown below. This design requires
+<img class="math" src="_images/math/dec96c1c3b8b8c0b25ee733ad20e999dfeb8f7a1.png" alt="1 + M + N"/> multiplications per output sample,
+<img class="math" src="_images/math/2a9edcb1cf2af28f4fa130b798d21b6a437fe271.png" alt="M + N"/> additions per output sample,
+and <img class="math" src="_images/math/2a9edcb1cf2af28f4fa130b798d21b6a437fe271.png" alt="M + N"/> delays.</p>
+<div class="figure align-center" style="width: 500px">
+<img alt="_images/directformi.jpg" src="_images/directformi.jpg" />
+</div>
+</div>
+<div class="section" id="direct-form-ii-iir-implementation">
+<h3>Direct-form II IIR Implementation<a class="headerlink" href="#direct-form-ii-iir-implementation" title="Permalink to this headline">¶</a></h3>
+<p>A <strong>direct-form II IIR</strong> implementation first computes the poles, and then the zeroes:</p>
+<div class="math">
+<p><img src="_images/math/3e0bfa3a7baef70e5b54e98236a196bcaff1c764.png" alt="Y(z) &amp;= B(z) . [\frac{1}{A(z)}.X(z)]"/></p>
+</div><p>This structure is created by swapping the order of the operations in a direct-form I
+structure. However, an important optimization is possible because the taps can be
+shared by the feedback part as well as by the feedforward part.</p>
+<div class="figure align-center" style="width: 400px">
+<img alt="_images/directformii.jpg" src="_images/directformii.jpg" />
+</div>
+<p>This design requires <img class="math" src="_images/math/dec96c1c3b8b8c0b25ee733ad20e999dfeb8f7a1.png" alt="1 + M + N"/> multiplications per output sample,
+<img class="math" src="_images/math/2a9edcb1cf2af28f4fa130b798d21b6a437fe271.png" alt="M + N"/> additions per output sample,
+and <img class="math" src="_images/math/d7e6bc2782827bebd8e2234782c7d3fbbe2c1d1e.png" alt="max(M,N)"/> delays.</p>
+<p>This implementation has the mimimum number of delays possible for a given transfer function.
+Hence, an N-th order FIR, and an N-th order IIR, both can be implemented with only N delays.</p>
+</div>
+<div class="section" id="cascade-iir-implementation">
+<h3>Cascade IIR Implementation<a class="headerlink" href="#cascade-iir-implementation" title="Permalink to this headline">¶</a></h3>
+<p>Just as with the FIR implementation, a cascade IIR is created by factoring the
+nominator and denominator polynomials in <img class="math" src="_images/math/7122590e858a5e23ce3cd42f8a763e95334b868f.png" alt="G(z)"/>. Assuming both
+nominator and denominator have order N, then</p>
+<div class="math">
+<p><img src="_images/math/889aa3814568fae6bee94ddf10165228ac64da8e.png" alt="G(z) =&amp; \frac{\sum_{k=0}^{N} b[k] z^{-k}}{ 1 + \sum_{k=1}^{N} a[k] z^{-k}} \\
+     =&amp; A . \prod_{k=1}^{N} \frac{1 - \beta_k . z^{-1}}{1 - \alpha_k . z^{-1}}"/></p>
+</div><p>It’s common to formulate this as <em>second-order</em> sections, in order to ensure
+that complex (conjugate) poles and complex (conjugate) zeroes can be represented
+with real coefficients. Each such a section contains a conjugate pole pair and/or conjugate zero pair.</p>
+<div class="math">
+<p><img src="_images/math/36b35e82dde8a830c0445c0c37ace3d120737cb0.png" alt="G_k(z) =&amp; \frac{(1 - \beta_k . z^{-1})(1 - \beta_k^* . z^{-1})}{(1 - \alpha_k . z^{-1})(1 - \alpha_k^* . z^{-1})} \\
+G_k(z) =&amp; \frac{1 - 2.Re(\beta_k).z^{-1} + |\beta_k|^2.z^{-2}}{1 - 2.Re(\alpha_k).z^{-1} + |\alpha_k|^2.z^{-2}}"/></p>
+</div><div class="figure align-center" style="width: 600px">
+<img alt="_images/cascadeiir.jpg" src="_images/cascadeiir.jpg" />
+</div>
+</div>
+<div class="section" id="cascade-iir-example">
+<h3>Cascade IIR Example<a class="headerlink" href="#cascade-iir-example" title="Permalink to this headline">¶</a></h3>
+<p>We implement the following cascade IIR design in C.
+It has four poles, located at <img class="math" src="_images/math/599544cf40dd5edc7b935d4b5bf2c603a3683481.png" alt="\pm 0.5 . e^{\pm j \pi/4}"/>, as well
+as three zeroes, located at <img class="math" src="_images/math/6cc0d0d403ade546a37dd4aca69c1da2ca0088c5.png" alt="j, -1, -j"/>.</p>
+<div class="figure align-center" style="width: 300px">
+<img alt="_images/cascadeiirexample.jpg" src="_images/cascadeiirexample.jpg" />
+</div>
+<p>The first step is to derive the proper filter coefficients. We group the poles and zeroes
+as follows.</p>
+<div class="math">
+<p><img src="_images/math/a2d23d994048d0e758955a83908069aa511e0844.png" alt="C1(z) &amp;= \frac{(1 - j.z^{-1}).(1 + j.z^{-1})}{(1 - e^{j.\pi/4}.z^{-1}/2).(1 - e^{-j.\pi/4}.z^{-1}/2)} \\
+C2(z) &amp;= \frac{(1  + z^{-1})}{(1 + e^{j.\pi/4}.z^{-1}/2).(1 + e^{-j.\pi/4}.z^{-1}/2)}"/></p>
+</div><p>Which can be multiplied out to derive the filter coefficients:</p>
+<div class="math">
+<p><img src="_images/math/dbcd45a0ecc67b9de2cd545f98a84db0248c54a8.png" alt="C1(z) &amp;= \frac{(1 + z^{-2})}{   (1 - \frac{1}{\sqrt 2}.z^{-1} + \frac{1}{4}.z^{-2})} \\
+C2(z) &amp;= \frac{(1  + z^{-1})}{   (1 + \frac{1}{\sqrt 2}.z^{-1} + \frac{1}{4}.z^{-2})}"/></p>
+</div><p>The construction of the filter proceeds similar to the cascade FIR filter
+from lecture 4. First, we create a data structure for the cascade IIR stage, containing
+filter coefficients and filter state. We will use a direct-form Type II design, which
+gives us a state of only two variables.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="name">cascadestate</span> <span class="punctuation">{</span>
+<span class="ln"> 2 </span>    <span class="name">float32_t</span> <span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">2</span><span class="punctuation">];</span>   <span class="comment single">// state
+</span><span class="ln"> 3 </span><span class="comment single"></span>    <span class="name">float32_t</span> <span class="name">b</span><span class="punctuation">[</span><span class="literal number integer">3</span><span class="punctuation">];</span>  <span class="comment single">// nominator coeff  b0 b1 b2
+</span><span class="ln"> 4 </span><span class="comment single"></span>    <span class="name">float32_t</span> <span class="name">a</span><span class="punctuation">[</span><span class="literal number integer">2</span><span class="punctuation">];</span>  <span class="comment single">// denominator coeff   a1 a2
+</span><span class="ln"> 5 </span><span class="comment single"></span><span class="punctuation">}</span> <span class="name">cascadestate_t</span><span class="punctuation">;</span>
+<span class="ln"> 6 </span>
+<span class="ln"> 7 </span><span class="name">float32_t</span> <span class="name function">cascadeiir</span><span class="punctuation">(</span><span class="name">float32_t</span> <span class="name">x</span><span class="punctuation">,</span> <span class="name">cascadestate_t</span> <span class="operator">*</span><span class="name">p</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 8 </span>    <span class="name">float32_t</span> <span class="name">v</span> <span class="operator">=</span> <span class="name">x</span> <span class="operator">-</span> <span class="punctuation">(</span><span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">*</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">a</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">])</span> <span class="operator">-</span>  <span class="punctuation">(</span><span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]</span> <span class="operator">*</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">a</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]);</span>
+<span class="ln"> 9 </span>    <span class="name">float32_t</span> <span class="name">y</span> <span class="operator">=</span> <span class="punctuation">(</span><span class="name">v</span> <span class="operator">*</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">b</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">])</span> <span class="operator">+</span> <span class="punctuation">(</span><span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">*</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">b</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">])</span> <span class="operator">+</span> <span class="punctuation">(</span><span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]</span> <span class="operator">*</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">b</span><span class="punctuation">[</span><span class="literal number integer">2</span><span class="punctuation">]);</span>
+<span class="ln">10 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">];</span>
+<span class="ln">11 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">v</span><span class="punctuation">;</span>
+<span class="ln">12 </span>    <span class="keyword">return</span> <span class="name">y</span><span class="punctuation">;</span>
+<span class="ln">13 </span><span class="punctuation">}</span>
+<span class="ln">14 </span>
+<span class="ln">15 </span><span class="keyword type">void</span> <span class="name function">createcascade</span><span class="punctuation">(</span><span class="name">float32_t</span> <span class="name">b0</span><span class="punctuation">,</span>
+<span class="ln">16 </span>                   <span class="name">float32_t</span> <span class="name">b1</span><span class="punctuation">,</span>
+<span class="ln">17 </span>                   <span class="name">float32_t</span> <span class="name">b2</span><span class="punctuation">,</span>
+<span class="ln">18 </span>                   <span class="name">float32_t</span> <span class="name">a1</span><span class="punctuation">,</span>
+<span class="ln">19 </span>                   <span class="name">float32_t</span> <span class="name">a2</span><span class="punctuation">,</span>
+<span class="ln">20 </span>                   <span class="name">cascadestate_t</span> <span class="operator">*</span><span class="name">p</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln">21 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">b</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">b0</span><span class="punctuation">;</span>
+<span class="ln">22 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">b</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">b1</span><span class="punctuation">;</span>
+<span class="ln">23 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">b</span><span class="punctuation">[</span><span class="literal number integer">2</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">b2</span><span class="punctuation">;</span>
+<span class="ln">24 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">a</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">a1</span><span class="punctuation">;</span>
+<span class="ln">25 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">a</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">a2</span><span class="punctuation">;</span>
+<span class="ln">26 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="literal number float">0.0f</span><span class="punctuation">;</span>
+<span class="ln">27 </span><span class="punctuation">}</span>
+</pre>
+<p>The <code class="docutils literal notranslate"><span class="pre">cascadestate_t</span></code> now contains both feed-forward and feed-back coefficients.
+The <code class="docutils literal notranslate"><span class="pre">cascadeiir</span></code> function is likely the most complicated element
+for this design. The order of evaluation of each expression is chosen
+so that we don’t update filter state until it has been used for all expressions
+required. In <code class="docutils literal notranslate"><span class="pre">cascadeiir</span></code> we first compute the intermediate variable <code class="docutils literal notranslate"><span class="pre">v</span></code> which
+corresponds to the center-tap of the filter. Next, we compute the
+feed-forward part based in this intermediate <code class="docutils literal notranslate"><span class="pre">v</span></code>. Finally, we update the filter
+state and return the filter output <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+<p>The filter program then consists of filter initialization, followed by the
+chaining of filter cascades:</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="name">cascadestate_t</span> <span class="name">stage1</span><span class="punctuation">;</span>
+<span class="ln"> 2 </span><span class="name">cascadestate_t</span> <span class="name">stage2</span><span class="punctuation">;</span>
+<span class="ln"> 3 </span>
+<span class="ln"> 4 </span><span class="keyword type">void</span> <span class="name function">initcascade</span><span class="punctuation">()</span> <span class="punctuation">{</span>
+<span class="ln"> 5 </span>    <span class="name">createcascade</span><span class="punctuation">(</span>  <span class="comment multiline">/* b0 */</span>  <span class="literal number float">1.0f</span><span class="punctuation">,</span>
+<span class="ln"> 6 </span>                    <span class="comment multiline">/* b1 */</span>  <span class="literal number float">0.0f</span><span class="punctuation">,</span>
+<span class="ln"> 7 </span>                    <span class="comment multiline">/* b2 */</span>  <span class="literal number float">1.0f</span><span class="punctuation">,</span>
+<span class="ln"> 8 </span>                    <span class="comment multiline">/* a1 */</span> <span class="operator">-</span><span class="literal number float">0.7071f</span><span class="punctuation">,</span>
+<span class="ln"> 9 </span>                    <span class="comment multiline">/* a2 */</span> <span class="literal number float">0.25f</span><span class="punctuation">,</span>
+<span class="ln">10 </span>                    <span class="operator">&amp;</span><span class="name">stage1</span><span class="punctuation">);</span>
+<span class="ln">11 </span>    <span class="name">createcascade</span><span class="punctuation">(</span>  <span class="comment multiline">/* b0 */</span>  <span class="literal number float">1.0f</span><span class="punctuation">,</span>
+<span class="ln">12 </span>                    <span class="comment multiline">/* b1 */</span>  <span class="literal number float">1.0f</span><span class="punctuation">,</span>
+<span class="ln">13 </span>                    <span class="comment multiline">/* b2 */</span>  <span class="literal number float">0.0f</span><span class="punctuation">,</span>
+<span class="ln">14 </span>                    <span class="comment multiline">/* a1 */</span> <span class="operator">+</span><span class="literal number float">0.7071f</span><span class="punctuation">,</span>
+<span class="ln">15 </span>                    <span class="comment multiline">/* a2 */</span> <span class="literal number float">0.25f</span><span class="punctuation">,</span>
+<span class="ln">16 </span>                    <span class="operator">&amp;</span><span class="name">stage2</span><span class="punctuation">);</span>
+<span class="ln">17 </span><span class="punctuation">}</span>
+<span class="ln">18 </span>
+<span class="ln">19 </span><span class="keyword type">uint16_t</span> <span class="name function">processCascade</span><span class="punctuation">(</span><span class="keyword type">uint16_t</span> <span class="name">x</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln">20 </span>
+<span class="ln">21 </span>    <span class="name">float32_t</span> <span class="name">input</span> <span class="operator">=</span> <span class="name">adc14_to_f32</span><span class="punctuation">(</span><span class="literal number hex">0x1800</span> <span class="operator">+</span> <span class="name">rand</span><span class="punctuation">()</span> <span class="operator">%</span> <span class="literal number hex">0x1000</span><span class="punctuation">);</span>
+<span class="ln">22 </span>    <span class="name">float32_t</span> <span class="name">v</span><span class="punctuation">;</span>
+<span class="ln">23 </span>
+<span class="ln">24 </span>    <span class="name">v</span> <span class="operator">=</span> <span class="name">cascadeiir</span><span class="punctuation">(</span><span class="name">input</span><span class="punctuation">,</span> <span class="operator">&amp;</span><span class="name">stage1</span><span class="punctuation">);</span>
+<span class="ln">25 </span>    <span class="name">v</span> <span class="operator">=</span> <span class="name">cascadeiir</span><span class="punctuation">(</span><span class="name">v</span><span class="punctuation">,</span> <span class="operator">&amp;</span><span class="name">stage2</span><span class="punctuation">);</span>
+<span class="ln">26 </span>
+<span class="ln">27 </span>    <span class="keyword">return</span> <span class="name">f32_to_dac14</span><span class="punctuation">(</span><span class="name">v</span><span class="operator">*</span><span class="literal number float">0.125</span><span class="punctuation">);</span>
+<span class="ln">28 </span><span class="punctuation">}</span>
+</pre>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><strong>The meaning of a delay or a tap</strong></p>
+<p>A central concept in DSP is the implementation of the <img class="math" src="_images/math/1a4b8d0a55f4ac355c094e93f5fdef08d7c20762.png" alt="z^{-1}"/> operation, we defined as
+a delay (of a single sample). Implementing a delay in C is tricky, because the C programming
+language goes not support the concept of time. Yet, by a precise interpretation of what
+it means to ‘delay a sample’, we can find an unambiguous technique to implement it in C code.</p>
+<p>The following figure shows three different transfer functions: a direct connection, a single
+delay, and a double delay. We already know how to write each transfer function using the z-transform, as well    as using a graphical notation. We have used black boxes to indicate
+the implementation of <img class="math" src="_images/math/1a4b8d0a55f4ac355c094e93f5fdef08d7c20762.png" alt="z^{-1}"/>.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/samplemeaning.jpg" src="_images/samplemeaning.jpg" />
+</div>
+<p>To understand the implementation of this design, shown in the ‘time loop’ at the bottom,
+you have to keep in mind that <img class="math" src="_images/math/bbc4135261f4ce1a786cfb9764452358a7e466f6.png" alt="X(z)"/> is not just a single value. Rather, it is
+a stream of samples, with potentially infinitely many samples each spaced one sample delay
+apart. Hence, writing <img class="math" src="_images/math/19bcd36d7951acf6ccd0253db4a8050e234469ed.png" alt="Y(z) = X(z)"/> means more than saying ‘the output equals the input’.
+Instead, it means: ‘each output sample equals each input sample’. There is an implicit time
+loop around this expression, that executes the copy from input to output over and over again, for each new    input sample. If we write this time loop as a C function, we would write:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+   <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Next, consider <img class="math" src="_images/math/ba84e01929733dc30d3b8c400095ce753f24901b.png" alt="Y(z) = X(z).z^{-1}"/> which means: copy the input to the output, delayed by one sample.    Again, this delay does not only apply to the current sample. Instead, it applies
+to every sample in <img class="math" src="_images/math/bbc4135261f4ce1a786cfb9764452358a7e466f6.png" alt="X(z)"/>. That’s why we need to introduce a memory which can remember
+a sample for one sample delay. The implementation <img class="math" src="_images/math/ba84e01929733dc30d3b8c400095ce753f24901b.png" alt="Y(z) = X(z).z^{-1}"/> really does two
+things. First, it reads the output of the memory and copies that to the y output. Next,
+it reads an input sample x and stores that into the (now empty) memory. If we write this
+time loop as a C function, we would write the following.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint16_t</span> <span class="n">storage</span><span class="p">;</span>
+<span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+   <span class="n">uint16_t</span> <span class="n">y</span> <span class="o">=</span> <span class="n">storage</span><span class="p">;</span>
+   <span class="n">storage</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+   <span class="k">return</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note the particular order of statements. We need to read the contents of the storage before
+overwriting it. This is a side effect of the sequential semantics of C.</p>
+<p>Now, consider <img class="math" src="_images/math/b036958bef732e5d2fbaddcb2aa186f81d212d97.png" alt="Y(z) = X(z).z^{-2}"/> which means: copy the input to the output, delayed by two samples. In    this case, we need two storage locations, one for each sample delay.
+The implementation of <img class="math" src="_images/math/b036958bef732e5d2fbaddcb2aa186f81d212d97.png" alt="Y(z) = X(z).z^{-2}"/> does three things: read the output of the second
+memory, copy the output of first memory to the second memory, copy the input to the first memory. If we write    this time loop as a C function, we would write the following.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint16_t</span> <span class="n">storage1</span><span class="p">;</span>
+<span class="n">uint16_t</span> <span class="n">storage2</span><span class="p">;</span>
+<span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+   <span class="n">uint16_t</span> <span class="n">y</span> <span class="o">=</span> <span class="n">storage2</span><span class="p">;</span>
+   <span class="n">storage2</span> <span class="o">=</span> <span class="n">storage1</span>
+   <span class="n">storage1</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+   <span class="k">return</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Again, not the particular order of statements, where memory locations are read (emptied) before
+they are filled up again.</p>
+<p>It’s not clear how you would write an arbitrary function build out of z delays. For example,
+let’s say that <img class="math" src="_images/math/aeb0c0126b5063ae32328fd664b595b71202353f.png" alt="Y(z) = X(z).(1 + 2.z^{-1} + 4.z^{-2})"/>. Graphically, this function looks as
+follows.</p>
+<div class="figure align-center" style="width: 450px">
+<img alt="_images/samplemeaning2.jpg" src="_images/samplemeaning2.jpg" />
+</div>
+<p>The delay line functions as before, each time storing a sample for the duration of a sample period, before a    new sample arrives. The output signal y is computed by combining delayed versions
+of x. The output signal y depends on the current x, the previous x, and the x before that.
+As a C function it would be implemented as follows.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint16_t</span> <span class="n">storage1</span><span class="p">;</span>
+<span class="n">uint16_t</span> <span class="n">storage2</span><span class="p">;</span>
+<span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+   <span class="n">uint16_t</span> <span class="n">y</span> <span class="o">=</span> <span class="n">storage2</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">storage1</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">;</span>
+   <span class="n">storage2</span> <span class="o">=</span> <span class="n">storage1</span><span class="p">;</span>
+   <span class="n">storage1</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+   <span class="k">return</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p class="last">This principle of building delay lines that are updated by a stream of samples applies equally
+to FIR and IIR filters. A key lesson to remember is that such a memory element (<img class="math" src="_images/math/1a4b8d0a55f4ac355c094e93f5fdef08d7c20762.png" alt="z^{-1}"/>)
+cannot be optimized away, ever. You have to implement it as a storage element and it has to operate by storing    samples for one sample period. Without a proper implementation of the storage
+elements, it’s impossible to implement a z-transfer function correctly.</p>
+</div>
+</div>
+</div>
+<div class="section" id="transposed-structures">
+<h2>Transposed Structures<a class="headerlink" href="#transposed-structures" title="Permalink to this headline">¶</a></h2>
+<p>The transposition theorem says that the input-output properties of a network remain unchanged after the following sequence of transformations:</p>
+<ol class="arabic simple">
+<li>Reverse the direction of all branches</li>
+<li>Change branch points into summing nodes and summing nodes into branch points</li>
+<li>Interchange the input and output</li>
+</ol>
+<div class="figure align-center" style="width: 500px">
+<img alt="_images/transposetheorem.jpg" src="_images/transposetheorem.jpg" />
+</div>
+<p>Once you have the defined the transposed-form structure, you can develop a C program for that implementation.
+The transposed-form IIR can be implemented using the same data structure as the direct-form IIR; only
+the filter operation would be rewritten. The following is the implementation of a second-order
+section of a transposed direct-form II design.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="name">cascadestate</span> <span class="punctuation">{</span>
+<span class="ln"> 2 </span>    <span class="name">float32_t</span> <span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">2</span><span class="punctuation">];</span>   <span class="comment single">// state
+</span><span class="ln"> 3 </span><span class="comment single"></span>    <span class="name">float32_t</span> <span class="name">b</span><span class="punctuation">[</span><span class="literal number integer">3</span><span class="punctuation">];</span>  <span class="comment single">// nominator coeff  b0 b1 b2
+</span><span class="ln"> 4 </span><span class="comment single"></span>    <span class="name">float32_t</span> <span class="name">a</span><span class="punctuation">[</span><span class="literal number integer">2</span><span class="punctuation">];</span>  <span class="comment single">// denominator coeff   a1 a2
+</span><span class="ln"> 5 </span><span class="comment single"></span><span class="punctuation">}</span> <span class="name">cascadestate_t</span><span class="punctuation">;</span>
+<span class="ln"> 6 </span>
+<span class="ln"> 7 </span><span class="name">float32_t</span> <span class="name function">cascadeiir_transpose</span><span class="punctuation">(</span><span class="name">float32_t</span> <span class="name">x</span><span class="punctuation">,</span> <span class="name">cascadestate_t</span> <span class="operator">*</span><span class="name">p</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 8 </span>    <span class="name">float32_t</span> <span class="name">y</span> <span class="operator">=</span> <span class="punctuation">(</span><span class="name">x</span> <span class="operator">*</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">b</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">])</span> <span class="operator">+</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">];</span>
+<span class="ln"> 9 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span>     <span class="operator">=</span> <span class="punctuation">(</span><span class="name">x</span> <span class="operator">*</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">b</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">])</span> <span class="operator">-</span> <span class="punctuation">(</span><span class="name">y</span> <span class="operator">*</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">a</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">])</span> <span class="operator">+</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">];</span>
+<span class="ln">10 </span>    <span class="name">p</span><span class="operator">-&gt;</span><span class="name">s</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]</span>     <span class="operator">=</span> <span class="punctuation">(</span><span class="name">x</span> <span class="operator">*</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">b</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">])</span> <span class="operator">-</span> <span class="punctuation">(</span><span class="name">y</span> <span class="operator">*</span> <span class="name">p</span><span class="operator">-&gt;</span><span class="name">a</span><span class="punctuation">[</span><span class="literal number integer">1</span><span class="punctuation">]);</span>
+<span class="ln">11 </span>    <span class="keyword">return</span> <span class="name">y</span><span class="punctuation">;</span>
+<span class="ln">12 </span><span class="punctuation">}</span>
+</pre>
+</div>
+<div class="section" id="parallel-structures">
+<h2>Parallel Structures<a class="headerlink" href="#parallel-structures" title="Permalink to this headline">¶</a></h2>
+<p>IIR filters are rarely implemented as single, monolithic structures; the risk for
+instability is too high (cfr Lecture 6). Instead, IIRs are implmemented as second-order
+sections.</p>
+<p>We already discussed cascade-form implementation for IIRs. An alternate implementation
+is the parallel-form implementation. The idea of a parallel-from implementation
+is to build two or more parallel filters, that can be summed up together to form the
+overall transfer function.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/paralleldesign.jpg" src="_images/paralleldesign.jpg" />
+</div>
+<p>Let’s consider this for the pole plot shown in the figure. This design has two
+poles, so it’s transfer function would be:</p>
+<div class="math">
+<p><img src="_images/math/fe245f26410930ba7a4197e92c3adb90ed33064b.png" alt="G(z) =&amp; \frac{1}{(z + 0.25).(z - 0.5)} \\
+     =&amp; \frac{z^{-2}}{(1 + 0.25.z^{-1})(1 - 0.5.z^{-1})}"/></p>
+</div><p>To build a parallel design, we have to decompose <img class="math" src="_images/math/7122590e858a5e23ce3cd42f8a763e95334b868f.png" alt="G(z)"/></p>
+<div class="math">
+<p><img src="_images/math/823ed22418eadc7142d78ff1e0ae089fb8474927.png" alt="G(z) =&amp; G1(z) + G2(z)"/></p>
+</div><p>The design of these partial function proceeds by <em>partial fraction expansion</em>.
+We split the poles of the overall function <img class="math" src="_images/math/7122590e858a5e23ce3cd42f8a763e95334b868f.png" alt="G(z)"/> in two.
+In this case, one pole goes with <img class="math" src="_images/math/538e074710c1cb1b4e91d395a0051eec64281b3f.png" alt="G1(z)"/> and the other pole goes with
+<img class="math" src="_images/math/22f51410dc505047f02512b696717df53910662d.png" alt="G2(z)"/>. Partial fraction expansion will now proceed by looking for terms
+<em>A</em> and <em>B</em> such that:</p>
+<div class="math">
+<p><img src="_images/math/4ec3dae786a6e2af64c2b1a25d320037328f7d2a.png" alt="G(z) &amp;=  \frac{A}{(1 + 0.25.z^{-1})} + \frac{B}{(1 - 0.5.z^{-1})}"/></p>
+</div><p>Of course we can compute the partial fraction expansion by hand (by manually computing <em>A</em> and <em>B</em>),
+but it’s also possible to do this using Matlab, by using the <code class="docutils literal notranslate"><span class="pre">residue</span></code> function.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="o">%</span> <span class="n">compute</span> <span class="n">G</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="n">conv</span><span class="p">([</span><span class="mi">1</span> <span class="mf">0.25</span><span class="p">],[</span><span class="mi">1</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">])</span>
+
+<span class="n">a</span> <span class="o">=</span>
+
+   <span class="mf">1.0000</span>   <span class="o">-</span><span class="mf">0.2500</span>   <span class="o">-</span><span class="mf">0.1250</span>
+
+<span class="o">%</span> <span class="n">In</span> <span class="n">other</span> <span class="n">words</span><span class="p">,</span> <span class="n">G</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">=</span> <span class="n">z</span><span class="o">^-</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">0.25</span><span class="o">.</span><span class="n">z</span><span class="o">^-</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">0.125</span><span class="o">.</span><span class="n">z</span><span class="o">^-</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;</span> <span class="o">%</span> <span class="n">compute</span> <span class="n">terms</span> <span class="n">A</span> <span class="ow">and</span> <span class="n">B</span>
+<span class="o">&gt;&gt;</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">residue</span><span class="p">([</span><span class="mi">0</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">],</span><span class="n">a</span><span class="p">)</span>
+
+<span class="n">r</span> <span class="o">=</span>
+
+   <span class="mf">1.3333</span>
+   <span class="o">-</span><span class="mf">1.3333</span>
+
+
+<span class="n">k</span> <span class="o">=</span>
+
+   <span class="mf">0.5000</span>
+   <span class="o">-</span><span class="mf">0.2500</span>
+
+
+<span class="n">p</span> <span class="o">=</span>
+
+    <span class="p">[]</span>
+</pre></div>
+</div>
+<p>From the r term in the Matlab output, we conclude that</p>
+<div class="math">
+<p><img src="_images/math/85c152e498c13d64a449e1d366910153aa02c0aa.png" alt="G(z) &amp;=  \frac{-1.33333}{(1 + 0.25.z^{-1})} + \frac{1.3333}{(1 - 0.5.z^{-1})}"/></p>
+</div><p>In other words, rather than having these two filters compute in sequence, they can
+work as independent first-order systems. The overall filter output is found
+by adding each filter together.</p>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h2>
+<p>We discussed the following filter implementation techniques:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Direct Form I filters</li>
+<li>Direct Form II filters</li>
+<li>Transposed Direct Form II filters</li>
+</ul>
+</div></blockquote>
+<p>We also discussed two decomposition techniques:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Cascade-form decomposition</li>
+<li>Parallel-form decomposition</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lecture6.html" class="btn btn-neutral float-right" title="L6: Fixed Point Arithmetic in DSP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lecture4.html" class="btn btn-neutral" title="L4: FIR filter implementation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

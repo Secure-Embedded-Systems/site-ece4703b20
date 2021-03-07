@@ -1,0 +1,584 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Lab 2 &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Lab 3" href="lab3.html" />
+    <link rel="prev" title="Lab 1" href="lab1.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lectures.html">Lectures</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="labs.html">Labs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="lab1.html">Lab 1</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Lab 2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#finite-impulse-response-filter">Finite Impulse Response Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#finite-impulse-response-filter-specifications">Finite Impulse Response Filter Specifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calibration">Calibration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filter-coefficient-generation">Filter Coefficient Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filter-implementation-fir-direct-form">Filter Implementation: FIR Direct Form</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#measuring-the-amplitude-response-of-the-fir-filter">Measuring the amplitude response of the FIR filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#measuring-the-performance-of-the-fir-filter">Measuring the performance of the FIR filter</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#filter-implementation-optimizing-the-fir-direct-form">Filter Implementation: Optimizing the FIR Direct Form</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filter-implementation-the-fir-transpose-form">Filter Implementation: The FIR Transpose Form</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wrapping-up">Wrapping Up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grading-rubric">Grading Rubric</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lab3.html">Lab 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab4.html">Lab 4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5.html">Lab 5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reportguidelines.html">Report Guidelines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="labs.html">Labs</a> &raquo;</li>
+        
+      <li>Lab 2</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lab2.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lab-2">
+<h1>Lab 2<a class="headerlink" href="#lab-2" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this assignment is as follows.</p>
+<ul class="simple">
+<li>to familiarize you with the filter design tools in Matlab,</li>
+<li>to familiarize you with the basic calibration of signal values captured using AUDIO BOOSTXL,</li>
+<li>to familiarize you with the implementation of finite impulse reponse (FIR) filtering using MSP-EXP432P401R,</li>
+<li>to measure the impulse reponse and frequency response of an FIR implementation,</li>
+<li>to compare the performance of various FIR implementation styles.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The starter code for this lab is in a repository at <em>https://github.com/wpi-ece4703-b20/assignment2_teamx</em>,
+where x is the team number that you have chosen on the Canvas course website. All team members have access
+to this private repository.</p>
+</div>
+<div class="section" id="finite-impulse-response-filter">
+<h2>Finite Impulse Response Filter<a class="headerlink" href="#finite-impulse-response-filter" title="Permalink to this headline">¶</a></h2>
+<p>An FIR filter with M taps is a digital filter described by the following input/output relationship</p>
+<div class="math">
+<p><img src="_images/math/be23ad37b0b4712280525b4929e75b769146d652.png" alt="y[n] = \sum_{k=0}^{M-1} b[k] x[n-k]"/></p>
+</div><p>where <img class="math" src="_images/math/b921f46e4636934accc21318b3f8ea402237c225.png" alt="y[n]"/> is the current filter output, <img class="math" src="_images/math/8547a700134928e4eab6c1c7280059e3f4139f3d.png" alt="b[0],...,b[M-1]"/> are the feedforward filter coefficients,
+and <img class="math" src="_images/math/bacf1f292ab8e82d674697d7642543bf1e3b0b3a.png" alt="x[n],...,x[n-M+1]"/> are the current input and <img class="math" src="_images/math/c53e2af61d5524c2be76008860509109b88391af.png" alt="M-1"/> previous inputs. The inputs are stored
+in a buffer referred to as the taps of the FIR filter.</p>
+<p>To compute the very first filter output <img class="math" src="_images/math/bbf8a3a662736a2dfe36f68c76d8097df12ee308.png" alt="y[0]"/> using the very first input <img class="math" src="_images/math/4e49a41280ec8c103c7a2d840ff7a9a7f15150a0.png" alt="x[0]"/>, one must assume
+an initial value for <img class="math" src="_images/math/967bb12c14fd5ea1f61a561e005657f8fc7ba703.png" alt="x[-1],...,x[-M+1]"/>. In this assignment we will assume the initial value of the taps
+of the FIR filter is 0.</p>
+<p>This assignment is focused on the implemention of the formula to compute an FIR output using a DSP program in C.
+We are primarily concerned with the correct implementation of the FIR design using floating-point precision.
+In a later assignment, we will study the optimized implementation of the FIR design.</p>
+</div>
+<div class="section" id="finite-impulse-response-filter-specifications">
+<h2>Finite Impulse Response Filter Specifications<a class="headerlink" href="#finite-impulse-response-filter-specifications" title="Permalink to this headline">¶</a></h2>
+<p>In the assignment you will develop an implementation for an FIR filter with the following specifications.
+You will design a bandpass filter with a passband of 2500Hz to 3500Hz, a lower stop band for frequencies below 1500Hz, an
+upper stopband for frequencies above 4500Hz, a maximum passband ripple of 1dB, and a stopband minimum rejection
+of 40dB for both stop bands.</p>
+<p>You can pick any supported sample rate and any filter design method you like, as long as your design
+meets all of the filter design requirements including real-time performance. You can use
+Matlab filter design tools such as <code class="docutils literal notranslate"><span class="pre">filterDesigner</span></code> to create the coefficients for your FIR filter.
+The Matlab filter design tools allow you to analyze various aspects of your filter such as
+its impulse response, frequency response, and pole-zero plot, among others. The Matlab filter design
+tools allow you to export the filter coefficients as a C header file. You can use these generated
+coefficients directly in your program. You will perform all calculations in this assignment using
+single-precision floating point numbers.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>C recognizes multiple floating-point precision
+levels, and the most common ones are single-precision floating point (<code class="docutils literal notranslate"><span class="pre">float</span></code>) and double-precision floating
+point (<code class="docutils literal notranslate"><span class="pre">double</span></code>). Single-precision floating point is a 32-bit datatype (a sign bit, 8 exponent bits and 23 mantissa bits),
+while double-precision floating
+point commonly uses 64 bits.</p>
+<p class="last">A floating-point constant can be written in various ways. For example, the value 0.75 can be written as
+<code class="docutils literal notranslate"><span class="pre">0.75</span></code> or <code class="docutils literal notranslate"><span class="pre">75e-2</span></code> or <code class="docutils literal notranslate"><span class="pre">.0075e2</span></code>. Without a floating-point suffix, such a constant is treated as
+having double precision. The floating-point suffix <code class="docutils literal notranslate"><span class="pre">f</span></code> can be added to indicate the compiler that
+you are providing a single-precision floating constant. Thus, the value 0.75 as a single-precision
+constant can be written as <code class="docutils literal notranslate"><span class="pre">0.75f</span></code> or <code class="docutils literal notranslate"><span class="pre">75e-2f</span></code>.</p>
+</div>
+</div>
+<div class="section" id="calibration">
+<h2>Calibration<a class="headerlink" href="#calibration" title="Permalink to this headline">¶</a></h2>
+<p>Before you will develop your real-time DSP filter, you first have to gain insight into the calibration
+of analog signals into digital floating point numbers.
+The <a class="reference external" href="https://www.ti.com/tool/MSP-EXP432P401R">MSP-EXP432P401R Launchpad</a> used for your course project contains a 14-bit Analog to Digital Converter, which
+converts analog voltages between 0 volts and 3.3 volts (full scale). The processed signal from the
+MSP432 processor is converted through digital audio using
+a 14-bit Digital to Analog Converter integrated on the <a class="reference external" href="https://www.ti.com/tool/BOOSTXL-AUDIO">Audio Signal Processing Boosterpack</a>. The DAC converts digital codes to analog voltages between 0 volts and 3.3 volts (full scale).</p>
+<p>The following figure illustrates the calibration of analog values to digital numbers. The ADC produces
+14-bit numbers which are mapped into a 16-bit unsigned data type. These integers are converted into
+single-precision floating-point numbers using <code class="docutils literal notranslate"><span class="pre">float32_t</span> <span class="pre">adc_to_f32(uint16_t)</span></code>, a function
+provided in <a class="reference internal" href="techdoc.html#msp432-boostxl-lib"><span class="std std-ref">MSP432_BOOSTXL_LIB</span></a>. For reasons that we will explain later, the lowest ADC value (0) is mapped to the real value -0.25, and the highest ADC value (0x3FFF) is mapped to the real value 0.25.
+A floating point number can be converted back to a voltage by first converting the number to a 16-bit unsigned integer using <code class="docutils literal notranslate"><span class="pre">uint16_t</span> <span class="pre">f32_to_dac(float32_t)</span></code>, and next sending that number to the 14-bit DAC.</p>
+<div class="figure align-center" id="id1" style="width: 500px">
+<img alt="_images/lab2_calibration.png" src="_images/lab2_calibration.png" />
+<p class="caption"><span class="caption-text">Calibration Chart relating analog values, DAC/ADC values, and floating point values</span></p>
+</div>
+<p>We recall how a typical real-time DSP program looks like. We demonstrate the case of an interrupt-driven
+sample conversion with a 24KHz sample rate.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="comment preproc">#include</span> <span class="comment preprocfile">&lt;ti/devices/msp432p4xx/driverlib/driverlib.h&gt;</span><span class="comment preproc">
+</span><span class="ln"> 2 </span><span class="comment preproc">#include</span> <span class="comment preprocfile">&quot;msp432_boostxl_init.h&quot;</span><span class="comment preproc">
+</span><span class="ln"> 3 </span><span class="comment preproc">#include</span> <span class="comment preprocfile">&quot;msp432_arm_dsp.h&quot;</span><span class="comment preproc">
+</span><span class="ln"> 4 </span><span class="comment preproc"></span>
+<span class="ln"> 5 </span><span class="keyword type">uint16_t</span> <span class="name function">processSample</span><span class="punctuation">(</span><span class="keyword type">uint16_t</span> <span class="name">x</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 6 </span>   <span class="name">float32_t</span> <span class="name">v</span> <span class="operator">=</span> <span class="name">adc_to_f32</span><span class="punctuation">(</span><span class="name">x</span><span class="punctuation">);</span>
+<span class="ln"> 7 </span>
+<span class="ln"> 8 </span>   <span class="comment single">// ... DSP code goes here
+</span><span class="ln"> 9 </span><span class="comment single"></span>
+<span class="ln">10 </span>   <span class="keyword">return</span> <span class="name">f32_to_dac</span><span class="punctuation">(</span><span class="name">v</span><span class="punctuation">);</span>
+<span class="ln">11 </span><span class="punctuation">}</span>
+<span class="ln">12 </span>
+<span class="ln">13 </span><span class="keyword type">int</span> <span class="name function">main</span><span class="punctuation">(</span><span class="keyword type">void</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln">14 </span>    <span class="name">WDT_A_hold</span><span class="punctuation">(</span><span class="name">WDT_A_BASE</span><span class="punctuation">);</span>
+<span class="ln">15 </span>
+<span class="ln">16 </span>    <span class="name">msp432_boostxl_init_intr</span><span class="punctuation">(</span><span class="name">FS_24000_HZ</span><span class="punctuation">,</span>
+<span class="ln">17 </span>                             <span class="name">BOOSTXL_J1_2_IN</span><span class="punctuation">,</span>
+<span class="ln">18 </span>                             <span class="name">processSample</span><span class="punctuation">);</span>
+<span class="ln">19 </span>    <span class="name">msp432_boostxl_run</span><span class="punctuation">();</span>
+<span class="ln">20 </span>
+<span class="ln">21 </span>    <span class="keyword">return</span> <span class="literal number integer">1</span><span class="punctuation">;</span>
+<span class="ln">22 </span><span class="punctuation">}</span>
+</pre>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p><strong>Question 1</strong>: Create a sinewave generator that generates a sine wave with the following properties.</p>
+<ul class="simple">
+<li>Frequency: 1000 Hz</li>
+<li>Sample Frequency: 16KHz</li>
+<li>Amplitude: 300mV</li>
+<li>Offset (with respect to 1.65V ref level): +200mV</li>
+</ul>
+<p class="last">Use a lookup table to store 16 samples of a sine wave as floating point numbers. Use the
+calibration diagram listed above to find the proper floating-point scaling factors for the
+amplitude and the offset.</p>
+</div>
+</div>
+<div class="section" id="filter-coefficient-generation">
+<h2>Filter Coefficient Generation<a class="headerlink" href="#filter-coefficient-generation" title="Permalink to this headline">¶</a></h2>
+<p>Use the Matlab <code class="docutils literal notranslate"><span class="pre">filterDesigner</span></code> tool to create a FIR according to the passband specifications provided
+earlier. You can choose any suitable sample frequency as long as it yields a filter that meets the passband
+specifications.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last"><strong>Question 2</strong>: Generate floating point coefficients that can be included in a C file.
+When your design is complete, extract the following information from  <code class="docutils literal notranslate"><span class="pre">filterDesigner</span></code>:
+the filter’s impulse response, the filter’s amplitude response, the filter’s phase response,
+and the filter’s pole-zero plot. You will include these plots in your report.</p>
+</div>
+</div>
+<div class="section" id="filter-implementation-fir-direct-form">
+<h2>Filter Implementation: FIR Direct Form<a class="headerlink" href="#filter-implementation-fir-direct-form" title="Permalink to this headline">¶</a></h2>
+<p>Implement a Direct-Form FIR filter using the coefficients created earlier.
+Attach the filter input to pin <code class="docutils literal notranslate"><span class="pre">BOOSTXL_J1_2_IN</span></code> so that you can inject an external test waveform.
+The first implementation is the so-called Direct Form implementation, illustrated in the figure below.
+You will have to adjust the number of taps of the filter to the number identified by the Matlab
+filter design program.</p>
+<div class="figure align-center" id="id2" style="width: 300px">
+<img alt="_images/lab2_fir_direct.png" src="_images/lab2_fir_direct.png" />
+<p class="caption"><span class="caption-text">Direct Form FIR filter</span></p>
+</div>
+<p>To test the filter, attach a signal generator to pin <code class="docutils literal notranslate"><span class="pre">BOOSTXL_J1_2_IN</span></code>, and insert a sine wave
+with amplitude 500mV and offset 1.65V. As you vary the frequency from 200Hz to 5KHz, you should hear
+the tone sound louder until it reaches around 2500Hz, and then grow silent again as you
+increase the frequency beyond 3500Hz.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Getting a complex filter operation to work ‘out of the box’ is challenging, so if the filter does
+not work as described above, don’t despair. You can work systematically through the design
+to make sure that everything works as expected. Here are some tips.</p>
+<p>First, the MSP432EXP401R does not have a straightforward error reporting. One of the first, basic
+tests that you can do, is to verify that the program is running. The <code class="docutils literal notranslate"><span class="pre">DAC_SYNC</span></code>, which
+toggles once for every two bytes transmitted to the DAC, enables you to verify that
+there is digital data moving from the MSP432EXP401R microcontroller to the DAC on the
+Audio BoostXL board. To measure this signal, connect an oscilloscope probe to
+pin <code class="docutils literal notranslate"><span class="pre">D</span> <span class="pre">sync</span></code> on header J2 of the Audio BoostXL board. If you don’t observe a DAC sync
+pulse, but you believe that there should be one,  then the MSP432EXP401R may have suffered
+an exception – which halts execution of the DSP program. Such an exception typically
+occurs when you have an out-of-bounds array access.</p>
+<p>Second, if the program is running, but you don’t get any output, you may need to observe
+the signal being send to the audio amplifier. Refer to <a class="reference internal" href="lab1.html#connect-scope"><span class="std std-ref">Connecting the Oscilloscope</span></a> to check where
+you need to connect the oscilloscope probe. Once the oscilloscope is connected you can
+perform simple tests - such as applying 0v or 3V3 to the input pin  <code class="docutils literal notranslate"><span class="pre">BOOSTXL_J1_2_IN</span></code>,
+and verifying that the output level of the DAC reacts correspondingly. Work systematically
+through the signal processing chain from the input to the output. Verify your work
+frequently and make small modifications at a time.</p>
+<p class="last">Finally, you can rely on the source-level debugger included in Code Composer Studio.
+However, since the source-level debugger essentially halts the real-time behavior
+of the program (masking further interrupts etc), this debugging technique is not
+very helpful to identify issues related to the real-time nature of the processing.</p>
+</div>
+<div class="figure align-center" id="id3" style="width: 600px">
+<img alt="_images/lab2_dacsync.png" src="_images/lab2_dacsync.png" />
+<p class="caption"><span class="caption-text">DAC SYNC of an audio stream at 16KHz sample rate</span></p>
+</div>
+<p>Once your filter appears to be working correctly, you have to demonstrate its correct operation
+by making the following two measurements.</p>
+<ol class="arabic simple">
+<li>You have to measure the Amplitude response of the FIR filter.</li>
+<li>You have to measure the performance (in clock cycles) of your FIR design</li>
+</ol>
+<div class="section" id="measuring-the-amplitude-response-of-the-fir-filter">
+<h3>Measuring the amplitude response of the FIR filter<a class="headerlink" href="#measuring-the-amplitude-response-of-the-fir-filter" title="Permalink to this headline">¶</a></h3>
+<p>The amplitude response of the FIR filter is obtained by computing the spectrum of the filter’s output while
+it is processing a broadband signal. In simulation, such a broadband signal is typically created through
+an impulse – so that the filter’s response in the time domain is the impulse response, and the response in
+the frequency domain is the amplitude response. Such an impulse is not easy to process by practical
+hardware as it concentrates the energy of the complete spectrum into the steep edges of a time domain pulse.
+Instead, it is easier to inject a white noise signal as the broadband input signal. A white noise signal
+is a broadband signal with uniform energy levels at every frequency. However, the phases of the frequency components in the white noise signal are random, the energy is distributed in time.</p>
+<p>As a sampled-data signal, a white-noise signal is created using a random sequence created from a uniform distribution. The C function <code class="docutils literal notranslate"><span class="pre">rand()</span></code> generates random numbers between 0 and a large constant <code class="docutils literal notranslate"><span class="pre">RAND_MAX</span></code>.
+For measuring the FIR filter, the randum number stream needs to be properly scaled: the average needs to be around 0x2000 (the ‘0 volt’ level for the DAC) with a uniformly distributed range of numbers around that central value.</p>
+<p>To apply the white noise signal, simply change the input of the <code class="docutils literal notranslate"><span class="pre">processSample</span></code> function in your program
+to take the input from your random number generator:</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="keyword type">uint16_t</span> <span class="name function">processSample</span><span class="punctuation">(</span><span class="keyword type">uint16_t</span> <span class="name">x</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 2 </span>   <span class="comment single">// float32_t v = adc_to_f32(x);
+</span><span class="ln"> 3 </span><span class="comment single"></span>
+<span class="ln"> 4 </span>   <span class="name">float_t</span> <span class="name">v</span> <span class="operator">=</span> <span class="name">my_scaled_random_number_generator</span><span class="punctuation">();</span> <span class="comment single">// you have to design this function
+</span><span class="ln"> 5 </span><span class="comment single"></span>
+<span class="ln"> 6 </span>   <span class="comment single">// ... DSP code goes here
+</span><span class="ln"> 7 </span><span class="comment single"></span>
+<span class="ln"> 8 </span>   <span class="keyword">return</span> <span class="name">f32_to_dac</span><span class="punctuation">(</span><span class="name">v</span><span class="punctuation">);</span>
+<span class="ln"> 9 </span><span class="punctuation">}</span>
+</pre>
+<p>To compute the filter output spectrum, you can make use of the spectrum analysis function present
+in typical USB oscilloscopes. Because the output spectrum is computed from a random input
+sequence, it will tend to be noisy. For this lab, you can make use of the Spectrum Analyzer function
+of Bitscope to demonstrate that your filter is operational. You should be able to show that the passband
+covers 2500 Hz to 3500 Hz, and that the stopband suppression reaches 40 dB. The following is an example
+spectrum recorded from a working filter.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/bitscopelab2.jpg" src="_images/bitscopelab2.jpg" />
+</div>
+</div>
+<div class="section" id="measuring-the-performance-of-the-fir-filter">
+<h3>Measuring the performance of the FIR filter<a class="headerlink" href="#measuring-the-performance-of-the-fir-filter" title="Permalink to this headline">¶</a></h3>
+<p>The performance of the FIR filter is the amount of clock cycles required to process a
+single signal sample. The total amount of clock cycles available to process a sample
+equals <code class="docutils literal notranslate"><span class="pre">48</span> <span class="pre">MHz</span> <span class="pre">/</span> <span class="pre">sample</span> <span class="pre">frequency</span></code>. For example, at 16KHz there are 3000 clock cycles
+available for each sample. Hence, it is important to understand how much computation
+effort is needed to process one sample.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">MSP432_BOOSTXL_LIB</span></code> has a built-in function to compute the performance for you:
+<code class="docutils literal notranslate"><span class="pre">uint32_t</span> <span class="pre">measurePerfSample(msp432_sample_process_t</span> <span class="pre">_cb)</span></code>. Study the source code of
+this function to understand how it works. You would typically call <code class="docutils literal notranslate"><span class="pre">measurePerfSample</span></code> during
+the initialization phase of the program, before you start the signal processing loop.
+The return of this function is the number of clock cycles needed to complete the function.
+You can <code class="docutils literal notranslate"><span class="pre">printf</span></code> this number and read it from the console in the debugger of
+Code Composer Studio.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p><strong>Question 3</strong>: Write the C function that computes the FIR using Direct Form.
+You have to report the following data for this function:</p>
+<ol class="last arabic simple">
+<li>The source code listing of <code class="docutils literal notranslate"><span class="pre">uint16_t</span> <span class="pre">processSample(uint16_t</span> <span class="pre">x)</span></code></li>
+<li>The amplitude response of the implementation</li>
+<li>The performance of the implementation</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="section" id="filter-implementation-optimizing-the-fir-direct-form">
+<h2>Filter Implementation: Optimizing the FIR Direct Form<a class="headerlink" href="#filter-implementation-optimizing-the-fir-direct-form" title="Permalink to this headline">¶</a></h2>
+<p>Closely study the filter coefficients. Optimize your filter design for performance by
+exploiting the symmetry available in the filter coefficients.</p>
+<p>Once you made the necessary modifications, repeat the same measurements as above:
+measure the frequency spectrum of the filter, and the performance of the filter.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p><strong>Question 4</strong>: Write the C function that optimizes the FIR direct form.
+You have to report the following data for this function:</p>
+<ol class="last arabic simple">
+<li>The source code listing of <code class="docutils literal notranslate"><span class="pre">uint16_t</span> <span class="pre">processSample(uint16_t</span> <span class="pre">x)</span></code></li>
+<li>The amplitude response of the implementation</li>
+<li>The performance of the implementation</li>
+</ol>
+</div>
+</div>
+<div class="section" id="filter-implementation-the-fir-transpose-form">
+<h2>Filter Implementation: The FIR Transpose Form<a class="headerlink" href="#filter-implementation-the-fir-transpose-form" title="Permalink to this headline">¶</a></h2>
+<p>The following transformation of the filter is called the Transpose Form.
+It is functionally identical to the Direct Form (with the same coefficients),
+but it stores intermediate results in the filter taps, rather then the
+previous input values.</p>
+<div class="figure align-center" id="id4" style="width: 300px">
+<img alt="_images/lab2_fir_transpose.png" src="_images/lab2_fir_transpose.png" />
+<p class="caption"><span class="caption-text">Transpose Form FIR</span></p>
+</div>
+<p>Implement this filter and perform the same measurements as you did for the
+other two filters.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p><strong>Question 5</strong>: Write the C function that optimizes the FIR transpose form.
+You have to report the following data for this function:</p>
+<ol class="last arabic simple">
+<li>The source code listing of <code class="docutils literal notranslate"><span class="pre">uint16_t</span> <span class="pre">processSample(uint16_t</span> <span class="pre">x)</span></code></li>
+<li>The amplitude response of the implementation</li>
+<li>The performance of the implementation</li>
+</ol>
+</div>
+</div>
+<div class="section" id="wrapping-up">
+<h2>Wrapping Up<a class="headerlink" href="#wrapping-up" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The answer to this lab consists of a written report which will be submitted on Canvas by the deadline. Refer to the General Lab Report Guidelines for details on report formatting. You will only submit your written report on Canvas. All code developed must be returned through github.</li>
+<li>Not everybody in the class may be using the same setup to make oscilloscope measurements. Start your report with a short introduction on your measurement setup including the MSP-EXP432P401R kit, the oscilloscope and the signal generator that you have used for this lab.</li>
+<li>Follow the five questions outlined above to structure your report. Optionally answer the bonus question. Use figures, screenshots and code examples where appropriate. Please work out the answers in sufficient detail to show your <em>analysis</em>.</li>
+<li>Make sure that you add newly developed projects to your github repository. Further, make sure that you commit and push all changes to the github repository on GitHub classroom. Use the Team - Commit pop-up menu and push all changes.</li>
+<li>Be aware that each of the laboratory assignments in ECE4703 will require a significant investment in time and preparation if you expect to have a working system by the assignment’s due date. This course is run in “open lab” mode where it is not expected that you will be able to complete the laboratory in the scheduled official lab time. It is in your best interest to plan ahead so that you can use the TA and instructor’s office hours most efficiently.</li>
+</ul>
+<p><em>Good Luck</em></p>
+</div>
+<div class="section" id="grading-rubric">
+<h2>Grading Rubric<a class="headerlink" href="#grading-rubric" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="83%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Requirement</th>
+<th class="head">Points</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Question 1 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-odd"><td>Question 2 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-even"><td>Question 3 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-odd"><td>Question 4 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-even"><td>Question 5 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-odd"><td>All projects build without errors or warnings</td>
+<td>5</td>
+</tr>
+<tr class="row-even"><td>Code is well structured and commented</td>
+<td>5</td>
+</tr>
+<tr class="row-odd"><td>Git Repository is complete and up to date</td>
+<td>5</td>
+</tr>
+<tr class="row-even"><td>Overall Report Quality (Format, Outline, Grammar)</td>
+<td>10</td>
+</tr>
+<tr class="row-odd"><td><strong>TOTAL</strong></td>
+<td><strong>100</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lab3.html" class="btn btn-neutral float-right" title="Lab 3" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lab1.html" class="btn btn-neutral" title="Lab 1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

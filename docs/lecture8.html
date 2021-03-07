@@ -1,0 +1,478 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>L8: DMA and the ARM CMSIS Library &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="L9: Adaptive Filters" href="lecture9.html" />
+    <link rel="prev" title="L7: Performance Optimization in DSP" href="lecture7.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="lectures.html">Lectures</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture1.html">L1: Sampling and Quantization, Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture2.html">L2: Real-Time Input Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture3.html">L3: DTFT, z-transform, and FIR filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture4.html">L4: FIR filter implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture5.html">L5: IIR filters, and their implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture6.html">L6: Fixed Point Arithmetic in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture7.html">L7: Performance Optimization in DSP</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">L8: DMA and the ARM CMSIS Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dsp-libraries-arm-cmsis">DSP Libraries: ARM CMSIS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dma-driven-input-output">DMA-driven Input/Output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lecture9.html">L9: Adaptive Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture10.html">L10: Frequency Synthesis and Detection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="labs.html">Labs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="lectures.html">Lectures</a> &raquo;</li>
+        
+      <li>L8: DMA and the ARM CMSIS Library</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lecture8.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="l8-dma-and-the-arm-cmsis-library">
+<h1>L8: DMA and the ARM CMSIS Library<a class="headerlink" href="#l8-dma-and-the-arm-cmsis-library" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this lecture is as follows.</p>
+<ul class="simple">
+<li>To discuss the purpose and use of DSP libraries, with an example</li>
+<li>To describe how DMA I/O is implemented in our DSP applications</li>
+</ul>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">The code example for this lecture is <a class="reference external" href="https://github.com/wpi-ece4703-b20/dsp_l7">available online</a> as part of the Lecture 7 example repository.</p>
+</div>
+<div class="section" id="dsp-libraries-arm-cmsis">
+<h2>DSP Libraries: ARM CMSIS<a class="headerlink" href="#dsp-libraries-arm-cmsis" title="Permalink to this headline">¶</a></h2>
+<p>Despite the need for optimize DSP code to achieve real-time performance, there is also a relentless pressure to develop code faster. A solution for this conundrum is to make use of a library with optimized
+primitives. The <a class="reference external" href="https://www.keil.com/pack/doc/CMSIS/DSP/html/index.html">ARM CMSIS Library</a> contains
+a suite of common signal processing functions for use on Cortex-M and Cortex-A processor based devices.
+The advantage of such a library is threefold. First, a library improves the speed of software development.
+Second, the library functions can be highly optimized for the underlying architecture.
+Third, the library’s application programmer’s interface (API) offers a portable design that enables
+the same application code to execute across multiple platforms.</p>
+<p>We’ll look at the design of a FIR filter using ARM CMSIS. In contrast to our previous design, this filter reads in a block of samples, rather than a single sample at a time. The reason for doing so is to improve the parallellism of the specification. In a typical 64-bit architecture, 16-bit samples can
+be represented in parallel as a vector. Furthermore, advanced members of the ARM family have vector
+instructions, which are able to perform four concurrent 16-bit operations in a 64-bit datapath.
+While it’s beyond the scope of this lecture to dive into the internal details of <code class="docutils literal notranslate"><span class="pre">arm_fir_q15</span></code>,
+you can do so on your own as the source code is available as part of the SimpleLink MSP432
+package you are using on the course (See <a class="reference external" href="file:C:/ti/simplelink_msp432p4_sdk_3_40_01_02/source/third_party/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_fir_q15.c">arm_fir_q15.c</a>).</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">arm_fir_q15</span> <span class="p">(</span> <span class="n">const</span> <span class="n">arm_fir_instance_q15</span> <span class="o">*</span>  <span class="n">S</span><span class="p">,</span>
+                   <span class="n">const</span> <span class="n">q15_t</span> <span class="o">*</span>   <span class="n">pSrc</span><span class="p">,</span>
+                   <span class="n">q15_t</span> <span class="o">*</span>   <span class="n">pDst</span><span class="p">,</span>
+                   <span class="n">uint32_t</span>  <span class="n">blockSize</span>
+                 <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Parameters</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>[in]  <code class="docutils literal notranslate"><span class="pre">S</span></code> points to an instance of the Q15 FIR filter structure</li>
+<li>[in]  <code class="docutils literal notranslate"><span class="pre">pSrc</span></code>  points to the block of input data</li>
+<li>[out] <code class="docutils literal notranslate"><span class="pre">pDst</span></code>  points to the block of output data</li>
+<li>[in]  <code class="docutils literal notranslate"><span class="pre">blockSize</span></code> number of samples to process</li>
+</ul>
+</div></blockquote>
+<p><strong>Returns</strong></p>
+<p>none</p>
+<p><strong>Scaling and Overflow Behavior</strong></p>
+<p class="last">The function is implemented using a 64-bit internal accumulator. Both coefficients and state variables are represented in 1.15 format and multiplications yield a 2.30 result. The 2.30 intermediate results are accumulated in a 64-bit accumulator in 34.30 format. There is no risk of internal overflow with this approach and the full precision of intermediate multiplications is preserved. After all additions have been performed, the accumulator is truncated to 34.15 format by discarding low 15 bits. Lastly, the accumulator is saturated to yield a result in 1.15 format.</p>
+</div>
+<p>To use of a block-driven format, we will switch from an interrupt-driven design to a DMA-controlled design; we will discuss the details of the DMA-controlled design later.</p>
+<p>The following application illustrates the use of <code class="docutils literal notranslate"><span class="pre">arm_fir_q15</span></code>.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define NUMTAPS 32</span>
+<span class="n">int16_t</span> <span class="n">taps</span><span class="p">[</span><span class="n">NUMTAPS</span> <span class="o">+</span> <span class="n">BUFLEN_SZ</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+<span class="nb">int</span> <span class="n">coefficients</span><span class="p">[</span><span class="n">NUMTAPS</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">15</span><span class="p">))</span> <span class="p">};</span>
+<span class="n">arm_fir_instance_q15</span> <span class="n">F</span><span class="p">;</span>
+
+<span class="n">initfir</span><span class="p">(</span><span class="n">arm_fir_instance_q15</span> <span class="o">*</span><span class="n">F</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">F</span><span class="o">-&gt;</span><span class="n">numTaps</span>  <span class="o">=</span> <span class="n">NUMTAPS</span><span class="p">;</span>
+    <span class="n">F</span><span class="o">-&gt;</span><span class="n">pState</span>   <span class="o">=</span> <span class="n">taps</span><span class="p">;</span>
+    <span class="n">F</span><span class="o">-&gt;</span><span class="n">pCoeffs</span>  <span class="o">=</span> <span class="n">coefficients</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">processBuffer</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">[</span><span class="n">BUFLEN_SZ</span><span class="p">],</span> <span class="n">uint16_t</span> <span class="n">y</span><span class="p">[</span><span class="n">BUFLEN_SZ</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">adc14_to_q15_vec</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">BUFLEN_SZ</span><span class="p">);</span>
+    <span class="n">arm_fir_q15</span><span class="p">(</span><span class="o">&amp;</span><span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">BUFLEN_SZ</span><span class="p">);</span>
+    <span class="n">q15_to_dac14_vec</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">BUFLEN_SZ</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">WDT_A_hold</span><span class="p">(</span><span class="n">WDT_A_BASE</span><span class="p">);</span>
+
+    <span class="n">initfir</span><span class="p">(</span><span class="o">&amp;</span><span class="n">F</span><span class="p">);</span>
+
+    <span class="n">msp432_boostxl_init_dma</span><span class="p">(</span><span class="n">FS_32000_HZ</span><span class="p">,</span> <span class="n">BOOSTXL_J1_2_IN</span><span class="p">,</span> <span class="n">BUFLEN</span><span class="p">,</span> <span class="n">processBuffer</span><span class="p">);</span>
+
+    <span class="n">uint32_t</span> <span class="n">c</span> <span class="o">=</span> <span class="n">measurePerfBuffer</span><span class="p">(</span><span class="n">processBuffer</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Cycles: </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+
+    <span class="n">msp432_boostxl_run</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>The size of the buffer with filter state is now the number of taps plus the block
+length minus 1 (<code class="docutils literal notranslate"><span class="pre">NUMTAPS</span> <span class="pre">+</span> <span class="pre">BUFLEN_SZ</span> <span class="pre">-</span> <span class="pre">1</span></code>). The reason for this larger buffer, is
+that the filter state will be updated with <code class="docutils literal notranslate"><span class="pre">BUFLEN_SZ</span></code> samples at a time.</li>
+<li>The filter state is stored in a record of type <code class="docutils literal notranslate"><span class="pre">arm_fir_instance_q15</span></code>, which also
+holds the coefficients and their count. A separate initialization function <code class="docutils literal notranslate"><span class="pre">initfir</span></code>
+is added to initialize the <code class="docutils literal notranslate"><span class="pre">arm_fir_instance_q15</span></code>. Detailed documentation
+on <a class="reference external" href="https://www.keil.com/pack/doc/CMSIS/DSP/html/structarm__fir__instance__q15.html">arm_fir_instance_q15</a> can be found online.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">processSample</span></code> is now replaced with a <code class="docutils literal notranslate"><span class="pre">processBuffer</span></code> function, which filters a
+block of samples. Note that <a class="reference internal" href="techdoc.html#msp432-boostxl-lib"><span class="std std-ref">MSP432_BOOSTXL_LIB</span></a> has functions to convert
+a vector of samples from the ADC/to the DAC to internal q15, f32 or q31 datatype.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">main</span></code> function creates a DMA block-based setup rather than an interrupt-driven
+sample-based setup. The key parameter is <code class="docutils literal notranslate"><span class="pre">BUFLEN</span></code>, which describes the blocksize
+used by the DMA. We will discuss the detailed internal operation of the DMA mechanism in our
+next lecture. For now, the key point is that the DMA mechanism will collect a block
+of <code class="docutils literal notranslate"><span class="pre">BUFLEN</span></code> samples (each one sample period apart) from the ADC, and then calls
+<code class="docutils literal notranslate"><span class="pre">processBuffer</span></code>. After this function returns, the resulting <code class="docutils literal notranslate"><span class="pre">BUFLEN</span></code> output samples
+are submitted to the DAC, one at a time and spaced one sample period apart.</li>
+</ul>
+<p>Finally, let’s look at the resulting performance of the design when using the DMA
+mechanism. Not surprisingly, because of the use of a DSP library, the impact of the
+compiler optimization is negligible. The use of a DSP library is about 2.2x faster than
+non-optimized code, but on the other hand, our manual optimizations outperform the DSP
+library filter by a factor of 2.7x. Note that this comparison is for the specific case
+of a Cortex-M4; and using a more powerful ARM (Cortex-A) may yield a different comparison.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="23%" />
+<col width="23%" />
+<col width="27%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">processBuffer</th>
+<th class="head">Non-optimized</th>
+<th class="head">Optimized (size)</th>
+<th class="head">Optimized (Performance)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Cycle Count (Buffer)</td>
+<td>6088</td>
+<td>6081</td>
+<td>6081</td>
+</tr>
+<tr class="row-odd"><td>Cycle Count (Sample)</td>
+<td>762</td>
+<td>760</td>
+<td>760</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dma-driven-input-output">
+<h2>DMA-driven Input/Output<a class="headerlink" href="#dma-driven-input-output" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/dmasystem.jpg" src="_images/dmasystem.jpg" />
+</div>
+<p>The figure above explains how the DMA mechanism works. As a block-based processing system, a conversion from sample-rate based processing to block-based, and vice versa, is needed. Two timers - one near the ADC, and one near the DAC, make sure that samples will be acquired and generated at the rate of the sample period.</p>
+<p>The ADC completion flag triggers the DMA module, which will copy it one one of two buffers - a PING buffer or a PONG buffer. The DMA module has support at the hardware level to alternate beween these to storage buffers. The copying process from ADC output to either of these buffers is called a ‘DMA Channel’, and both of these channels are configured when you initialize the MSP432-BOOSTXL library:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">code</span> <span class="kn">from</span> <span class="nn">initADC</span><span class="p">()</span> <span class="ow">in</span> <span class="n">msp432_boostxl_init</span><span class="o">.</span><span class="n">c</span>
+
+<span class="n">DMA_setChannelControl</span><span class="p">(</span><span class="n">DMA_CH7_ADC14</span> <span class="o">|</span> <span class="n">UDMA_PRI_SELECT</span><span class="p">,</span>
+                      <span class="p">(</span><span class="n">UDMA_SIZE_16</span> <span class="o">|</span> <span class="n">UDMA_SRC_INC_NONE</span> <span class="o">|</span> <span class="n">UDMA_DST_INC_16</span> <span class="o">|</span> <span class="n">UDMA_ARB_1</span><span class="p">));</span>
+<span class="n">DMA_setChannelTransfer</span><span class="p">(</span><span class="n">DMA_CH7_ADC14</span> <span class="o">|</span> <span class="n">UDMA_PRI_SELECT</span><span class="p">,</span>
+                      <span class="n">UDMA_MODE_PINGPONG</span><span class="p">,</span>
+                      <span class="p">(</span><span class="n">void</span><span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">ADC14</span><span class="o">-&gt;</span><span class="n">MEM</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                      <span class="p">(</span><span class="n">void</span> <span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="n">glbPingADC</span><span class="p">),</span>
+                      <span class="n">glbBUFLEN</span><span class="p">);</span>
+
+<span class="n">DMA_setChannelControl</span><span class="p">(</span><span class="n">DMA_CH7_ADC14</span> <span class="o">|</span> <span class="n">UDMA_ALT_SELECT</span><span class="p">,</span>
+                      <span class="p">(</span><span class="n">UDMA_SIZE_16</span> <span class="o">|</span> <span class="n">UDMA_SRC_INC_NONE</span> <span class="o">|</span> <span class="n">UDMA_DST_INC_16</span> <span class="o">|</span> <span class="n">UDMA_ARB_1</span><span class="p">));</span>
+<span class="n">DMA_setChannelTransfer</span><span class="p">(</span><span class="n">DMA_CH7_ADC14</span> <span class="o">|</span> <span class="n">UDMA_ALT_SELECT</span><span class="p">,</span>
+                       <span class="n">UDMA_MODE_PINGPONG</span><span class="p">,</span>
+                       <span class="p">(</span><span class="n">void</span><span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">ADC14</span><span class="o">-&gt;</span><span class="n">MEM</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                       <span class="p">(</span><span class="n">void</span> <span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="n">glbPongADC</span><span class="p">),</span>
+                       <span class="n">glbBUFLEN</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The DMA channel will copy <code class="docutils literal notranslate"><span class="pre">glbBUFLEN</span></code> samples from the ADC before a DMA completion interrupt is issued. Inside of the DMA ISR, the DMA channel is re-initialized for the next transfer, and a global flag is set for the signal processing function to start working on the newly acquired buffer.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">DMA_INT1_IRQHandler</span><span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">DMA_getChannelAttribute</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">UDMA_ATTR_ALTSELECT</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">DMA_setChannelControl</span><span class="p">(</span><span class="n">DMA_CH7_ADC14</span> <span class="o">|</span> <span class="n">UDMA_PRI_SELECT</span><span class="p">,</span>
+                              <span class="p">(</span><span class="n">UDMA_SIZE_16</span> <span class="o">|</span> <span class="n">UDMA_SRC_INC_NONE</span> <span class="o">|</span> <span class="n">UDMA_DST_INC_16</span> <span class="o">|</span> <span class="n">UDMA_ARB_1</span><span class="p">));</span>
+        <span class="n">DMA_setChannelTransfer</span><span class="p">(</span><span class="n">DMA_CH7_ADC14</span> <span class="o">|</span> <span class="n">UDMA_PRI_SELECT</span><span class="p">,</span>
+                               <span class="n">UDMA_MODE_PINGPONG</span><span class="p">,</span>
+                               <span class="p">(</span><span class="n">void</span><span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">ADC14</span><span class="o">-&gt;</span><span class="n">MEM</span><span class="p">[</span>   <span class="mi">0</span><span class="p">],</span>
+                               <span class="p">(</span><span class="n">void</span> <span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="n">glbPingADC</span><span class="p">),</span>
+                               <span class="n">glbBUFLEN</span><span class="p">);</span>
+        <span class="n">glbADCPPWrite</span> <span class="o">=</span> <span class="n">PING</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">DMA_setChannelControl</span><span class="p">(</span><span class="n">DMA_CH7_ADC14</span> <span class="o">|</span> <span class="n">UDMA_ALT_SELECT</span><span class="p">,</span>
+                              <span class="p">(</span><span class="n">UDMA_SIZE_16</span> <span class="o">|</span> <span class="n">UDMA_SRC_INC_NONE</span> <span class="o">|</span>    <span class="n">UDMA_DST_INC_16</span> <span class="o">|</span> <span class="n">UDMA_ARB_1</span><span class="p">));</span>
+        <span class="n">DMA_setChannelTransfer</span><span class="p">(</span><span class="n">DMA_CH7_ADC14</span> <span class="o">|</span> <span class="n">UDMA_ALT_SELECT</span><span class="p">,</span>
+                               <span class="n">UDMA_MODE_PINGPONG</span><span class="p">,</span>
+                               <span class="p">(</span><span class="n">void</span><span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">ADC14</span><span class="o">-&gt;</span><span class="n">MEM</span><span class="p">[</span>   <span class="mi">0</span><span class="p">],</span>
+                               <span class="p">(</span><span class="n">void</span> <span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="n">glbPongADC</span><span class="p">),</span>
+                               <span class="n">glbBUFLEN</span><span class="p">);</span>
+        <span class="n">glbADCPPWrite</span> <span class="o">=</span> <span class="n">PONG</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">processBuffer</span></code> will convert a PingADC buffer of input samples into a PingDAC buffer of output samples, or else a PongADC buffer of input samples into a PongDAC buffer of output samples.
+The <code class="docutils literal notranslate"><span class="pre">glbBufferCallback</span></code> function maps to the <code class="docutils literal notranslate"><span class="pre">processBuffer</span></code> function you write in your
+main program.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">glbADCPPRead</span> <span class="o">=</span> <span class="n">PING</span><span class="p">;</span>
+
+<span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">if</span> <span class="p">((</span><span class="n">glbADCPPWrite</span> <span class="o">==</span> <span class="n">PING</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">glbADCPPRead</span> <span class="o">==</span> <span class="n">PONG</span><span class="p">))</span> <span class="p">{</span>
+
+        <span class="n">glbBufferCallback</span><span class="p">(</span><span class="n">glbPingADC</span><span class="p">,</span> <span class="n">glbPingDAC</span><span class="p">);</span>
+        <span class="n">glbADCPPRead</span> <span class="o">=</span> <span class="n">PING</span><span class="p">;</span>  <span class="o">//</span> <span class="n">ADC</span> <span class="n">PING</span> <span class="n">BUFFER</span> <span class="n">HAS</span> <span class="n">BEEN</span> <span class="n">READ</span>
+        <span class="n">glbDACPPWrite</span> <span class="o">=</span> <span class="n">PING</span><span class="p">;</span> <span class="o">//</span> <span class="n">DAC</span> <span class="n">PING</span> <span class="n">BUFFER</span> <span class="n">HAS</span> <span class="n">FILLED</span> <span class="n">UP</span>
+
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">((</span><span class="n">glbADCPPWrite</span> <span class="o">==</span> <span class="n">PONG</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">glbADCPPRead</span> <span class="o">==</span> <span class="n">PING</span><span class="p">))</span> <span class="p">{</span>
+
+        <span class="n">glbBufferCallback</span><span class="p">(</span><span class="n">glbPongADC</span><span class="p">,</span> <span class="n">glbPongDAC</span><span class="p">);</span>
+        <span class="n">glbADCPPRead</span> <span class="o">=</span> <span class="n">PONG</span><span class="p">;</span>   <span class="o">//</span> <span class="n">ADC</span> <span class="n">PONG</span> <span class="n">BUFFER</span> <span class="n">HAS</span> <span class="n">BEEN</span> <span class="n">READ</span>
+        <span class="n">glbDACPPWrite</span> <span class="o">=</span> <span class="n">PONG</span><span class="p">;</span>  <span class="o">//</span> <span class="n">DAC</span> <span class="n">PONG</span> <span class="n">BUFFER</span> <span class="n">HAS</span> <span class="n">FILLED</span> <span class="n">UP</span>
+
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To run the output stream, a second timer regenerates the samples from the PingDAC buffer or else the PingDAC buffer. Notice that the dutypin signal is raised or lowered depending on what buffer is being read out. This enables you to monitor the ping-pong process. Timing issues (when the processor becomes overloaded) can be monitored when the duty cycle period is not in line with the expected timing, i.e. duty cycle period = (2 * buffer length * sample period).</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DAC8311_updateDacOut</span><span class="p">(</span><span class="n">glbActiveDACBuf</span><span class="p">[</span><span class="n">glbDACBufIndex</span><span class="o">++</span><span class="p">]);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">glbDACBufIndex</span> <span class="o">==</span> <span class="n">glbBUFLEN</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">glbDACBufIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">glbDACPPWrite</span> <span class="o">==</span> <span class="n">PING</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">dutypinhigh</span><span class="p">();</span>
+       <span class="n">glbActiveDACBuf</span> <span class="o">=</span> <span class="n">glbPingDAC</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">dutypinlow</span><span class="p">();</span>
+      <span class="n">glbActiveDACBuf</span> <span class="o">=</span> <span class="n">glbPongDAC</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h2>
+<p>We briefly discussed the ARM-CMSIS library, a library with pre-made DSP functions available for ARM. Lab 5 requires the use of this library, to build a biquad filter. The filter functions in ARM CMSIS use block-based processint, which requires the use of DMA-based I/O rather than interrupt driven I/O.</p>
+<p>We briefly discussed the design of the DMA-based I/O mechanism in the MSP432-BOOSTXL library.</p>
+<p>The code examples for this lecture are <a class="reference external" href="https://github.com/wpi-ece4703-b20/dsp_l7">available online</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lecture9.html" class="btn btn-neutral float-right" title="L9: Adaptive Filters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lecture7.html" class="btn btn-neutral" title="L7: Performance Optimization in DSP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1058 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>L7: Performance Optimization in DSP &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="L8: DMA and the ARM CMSIS Library" href="lecture8.html" />
+    <link rel="prev" title="L6: Fixed Point Arithmetic in DSP" href="lecture6.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="lectures.html">Lectures</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture1.html">L1: Sampling and Quantization, Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture2.html">L2: Real-Time Input Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture3.html">L3: DTFT, z-transform, and FIR filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture4.html">L4: FIR filter implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture5.html">L5: IIR filters, and their implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture6.html">L6: Fixed Point Arithmetic in DSP</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">L7: Performance Optimization in DSP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-cost-of-computations-in-dsp">The cost of computations in DSP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-software-flow">The Software Flow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#examing-the-basic-fir">Examing the basic FIR</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#control-flow">Control Flow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-movement">Data Movement</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#calculations">Calculations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#optimizing-for-size">Optimizing for Size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optimizing-for-performance">Optimizing for Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comparing-non-optimized-and-optimized-code">Comparing Non-optimized and Optimized Code</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#a-caveat">A Caveat</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dsp-libraries-arm-cmsis">DSP Libraries: ARM CMSIS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lecture8.html">L8: DMA and the ARM CMSIS Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture9.html">L9: Adaptive Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture10.html">L10: Frequency Synthesis and Detection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="labs.html">Labs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="lectures.html">Lectures</a> &raquo;</li>
+        
+      <li>L7: Performance Optimization in DSP</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lecture7.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="l7-performance-optimization-in-dsp">
+<h1>L7: Performance Optimization in DSP<a class="headerlink" href="#l7-performance-optimization-in-dsp" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this lecture is as follows.</p>
+<ul class="simple">
+<li>To describe the factors that affect performance in DSP software</li>
+<li>To analyze the assembly code of typical DSP operations</li>
+<li>To discuss the purpose and use of DSP libraries</li>
+<li>To review examples of commerial DSP libaries</li>
+</ul>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Before running the examples of this lecture, please update the msp432_boostxl_lib.
+This will resolve a bug in the DMA mechanism.</p>
+</div>
+<div class="section" id="the-cost-of-computations-in-dsp">
+<h2>The cost of computations in DSP<a class="headerlink" href="#the-cost-of-computations-in-dsp" title="Permalink to this headline">¶</a></h2>
+<p>In this lecture we are interested in understanding the factors that affect the performance
+of DSP programs. As we discussed in Lecture 2 (<a class="reference internal" href="lecture2.html#lec2"><span class="std std-ref">L2: Real-Time Input Output</span></a>), the maximum allowed processing
+time per sample cannot exceed the sample period. Within the interval of a single sample period,
+the processor has to acquire data from the ADC, process the new sample following the rules
+of the DSP algorithm, and finally convert the output sample to a DAC voltage.</p>
+<p>We will break down the processing time of a DSP in its components, and then clarify how
+these components can be reduced through optimization. In this lecture, the emphasis
+lies on the software processing, i.e., the C code written for the Cortex-M4 ARM
+processor. In the next lecture, we investigate the role of the hardware.</p>
+<div class="section" id="the-software-flow">
+<h3>The Software Flow<a class="headerlink" href="#the-software-flow" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/swflow.jpg" src="_images/swflow.jpg" />
+</div>
+<p>We start by briefly reminding the flow from C source code to a binary program for a DSP
+processor. A C compiler, which accepts optimization flags, converts C code with
+optional inline assembly into an <em>object file</em>, which contains processor instructions.
+The C compiler also produces a <em>listing file</em> which relates C code and processor
+instructions.</p>
+<p>The object file is not yet a binary program. All external symbols (such as library functions)
+have to be resolved, and every variable and function has to be mapped to a concrete
+memory address following a specific memory layout. Finally, the binary file can be downloaded
+to the board, and it can also be disassembled to a listing file. The latter may be useful
+to inspect the implementation of external library functions.</p>
+<p>We will be investigating the assembly output of a few DSP programs to investigate the
+factors that influence the complexity and cost of DSP program implementation.
+A useful document to understand assembly code produced by a compiler (and, in this case, assembly
+code for the ARM Cortex-M4), is the <a class="reference external" href="https://developer.arm.com/documentation/ihi0042/latest/">Procedure Call Standard for the ARM Architecture</a>. This document describes how a
+function call is implemented, and how basic data types (in C, C++) are implemented.
+Of particular interest is Table 6.1 in this document, which is reproduced below. This table
+indicates the functionality of the 16 processor registers in the ARM.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/table61arm.jpg" src="_images/table61arm.jpg" />
+</div>
+<p>Besides these 16 processor registers, there are an additional 32 registers in the floating-point
+coprocessor. These registers are addressed as <code class="docutils literal notranslate"><span class="pre">s0-s31</span></code> when used as single-precision registers,
+<code class="docutils literal notranslate"><span class="pre">d0-d15</span></code> when used as double-precision registers. <code class="docutils literal notranslate"><span class="pre">d0</span></code> overlaps <code class="docutils literal notranslate"><span class="pre">s0-s1</span></code>, <code class="docutils literal notranslate"><span class="pre">d1</span></code> overlaps <code class="docutils literal notranslate"><span class="pre">s2-s3</span></code>, and so forth. Furthermore when SIMD vector instructions are present, <code class="docutils literal notranslate"><span class="pre">q0-q7</span></code> represent quad-word registers.</p>
+</div>
+</div>
+<div class="section" id="examing-the-basic-fir">
+<h2>Examing the basic FIR<a class="headerlink" href="#examing-the-basic-fir" title="Permalink to this headline">¶</a></h2>
+<p>Let’s consider the following function, which represents a basic FIR.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">int</span> <span class="nb">input</span> <span class="o">=</span> <span class="n">adc14_to_q15</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+
+    <span class="n">taps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">input</span><span class="p">;</span>
+
+    <span class="nb">int</span> <span class="n">q</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">uint16_t</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">NUMTAPS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">+=</span> <span class="p">(</span><span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;&gt;</span> <span class="mi">15</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">NUMTAPS</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+        <span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+
+    <span class="k">return</span> <span class="n">q15_to_dac14</span><span class="p">(</span><span class="n">q</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>To set the optimization level of the compiler, right-click a project and select CCS Build - ARM Compiler - Optimization.</p>
+<p class="last">To inspect the assembly listing produced by the compiler, open the Debug folder in the project and
+look for the listing (.lst) file. You will find that listing files are very verbose; the code shown
+further is an edited version with the majority of comments removed.</p>
+</div>
+<p>We start by examining the output of the compiler without any optimization. Such code is sub-optimal, but also very easy to understand.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span>processSample:
+        PUSH      {LR}
+        SUB       SP, SP, #12
+
+        ; int input = adc14_to_q15(x);
+
+        STRH      A1, [SP, #8]
+        LDRH      A1, [SP, #8]
+        BL        adc14_to_q15
+        STR       A1, [SP, #0]
+
+        ; taps[0] = input;
+
+        LDR       A1, [SP, #0]
+        MOVW      A2, taps+0
+        MOVT      A2, taps+0
+        STR       A1, [A2, #0]
+
+        ; int q = 0;
+
+        MOVS      A1, #0
+        STR       A1, [SP, #4]
+
+        ; for (i = 0; i&lt;NUMTAPS; i++)
+
+        MOVS      A1, #0
+        STRH      A1, [SP, #10]
+        LDRH      A1, [SP, #10]
+        CMP       A1, #32
+        BGE       ||$C$L61||
+||$C$L60||:
+
+        ; q += (taps[i] * C[i]) &gt;&gt; 15;
+
+        LDRH      A1, [SP, #10]
+        LDRH      A3, [SP, #10]
+        MOVW      A2, C+0
+        MOVW      A4, taps+0
+        MOVT      A2, C+0
+        MOVT      A4, taps+0
+        LDR       A1, [A2, +A1, LSL #2]
+        LDR       A3, [A4, +A3, LSL #2]
+        LDR       A2, [SP, #4]
+        MULS      A1, A1, A3
+        ADD       A2, A2, A1, ASR #15
+        STR       A2, [SP, #4]
+        LDRH      A1, [SP, #10]
+        ADDS      A1, A1, #1
+        STRH      A1, [SP, #10]
+        LDRH      A1, [SP, #10]
+        CMP       A1, #32
+        BLT       ||$C$L60||
+||$C$L61||:
+
+        ; for (i = NUMTAPS-1; i&gt;0; i--)
+
+        MOVS      A1, #31
+        STRH      A1, [SP, #10]
+        LDRH      A1, [SP, #10]
+        CMP       A1, #0
+        BLE       ||$C$L63||
+||$C$L62||:
+
+        ; taps[i] = taps[i-1];
+
+        LDRH      A1, [SP, #10]
+        LDRH      A3, [SP, #10]
+        MOVW      A2, taps+0
+        MOVT      A2, taps+0
+        LSLS      A1, A1, #2
+        SUBS      A1, A1, #4
+        LDR       A1, [A2, +A1]
+        MOVW      A2, taps+0
+        MOVT      A2, taps+0
+        STR       A1, [A2, +A3, LSL #2]
+        LDRH      A1, [SP, #10]
+        SUBS      A1, A1, #1
+        STRH      A1, [SP, #10]
+        LDRH      A1, [SP, #10]
+        CMP       A1, #0
+        BGT       ||$C$L62||
+
+||$C$L63||:
+
+        ; return q15_to_dac14(q);
+
+        LDRSH     A1, [SP, #4]
+        BL        q15_to_dac14
+        ADD       SP, SP, #12
+        POP       {PC}
+</pre></div>
+</div>
+<p>The instructions fall apart in three broad categories.</p>
+<ol class="arabic simple">
+<li>Some instructions are related to the implementation of control flow operations in C. Loop counters, for example, imply the creation of a loop counter variable, a loop counter increment operations, and one or more conditional jump instructions.</li>
+<li>Some instructions are related to the storage and retrieval of variables. In particular, variables are either stored in the stack (local variables such as <code class="docutils literal notranslate"><span class="pre">input</span></code> and <code class="docutils literal notranslate"><span class="pre">q</span></code>), or else in main memory (global variables such as <code class="docutils literal notranslate"><span class="pre">taps</span></code> and <code class="docutils literal notranslate"><span class="pre">C</span></code>).</li>
+<li>Some instructions do actual computations, and for a FIR filter these computations consist of multiply and accumulate.</li>
+</ol>
+<p>Let’s examine each of these instruction types in further detail.</p>
+<div class="section" id="control-flow">
+<h3>Control Flow<a class="headerlink" href="#control-flow" title="Permalink to this headline">¶</a></h3>
+<p>The ARM Cortex-M4 is a pipelined processor, meaning that pipeline hazards can occur
+due to branches (control hazard) or memory access (data hazard). The ARM Cortex-M4 has a 3-stage pipeline with branch speculation, which reduces some of the penalty of a control hazard.</p>
+<p>However, when considering a C program, it is useful to evaluate all aspects of the control
+flow implementation of the C program. For example, let us highlight all instructions
+related to the loop counter.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span>        ; for (i = NUMTAPS-1; i&gt;0; i--)
+
+        MOVS      A1, #31
+        STRH      A1, [SP, #10]
+        CMP       A1, #0
+        LDRH      A1, [SP, #10]
+        BLE       ||$C$L63||
+||$C$L62||:
+
+        ...
+
+        LDRH      A1, [SP, #10]
+        SUBS      A1, A1, #1
+        STRH      A1, [SP, #10]
+        LDRH      A1, [SP, #10]
+        CMP       A1, #0
+        BGT       ||$C$L62||
+</pre></div>
+</div>
+<p>There is, of course, overhead because of the absence of optimization. The loop counter
+is moved on and off the stack multiple times. On the other hand, one can see that
+a simple loop iteration without optimization costs 6 instructions per loop iteration,
+where most of the memory-load instructions will cause a data-hazard, and where one
+of the instructions is a branch. Clearly, loop counters in DSP programs are not free,
+and for this reason, short loops with known bounds are unrolled.</p>
+</div>
+<div class="section" id="data-movement">
+<h3>Data Movement<a class="headerlink" href="#data-movement" title="Permalink to this headline">¶</a></h3>
+<p>A second important source of code is the computation of addresses. Each indexed
+element access requires the computation of the address where that element is stored.
+This address is given by the base address plus the size of an element (in bytes)
+times the index.</p>
+<div class="figure align-center" style="width: 300px">
+<img alt="_images/array_address.jpg" src="_images/array_address.jpg" />
+</div>
+<p>Address calculations quickly become an important factor in additional ‘hidden’
+computation costs. Consider for example the assembly code required
+for a simple array-to-array copy. It contains 10 instructions! Again, there are some obvious inefficiencies in this code, but even without those, it’s clear that there will be multiple instructions involved for every memory-to-memory copy.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+
+<span class="n">LDRH</span>      <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#10]             ; A1 = i</span>
+<span class="n">LDRH</span>      <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#10]             ; A3 = i</span>
+<span class="n">MOVW</span>      <span class="n">A2</span><span class="p">,</span> <span class="n">taps</span><span class="o">+</span><span class="mi">0</span>
+<span class="n">MOVT</span>      <span class="n">A2</span><span class="p">,</span> <span class="n">taps</span><span class="o">+</span><span class="mi">0</span>                <span class="p">;</span> <span class="n">A2</span> <span class="o">=</span> <span class="n">base</span><span class="p">(</span><span class="n">taps</span><span class="p">)</span>
+<span class="n">LSLS</span>      <span class="n">A1</span><span class="p">,</span> <span class="n">A1</span><span class="p">,</span> <span class="c1">#2                ; A1 = i * 4</span>
+<span class="n">SUBS</span>      <span class="n">A1</span><span class="p">,</span> <span class="n">A1</span><span class="p">,</span> <span class="c1">#4                ; A1 = (i -1) * 4</span>
+<span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">A2</span><span class="p">,</span> <span class="o">+</span><span class="n">A1</span><span class="p">]</span>             <span class="p">;</span> <span class="n">A1</span> <span class="o">=</span> <span class="n">MEM</span><span class="p">[</span><span class="n">base</span><span class="p">(</span><span class="n">taps</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span><span class="p">]</span>
+<span class="n">MOVW</span>      <span class="n">A2</span><span class="p">,</span> <span class="n">taps</span><span class="o">+</span><span class="mi">0</span>                <span class="p">;</span>
+<span class="n">MOVT</span>      <span class="n">A2</span><span class="p">,</span> <span class="n">taps</span><span class="o">+</span><span class="mi">0</span>                <span class="p">;</span> <span class="n">A2</span> <span class="o">=</span> <span class="n">base</span><span class="p">(</span><span class="n">taps</span><span class="p">)</span>
+<span class="n">STR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">A2</span><span class="p">,</span> <span class="o">+</span><span class="n">A3</span><span class="p">,</span> <span class="n">LSL</span> <span class="c1">#2]     ; MEM[base(taps) + i*4] = A1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calculations">
+<h3>Calculations<a class="headerlink" href="#calculations" title="Permalink to this headline">¶</a></h3>
+<p>Finally, there are the actual computations, which include the multiply-accumulate operations of the FIR. The ARM processor has a relatively powerful execution unit, which can combine shifting and adding in a single operation. Consider for example the expression (taps[i] * C[i]) &gt;&gt; 15.
+Stripping out the overhead of the address computations for <code class="docutils literal notranslate"><span class="pre">taps[i]</span></code> and <code class="docutils literal notranslate"><span class="pre">C[i]</span></code>,
+we are left with the following compact sequence.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">q</span> <span class="o">+=</span> <span class="p">(</span><span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;&gt;</span> <span class="mi">15</span><span class="p">;</span>
+
+<span class="n">LDR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">A2</span><span class="p">,</span> <span class="o">+</span><span class="n">A1</span><span class="p">,</span> <span class="n">LSL</span> <span class="c1">#2]    ; load taps[i]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="o">+</span><span class="n">A3</span><span class="p">,</span> <span class="n">LSL</span> <span class="c1">#2]    ; load C[i]</span>
+<span class="n">LDR</span>       <span class="n">A2</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#4]             ; load q</span>
+<span class="n">MULS</span>      <span class="n">A1</span><span class="p">,</span> <span class="n">A1</span><span class="p">,</span> <span class="n">A3</span>               <span class="p">;</span> <span class="n">tapsi</span><span class="p">]</span> <span class="o">*</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">ADD</span>       <span class="n">A2</span><span class="p">,</span> <span class="n">A2</span><span class="p">,</span> <span class="n">A1</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15      ; q = q + (tapsi] * C[i]) &gt;&gt; 15</span>
+<span class="n">STR</span>       <span class="n">A2</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#4]             ; store q</span>
+</pre></div>
+</div>
+<p>In summary, the bulk of the instructions performed by the program are not directly related to the FIR multiply-accumulate operations. Instead, the bulk of instructions are related to various management tasks in C: supporting control flow operations, and supporting data structures in memory, for example. It is impossible to do good DSP program optimization while ignoring this aspect.</p>
+</div>
+</div>
+<div class="section" id="optimizing-for-size">
+<h2>Optimizing for Size<a class="headerlink" href="#optimizing-for-size" title="Permalink to this headline">¶</a></h2>
+<p>When you write C code, the most important source of optimization is the C compiler. For simple programs (including the FIR design that we are currently investigating), the C compiler is very effective at analyzing the properties of the code and transforming it for minimal footprint or maximal performance.</p>
+<p>When optimizing for minimal footprint, we value code size over processor clock cycles. In an embedded processor, optimizing for size is important to minimize storage needs.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/optimizer-settings.jpg" src="_images/optimizer-settings.jpg" />
+</div>
+<p>Let’s consider the impact of compiler optimization, set of Global Optimizations while minimizing code size.
+The FIR program considered earlier now shrinks to the following set of instructions.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span>processSample:
+        PUSH      {V1, V2, V4, LR}
+        BL        adc14_to_q15
+
+        LDR       A2, $C$CON1           ; load base address taps
+        LDR       V1, $C$CON2           ; load base address C
+
+        MOVS      V4, #32               ; loop counter initalization
+        MOVS      A3, #0                ; accumulator initialization
+        MOV       V2, A2
+        STR       A1, [A2, #0]          ; taps[0] = input
+||$C$L1||:
+        LDR       A4, [V2], #4          ; A4 = *taps++
+        LDR       A1, [V1], #4          ; A1 = *C++
+        SUBS      V4, V4, #1            ; decrement loop counter
+        MUL       A1, A1, A4            ; A1 = taps[i]*C[i]
+        ADD       A3, A3, A1, ASR #15   ; A3 += (A1 &gt;&gt; 15)
+        BNE       ||$C$L1||
+
+        ADDS      A2, A2, #124          ; A2 = base address taps + (4*31)
+        MOVS      V4, #31               ; loop counter initialization
+||$C$L2||:
+        LDR       A1, [A2, #-4]         ; A1 = *taps - 1
+        SUBS      V4, V4, #1            ; decrement loop counter
+        STR       A1, [A2], #-4         ; *taps-- = A1
+        BNE       ||$C$L2||
+
+        SXTH      A1, A3                ; sign-extend A3
+        BL        q15_to_dac14
+        POP       {V1, V2, V4, PC}
+</pre></div>
+</div>
+<p>This code is worth discussing further, as it testifies the capabilities of compiler optimization.</p>
+<ul>
+<li><p class="first">The amount of data movement is drastically reduced. In the non-optimized version,
+every local variable is stored on the stack. For every access, the local variable is read
+into a processor register. When the variable is modified, it is written back onto the stack.</p>
+</li>
+<li><p class="first">The code has been converted to use pointer arithmetic rather than using address expressions.
+Consider the a loop with <code class="docutils literal notranslate"><span class="pre">C[i]</span></code> and <code class="docutils literal notranslate"><span class="pre">taps[i]</span></code>:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">NUMTAPS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">+=</span> <span class="p">(</span><span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;&gt;</span> <span class="mi">15</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>After compiler optimization, two pointers are introduced as follows:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ptr1</span> <span class="o">=</span> <span class="n">taps</span><span class="p">;</span>
+<span class="n">ptr2</span> <span class="o">=</span> <span class="n">C</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">NUMTAPS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">+=</span> <span class="p">(</span><span class="o">*</span><span class="n">ptr1</span><span class="o">++</span> <span class="o">*</span> <span class="o">*</span><span class="n">ptr2</span><span class="o">++</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">15</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Similarly, the delay line shifting is converted from address arithmetic to pointers:</p>
+</li>
+<li><p class="first">The loop counts down, instead of up. When decrementing a loop counter to zero, a simple
+test on the zero flag of the processor is sufficient to detect the end of the loop.
+When a loop counter counts up, an additional compare instruction is needed.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="optimizing-for-performance">
+<h2>Optimizing for Performance<a class="headerlink" href="#optimizing-for-performance" title="Permalink to this headline">¶</a></h2>
+<p>The compiler can also optimize for performance. In that case the generated code is dramatically different from the optimization for size.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/optimizer-settings-performance.jpg" src="_images/optimizer-settings-performance.jpg" />
+</div>
+<p>In this case, the compiler completely unrolls the loop, removing every control operation, including loop counter management and branch instructions.
+The resulting code contains only memory-load and -store, as well as arithmetic.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PUSH</span>      <span class="p">{</span><span class="n">V1</span><span class="p">,</span> <span class="n">V2</span><span class="p">,</span> <span class="n">V3</span><span class="p">,</span> <span class="n">V4</span><span class="p">,</span> <span class="n">V5</span><span class="p">,</span> <span class="n">V6</span><span class="p">,</span> <span class="n">V7</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">LR</span><span class="p">}</span>
+<span class="n">SUB</span>       <span class="n">SP</span><span class="p">,</span> <span class="n">SP</span><span class="p">,</span> <span class="c1">#60</span>
+<span class="n">BL</span>        <span class="n">adc14_to_q15</span>
+<span class="n">MOVW</span>      <span class="n">V1</span><span class="p">,</span> <span class="n">C</span><span class="o">+</span><span class="mi">0</span>
+<span class="n">MOVT</span>      <span class="n">V1</span><span class="p">,</span> <span class="n">C</span><span class="o">+</span><span class="mi">0</span>
+<span class="n">MOVW</span>      <span class="n">A4</span><span class="p">,</span> <span class="n">taps</span><span class="o">+</span><span class="mi">0</span>
+<span class="n">MOVT</span>      <span class="n">A4</span><span class="p">,</span> <span class="n">taps</span><span class="o">+</span><span class="mi">0</span>
+<span class="n">LDR</span>       <span class="n">A2</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#124]</span>
+<span class="n">LDR</span>       <span class="n">V2</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#88]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#124]</span>
+<span class="n">MULS</span>      <span class="n">A2</span><span class="p">,</span> <span class="n">A2</span><span class="p">,</span> <span class="n">A3</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#88]</span>
+<span class="n">MUL</span>       <span class="n">V3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V2</span>
+<span class="n">LDR</span>       <span class="n">V2</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#92]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#92]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#84]</span>
+<span class="n">LDR</span>       <span class="n">V4</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#84]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#88]</span>
+<span class="n">MULS</span>      <span class="n">V4</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V4</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#80]</span>
+<span class="n">LDR</span>       <span class="n">V9</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#80]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#84]</span>
+<span class="n">MUL</span>       <span class="n">V9</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V9</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#76]</span>
+<span class="n">LDR</span>       <span class="n">LR</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#76]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#80]</span>
+<span class="n">MUL</span>       <span class="n">LR</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">LR</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#72]</span>
+<span class="n">LDR</span>       <span class="n">V5</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#72]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#76]</span>
+<span class="n">MUL</span>       <span class="n">V5</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V5</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#68]</span>
+<span class="n">LDR</span>       <span class="n">V6</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#68]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#72]</span>
+<span class="n">MUL</span>       <span class="n">V6</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V6</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#64]</span>
+<span class="n">LDR</span>       <span class="n">V7</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#64]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#68]</span>
+<span class="n">MUL</span>       <span class="n">V7</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V7</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#60]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#60]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#64]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#52]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#56]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#56]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#60]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#48]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#52]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#52]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#56]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#44]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#48]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#48]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#52]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#40]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#44]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#44]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#48]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#36]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#40]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#40]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#44]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#32]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#36]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#36]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#40]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#28]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#32]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#32]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#36]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#24]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#28]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#28]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#32]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#20]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#24]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#24]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#28]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#16]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#20]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#20]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#24]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#12]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#16]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#16]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#20]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#8]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#12]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#12]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#16]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#4]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#8]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#8]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#12]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">STR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#0]</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#4]</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#4]</span>
+<span class="n">STR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#8]</span>
+<span class="n">MUL</span>       <span class="n">V8</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span>
+<span class="n">LDR</span>       <span class="n">A3</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#0]</span>
+<span class="n">MULS</span>      <span class="n">A3</span><span class="p">,</span> <span class="n">A1</span><span class="p">,</span> <span class="n">A3</span>
+<span class="n">ASRS</span>      <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="c1">#15</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#0]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#4]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#8]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#12]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#16]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#20]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#24]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#28]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#32]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#36]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#40]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#44]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#48]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V8</span><span class="p">,</span> <span class="p">[</span><span class="n">SP</span><span class="p">,</span> <span class="c1">#52]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V7</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V6</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V7</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#116]</span>
+<span class="n">LDR</span>       <span class="n">V6</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#112]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V5</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">LR</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V9</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V4</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V3</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V5</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#108]</span>
+<span class="n">LDR</span>       <span class="n">LR</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#104]</span>
+<span class="n">LDR</span>       <span class="n">V9</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#100]</span>
+<span class="n">LDR</span>       <span class="n">V4</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#96]</span>
+<span class="n">LDR</span>       <span class="n">V3</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#92]</span>
+<span class="n">MULS</span>      <span class="n">V3</span><span class="p">,</span> <span class="n">V2</span><span class="p">,</span> <span class="n">V3</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V3</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#96]</span>
+<span class="n">STR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#0]</span>
+<span class="n">MULS</span>      <span class="n">V4</span><span class="p">,</span> <span class="n">V3</span><span class="p">,</span> <span class="n">V4</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V4</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V4</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#100]</span>
+<span class="n">STR</span>       <span class="n">A1</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#4]</span>
+<span class="n">MUL</span>       <span class="n">V9</span><span class="p">,</span> <span class="n">V4</span><span class="p">,</span> <span class="n">V9</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V9</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V9</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#104]</span>
+<span class="n">STR</span>       <span class="n">V2</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#96]</span>
+<span class="n">MUL</span>       <span class="n">LR</span><span class="p">,</span> <span class="n">V9</span><span class="p">,</span> <span class="n">LR</span>
+<span class="n">STR</span>       <span class="n">V3</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#100]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">LR</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">LR</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#108]</span>
+<span class="n">STR</span>       <span class="n">V4</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#104]</span>
+<span class="n">MUL</span>       <span class="n">V5</span><span class="p">,</span> <span class="n">LR</span><span class="p">,</span> <span class="n">V5</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V5</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V5</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#112]</span>
+<span class="n">STR</span>       <span class="n">V9</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#108]</span>
+<span class="n">MUL</span>       <span class="n">V6</span><span class="p">,</span> <span class="n">V5</span><span class="p">,</span> <span class="n">V6</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V6</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">LDR</span>       <span class="n">V6</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#116]</span>
+<span class="n">STR</span>       <span class="n">LR</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#112]</span>
+<span class="n">MUL</span>       <span class="n">V7</span><span class="p">,</span> <span class="n">V6</span><span class="p">,</span> <span class="n">V7</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V7</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">STR</span>       <span class="n">V5</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#116]</span>
+<span class="n">LDR</span>       <span class="n">V7</span><span class="p">,</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="c1">#120]</span>
+<span class="n">LDR</span>       <span class="n">V1</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#120]</span>
+<span class="n">STR</span>       <span class="n">V1</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#124]</span>
+<span class="n">MUL</span>       <span class="n">V7</span><span class="p">,</span> <span class="n">V1</span><span class="p">,</span> <span class="n">V7</span>
+<span class="n">STR</span>       <span class="n">V6</span><span class="p">,</span> <span class="p">[</span><span class="n">A4</span><span class="p">,</span> <span class="c1">#120]</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">V7</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">ADD</span>       <span class="n">A3</span><span class="p">,</span> <span class="n">A3</span><span class="p">,</span> <span class="n">A2</span><span class="p">,</span> <span class="n">ASR</span> <span class="c1">#15</span>
+<span class="n">SXTH</span>      <span class="n">A1</span><span class="p">,</span> <span class="n">A3</span>
+<span class="n">BL</span>        <span class="n">q15_to_dac14</span>
+<span class="n">ADD</span>       <span class="n">SP</span><span class="p">,</span> <span class="n">SP</span><span class="p">,</span> <span class="c1">#60</span>
+<span class="n">POP</span>       <span class="p">{</span><span class="n">V1</span><span class="p">,</span> <span class="n">V2</span><span class="p">,</span> <span class="n">V3</span><span class="p">,</span> <span class="n">V4</span><span class="p">,</span> <span class="n">V5</span><span class="p">,</span> <span class="n">V6</span><span class="p">,</span> <span class="n">V7</span><span class="p">,</span> <span class="n">V8</span><span class="p">,</span> <span class="n">PC</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="comparing-non-optimized-and-optimized-code">
+<h2>Comparing Non-optimized and Optimized Code<a class="headerlink" href="#comparing-non-optimized-and-optimized-code" title="Permalink to this headline">¶</a></h2>
+<p>Let’s compare the three epamples we discussed so far: the unoptimized code, versus the compiler-optimized code (optimized for size), versus performance-optimized code (optimized for performance). For each implementation, we collected the following metrics.</p>
+<ol class="arabic simple">
+<li>The number of instructions in the static program image. This metric represents the cost of storing instructions.</li>
+<li>The number of instructions executed to deal with data movement, including address expressions, and load/store operations.</li>
+<li>The number of instructions executed to deal with control, including loop counting and branches.</li>
+<li>The number of instructions executed for actual FIR calculations, such as multiply and accumulate.</li>
+<li>The cycle count of the <code class="docutils literal notranslate"><span class="pre">processSample</span></code> function.</li>
+</ol>
+<table border="1" class="docutils" id="asmtable">
+<colgroup>
+<col width="27%" />
+<col width="23%" />
+<col width="23%" />
+<col width="27%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">ProcessSample</th>
+<th class="head">Non-optimized</th>
+<th class="head">Optimized (size)</th>
+<th class="head">Optimized (Performance)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Instructions in Binary</td>
+<td>60</td>
+<td>23</td>
+<td>198</td>
+</tr>
+<tr class="row-odd"><td>Exec Ins Data Movement</td>
+<td>682</td>
+<td>134</td>
+<td>123</td>
+</tr>
+<tr class="row-even"><td>Exec Ins Control</td>
+<td>336</td>
+<td>132</td>
+<td>8</td>
+</tr>
+<tr class="row-odd"><td>Exec Ins Calculations</td>
+<td>64</td>
+<td>64</td>
+<td>64</td>
+</tr>
+<tr class="row-even"><td>Cycle Count</td>
+<td>1698</td>
+<td>546</td>
+<td>277</td>
+</tr>
+</tbody>
+</table>
+<p>We make the following observations. First, performance can be dramatically improved through compiler optimization.
+We observe a factor 6.12x using automatic techniques (this could be even further improved with manual
+optimizations such as the circular-buffer optimization we discussed earlier).</p>
+<p>Second, the number
+of instructions devoted to calculations remains constant. This is not a surprise, since we have to
+compute all taps of the filter. The only method to reduce the calculations further would be to
+exploit the knowledge of the filter coefficient values, for example skipping the multiplications
+with zero, or using add-shift expansion on constant multiplications.</p>
+<div class="section" id="a-caveat">
+<h3>A Caveat<a class="headerlink" href="#a-caveat" title="Permalink to this headline">¶</a></h3>
+<p>Despite the impressive performance gains achieved through compiler optimization, it is crucial
+that performance gains are validated. You have to check your assumptions and evaluate every
+optimization you make by <em>measuring</em> the resulting performance. The following example serves
+to illustrate this point. Consider the circular-buffer design we discussed earlier. A circular
+buffer design eliminates shifting of the taps at the expense of slightly more complex address
+expressions. By keeping the number of taps (NUMTAPS) at a power of 2, the operation <code class="docutils literal notranslate"><span class="pre">%</span> <span class="pre">NUMTAPS</span></code>
+can be implemented efficiently by a bitwise and with <code class="docutils literal notranslate"><span class="pre">&amp;</span> <span class="pre">(NUMTAPS-1)</span></code>.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">static</span> <span class="n">uint16_t</span> <span class="n">head</span><span class="p">;</span>
+
+<span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">int</span> <span class="nb">input</span> <span class="o">=</span> <span class="n">adc14_to_q15</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+
+    <span class="n">taps</span><span class="p">[(</span><span class="n">NUMTAPS</span> <span class="o">-</span> <span class="n">head</span><span class="p">)</span> <span class="o">%</span> <span class="n">NUMTAPS</span><span class="p">]</span> <span class="o">=</span> <span class="nb">input</span><span class="p">;</span>
+
+    <span class="nb">int</span> <span class="n">q</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">uint16_t</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">NUMTAPS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">+=</span> <span class="p">(</span><span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">C</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="n">head</span><span class="p">)</span> <span class="o">%</span> <span class="n">NUMTAPS</span><span class="p">])</span> <span class="o">&gt;&gt;</span> <span class="mi">15</span><span class="p">;</span>
+
+    <span class="n">head</span> <span class="o">=</span> <span class="p">(</span><span class="n">head</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">NUMTAPS</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">q15_to_dac14</span><span class="p">(</span><span class="n">q</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>However, what about aggressive compiler optimization for performance? The result is not clear-cut.
+When you unroll a loop, then there is no simple optimization that will lead to the address
+of <code class="docutils literal notranslate"><span class="pre">C[(i</span> <span class="pre">+</span> <span class="pre">head)</span> <span class="pre">%</span> <span class="pre">NUMTAPS])</span></code> without doing an addition with <code class="docutils literal notranslate"><span class="pre">head</span></code> followed by a bitwise
+AND operation. Hence, even after unrolling, the amount of address calculations remains
+relatively high.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="23%" />
+<col width="23%" />
+<col width="27%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">ProcessSample</th>
+<th class="head">Non-optimized</th>
+<th class="head">Optimized (size)</th>
+<th class="head">Optimized (Performance)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Cycle Count</td>
+<td>1230</td>
+<td>410</td>
+<td>413</td>
+</tr>
+</tbody>
+</table>
+<p>Measurement of the cycle counts for the circular-buffer case confirms that
+aggressive optimization actually deteriorates performance. Without detailed study of the
+assembly code, it’s hard to tell why the size-optimized case is faster than the performance-optimized
+case. At least, the example demonstrates that <em>in performance optimization, you always have to verify your assumptions</em>.</p>
+</div>
+</div>
+<div class="section" id="dsp-libraries-arm-cmsis">
+<h2>DSP Libraries: ARM CMSIS<a class="headerlink" href="#dsp-libraries-arm-cmsis" title="Permalink to this headline">¶</a></h2>
+<p>Despite the need for optimize DSP code to achieve real-time performance, there is also a relentless pressure
+to develop code faster. A solution for this conundrum is to make use of a library with optimized
+primitives. The <a class="reference external" href="https://www.keil.com/pack/doc/CMSIS/DSP/html/index.html">ARM CMSIS Library</a> contains
+a suite of common signal processing functions for use on Cortex-M and Cortex-A processor based devices.
+The advantage of such a library is threefold. First, a library improves the speed of software development.
+Second, the library functions can be highly optimized for the underlying architecture.
+Third, the library’s application programmer’s interface (API) offers a portable design that enables
+the same application code to execute across multiple platforms.</p>
+<p>We’ll look at the design of a FIR filter using ARM CMSIS. In contrast to our previous design, this filter
+reads in a block of samples, rather than a single sample at a time. The reason for doing so is to
+improve the parallellism of the specification. In a typical 64-bit architecture, 16-bit samples can
+be represented in parallel as a vector. Furthermore, advanced members of the ARM family have vector
+instructions, which are able to perform four concurrent 16-bit operations in a 64-bit datapath.
+While it’s beyond the scope of this lecture to dive into the internal details of <code class="docutils literal notranslate"><span class="pre">arm_fir_q15</span></code>,
+you can do so on your own as the source code is available as part of the SimpleLink MSP432
+package you are using on the course (See <a class="reference external" href="file:C:/ti/simplelink_msp432p4_sdk_3_40_01_02/source/third_party/CMSIS/DSP_Lib/Source/FilteringFunctions/arm_fir_q15.c">arm_fir_q15.c</a>).</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">arm_fir_q15</span> <span class="p">(</span> <span class="n">const</span> <span class="n">arm_fir_instance_q15</span> <span class="o">*</span>  <span class="n">S</span><span class="p">,</span>
+                   <span class="n">const</span> <span class="n">q15_t</span> <span class="o">*</span>   <span class="n">pSrc</span><span class="p">,</span>
+                   <span class="n">q15_t</span> <span class="o">*</span>   <span class="n">pDst</span><span class="p">,</span>
+                   <span class="n">uint32_t</span>  <span class="n">blockSize</span>
+                 <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Parameters</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>[in]  <code class="docutils literal notranslate"><span class="pre">S</span></code> points to an instance of the Q15 FIR filter structure</li>
+<li>[in]  <code class="docutils literal notranslate"><span class="pre">pSrc</span></code>  points to the block of input data</li>
+<li>[out] <code class="docutils literal notranslate"><span class="pre">pDst</span></code>  points to the block of output data</li>
+<li>[in]  <code class="docutils literal notranslate"><span class="pre">blockSize</span></code> number of samples to process</li>
+</ul>
+</div></blockquote>
+<p><strong>Returns</strong></p>
+<p>none</p>
+<p><strong>Scaling and Overflow Behavior</strong></p>
+<p class="last">The function is implemented using a 64-bit internal accumulator. Both coefficients and state variables are represented in 1.15 format and multiplications yield a 2.30 result. The 2.30 intermediate results are accumulated in a 64-bit accumulator in 34.30 format. There is no risk of internal overflow with this approach and the full precision of intermediate multiplications is preserved. After all additions have been performed, the accumulator is truncated to 34.15 format by discarding low 15 bits. Lastly, the accumulator is saturated to yield a result in 1.15 format.</p>
+</div>
+<p>To use of a block-driven format, we will switch from an interrupt-driven design to a DMA-controlled design; we will discuss the details of the DMA-controlled design in our next lecture.</p>
+<p>The following application illustrates the use of <code class="docutils literal notranslate"><span class="pre">arm_fir_q15</span></code>.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define NUMTAPS 32</span>
+<span class="n">int16_t</span> <span class="n">taps</span><span class="p">[</span><span class="n">NUMTAPS</span> <span class="o">+</span> <span class="n">BUFLEN_SZ</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+<span class="nb">int</span> <span class="n">coefficients</span><span class="p">[</span><span class="n">NUMTAPS</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">15</span><span class="p">))</span> <span class="p">};</span>
+<span class="n">arm_fir_instance_q15</span> <span class="n">F</span><span class="p">;</span>
+
+<span class="n">initfir</span><span class="p">(</span><span class="n">arm_fir_instance_q15</span> <span class="o">*</span><span class="n">F</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">F</span><span class="o">-&gt;</span><span class="n">numTaps</span>  <span class="o">=</span> <span class="n">NUMTAPS</span><span class="p">;</span>
+    <span class="n">F</span><span class="o">-&gt;</span><span class="n">pState</span>   <span class="o">=</span> <span class="n">taps</span><span class="p">;</span>
+    <span class="n">F</span><span class="o">-&gt;</span><span class="n">pCoeffs</span>  <span class="o">=</span> <span class="n">coefficients</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">processBuffer</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">[</span><span class="n">BUFLEN_SZ</span><span class="p">],</span> <span class="n">uint16_t</span> <span class="n">y</span><span class="p">[</span><span class="n">BUFLEN_SZ</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">adc14_to_q15_vec</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">BUFLEN_SZ</span><span class="p">);</span>
+    <span class="n">arm_fir_q15</span><span class="p">(</span><span class="o">&amp;</span><span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">BUFLEN_SZ</span><span class="p">);</span>
+    <span class="n">q15_to_dac14_vec</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">BUFLEN_SZ</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">WDT_A_hold</span><span class="p">(</span><span class="n">WDT_A_BASE</span><span class="p">);</span>
+
+    <span class="n">initfir</span><span class="p">(</span><span class="o">&amp;</span><span class="n">F</span><span class="p">);</span>
+
+    <span class="n">msp432_boostxl_init_dma</span><span class="p">(</span><span class="n">FS_32000_HZ</span><span class="p">,</span> <span class="n">BOOSTXL_J1_2_IN</span><span class="p">,</span> <span class="n">BUFLEN</span><span class="p">,</span> <span class="n">processBuffer</span><span class="p">);</span>
+
+    <span class="n">uint32_t</span> <span class="n">c</span> <span class="o">=</span> <span class="n">measurePerfBuffer</span><span class="p">(</span><span class="n">processBuffer</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Cycles: </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+
+    <span class="n">msp432_boostxl_run</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>The size of the buffer with filter state is now the number of taps plus the block
+length minus 1 (<code class="docutils literal notranslate"><span class="pre">NUMTAPS</span> <span class="pre">+</span> <span class="pre">BUFLEN_SZ</span> <span class="pre">-</span> <span class="pre">1</span></code>). The reason for this larger buffer, is
+that the filter state will be updated with <code class="docutils literal notranslate"><span class="pre">BUFLEN_SZ</span></code> samples at a time.</li>
+<li>The filter state is stored in a record of type <code class="docutils literal notranslate"><span class="pre">arm_fir_instance_q15</span></code>, which also
+holds the coefficients and their count. A separate initialization function <code class="docutils literal notranslate"><span class="pre">initfir</span></code>
+is added to initialize the <code class="docutils literal notranslate"><span class="pre">arm_fir_instance_q15</span></code>. Detailed documentation
+on <a class="reference external" href="https://www.keil.com/pack/doc/CMSIS/DSP/html/structarm__fir__instance__q15.html">arm_fir_instance_q15</a> can be found online.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">processSample</span></code> is now replaced with a <code class="docutils literal notranslate"><span class="pre">processBuffer</span></code> function, which filters a
+block of samples. Note that <a class="reference internal" href="techdoc.html#msp432-boostxl-lib"><span class="std std-ref">MSP432_BOOSTXL_LIB</span></a> has functions to convert
+a vector of samples from the ADC/to the DAC to internal q15, f32 or q31 datatype.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">main</span></code> function creates a DMA block-based setup rather than an interrupt-driven
+sample-based setup. The key parameter is <code class="docutils literal notranslate"><span class="pre">BUFLEN</span></code>, which describes the blocksize
+used by the DMA. We will discuss the detailed internal operation of the DMA mechanism in our
+next lecture. For now, the key point is that the DMA mechanism will collect a block
+of <code class="docutils literal notranslate"><span class="pre">BUFLEN</span></code> samples (each one sample period apart) from the ADC, and then calls
+<code class="docutils literal notranslate"><span class="pre">processBuffer</span></code>. After this function returns, the resulting <code class="docutils literal notranslate"><span class="pre">BUFLEN</span></code> output samples
+are submitted to the DAC, one at a time and spaced one sample period apart.</li>
+</ul>
+<p>Finally, let’s look at the resulting performance of the design when using the DMA
+mechanism. Not surprisingly, because of the use of a DSP library, the impact of the
+compiler optimization is negligible. The use of a DSP library is about 2.2x faster than
+non-optimized code, but on the other hand, our manual optimizations outperform the DSP
+library filter by a factor of 2.7x. Note that this comparison is for the specific case
+of a Cortex-M4; and using a more powerful ARM (Cortex-A) may yield a different comparison.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="23%" />
+<col width="23%" />
+<col width="27%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">processBuffer</th>
+<th class="head">Non-optimized</th>
+<th class="head">Optimized (size)</th>
+<th class="head">Optimized (Performance)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Cycle Count (Buffer)</td>
+<td>6088</td>
+<td>6081</td>
+<td>6081</td>
+</tr>
+<tr class="row-odd"><td>Cycle Count (Sample)</td>
+<td>762</td>
+<td>760</td>
+<td>760</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h2>
+<p>We considered the problem pf performance optimization, by looking in detail at the code produced
+by a C compiler. We identified three factors that determine the execution time of DSP algorithm:
+the computations such as multiply and accumulate, the control operations such as loops, and
+the data load and store operations with address calculations.</p>
+<p>The overhead of control operations and data load and store operations is significant, but it can
+be greatly reduced with compiler optimization. The compiler optimizer makes a trade-off between
+optimizing for storage cost (code size), and optimizing for performance. Each of these have a different impact on the balance of computation/control/data load-store operations.</p>
+<p>Finally, we briefly discussed the ARM-CMSIS library, a library with pre-made DSP functions available for ARM.</p>
+<p>The code examples for this lecture are <a class="reference external" href="https://github.com/wpi-ece4703-b20/dsp_l7">available online</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lecture8.html" class="btn btn-neutral float-right" title="L8: DMA and the ARM CMSIS Library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lecture6.html" class="btn btn-neutral" title="L6: Fixed Point Arithmetic in DSP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

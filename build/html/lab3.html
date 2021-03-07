@@ -1,0 +1,591 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Lab 3 &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Lab 4" href="lab4.html" />
+    <link rel="prev" title="Lab 2" href="lab2.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lectures.html">Lectures</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="labs.html">Labs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="lab1.html">Lab 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab2.html">Lab 2</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Lab 3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#infinite-impulse-response-filter">Infinite Impulse Response Filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#infinite-impulse-response-filter-specifications">Infinite Impulse Response Filter Specifications</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#filter-i">Filter I:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filter-ii">Filter II:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#infinite-impulse-response-filter-implementation">Infinite Impulse Response Filter Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#infinite-impulse-response-filter-evaluation">Infinite Impulse Response Filter Evaluation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#compute-the-spectrum-using-matlab">Compute the spectrum using Matlab</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#measure-the-filter-performance-using-a-scope">Measure the filter performance using a scope</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#wrapping-up">Wrapping Up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grading-rubric">Grading Rubric</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lab4.html">Lab 4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5.html">Lab 5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reportguidelines.html">Report Guidelines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="labs.html">Labs</a> &raquo;</li>
+        
+      <li>Lab 3</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lab3.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lab-3">
+<h1>Lab 3<a class="headerlink" href="#lab-3" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this assignment is as follows.</p>
+<ul class="simple">
+<li>to familiarize you with the filter design tools in Matlab,</li>
+<li>to compare the complexity of various IIR filters and their dependency on filter specifications,</li>
+<li>to familiarize you with the implementation of infinite impulse response (IIR) filtering using MSP-EXP432P401R,</li>
+<li>to compare the performance of various IIR implementation styles.</li>
+</ul>
+<div class="section" id="infinite-impulse-response-filter">
+<h2>Infinite Impulse Response Filter<a class="headerlink" href="#infinite-impulse-response-filter" title="Permalink to this headline">¶</a></h2>
+<p>An IIR filter is a digital filter described by the following input/output relationship</p>
+<div class="math">
+<p><img src="_images/math/c75645ff090ea4b0024fb4aed2a2ffe88afd75b7.png" alt="y[n] = \sum_{k=0}^{M} b[k] x[n-k] - \sum_{k=1}^{N} a[k] y[n-k]"/></p>
+</div><p>where <img class="math" src="_images/math/b921f46e4636934accc21318b3f8ea402237c225.png" alt="y[n]"/> is the current filter output, <img class="math" src="_images/math/6c1beeec988cc83b2568f70747a01d1d67994a35.png" alt="b[0],...,b[M]"/> are
+the feedforward filter coefficients, <img class="math" src="_images/math/b18e8441ff81cec961eb2c5c6e32f42b73299fe7.png" alt="1,a[1],...,a[N]"/> are the feedback
+filter coefficients, and <img class="math" src="_images/math/1cf1fba9f0fa5acbe196c3baa0a5f8f9288981ca.png" alt="x[n],...,x[n-M]"/> are the current input and
+<img class="math" src="_images/math/450a8e2c2320d77181e0d4fc68c947e9a5de8ecb.png" alt="M"/> previous inputs.</p>
+<p>An IIR filter has a feedforward order <img class="math" src="_images/math/450a8e2c2320d77181e0d4fc68c947e9a5de8ecb.png" alt="M"/> and a feedback order <img class="math" src="_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/>.
+In practice,  <img class="math" src="_images/math/450a8e2c2320d77181e0d4fc68c947e9a5de8ecb.png" alt="M"/> and  <img class="math" src="_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> are often equal so that you can simply refer
+to the order of the IIR filter as meaning both feedforward and feedback order.</p>
+<p>To compute an output of this filter, one needs to know the previous <img class="math" src="_images/math/450a8e2c2320d77181e0d4fc68c947e9a5de8ecb.png" alt="M"/>
+inputs as well as the previous <img class="math" src="_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> outputs. The objective of this assignment
+will be to design an IIR filter and develop an implementation in C. Next, you will
+evaluate the frequency response of your design, and demonstrate that it meets the
+filter specifications. Finally, you will compare the computational cost of various
+IIR realizations.</p>
+<p>IIR filters they tend to require
+lower orders for a given filter characteristic, when compared to FIR filters.
+However, IIR filters have
+less desirable (non-linear) phase response, and their internal feedback can lead to instability.
+We are primarily concerned with the correct implementation of the IIR design using
+single-precision floating-point precision.
+In a later assignment, we will study the optimized implementation of the IIR design –
+and we will investigate the impact of non-linear phase and instability.</p>
+</div>
+<div class="section" id="infinite-impulse-response-filter-specifications">
+<h2>Infinite Impulse Response Filter Specifications<a class="headerlink" href="#infinite-impulse-response-filter-specifications" title="Permalink to this headline">¶</a></h2>
+<p>In this assignment you have to design two IIR filters.</p>
+<div class="section" id="filter-i">
+<h3>Filter I:<a class="headerlink" href="#filter-i" title="Permalink to this headline">¶</a></h3>
+<p>The first IIR filter has the same specification
+as the filter specification for Lab 2. Create a <strong>Butterworth</strong> bandpass
+filter with a passband of 2500Hz to 3500Hz, a lower stop band for frequencies
+below 1500Hz, an upper stopband for frequencies above 4500Hz, a maximum passband
+ripple of 1dB, and a stopband minimum rejection of 40dB for both stop bands.</p>
+<p>You can pick a sample rate that you like, as long as the filter meets the specifications.
+Use Matlab’s <code class="docutils literal notranslate"><span class="pre">filterDesigner</span></code> tool and determine the filter order as well as the coefficients (single precision floating point) for the Butterworth filter.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Question 1: Create a Butterworth bandpass filter with a passband of 2500Hz to 3500Hz, a lower stop band for frequencies below 1500Hz, an upper stopband for frequencies above 4500Hz, a maximum passband ripple of 1dB, and a stopband minimum rejection of 40dB for both stop bands. Save the filter specification so that you can easily restore it later. Record the magnitude response as well as the
+phase response. Make a note of the filter order, which you will need to solve the next part
+of the section.</p>
+</div>
+<p>The Butterworth filter is a maximally flat filter, which means that it has minimal ripple in the passband. The downside of the Butterworth filter is that its transition bands are relatively wide. Other IIR filter structures, such as Chebyshev Type-I and Type-II filters, and Elliptic filters, allow for a steeper transition band at the expense of passband ripple. Since our specification allows for a 1dB passband ripple, we can therefore reduce the filter order by switching from Butterworth to one of the
+other IIR types (such as Chebyshev Type-I, Type-II or Elliptic Filter).  Conversely, a Chebyshev Type-I, Type-II or Elliptic IIR filter will be able to have steeper transition band edges for the same filter order constant as a Butterworth filter.</p>
+</div>
+<div class="section" id="filter-ii">
+<h3>Filter II:<a class="headerlink" href="#filter-ii" title="Permalink to this headline">¶</a></h3>
+<p>The second IIR filter is derived from the first filter. The second IIR filter has the same filter
+order as the first filter, but you have to make the transition bands as narrow as possible. You will
+do this by substituting the Butterworth design for another IIR type (such as Chebyshev Type-I, Type-II or Elliptic Filter)
+while simultaneously narrowing the transition bands. The design completes when you
+have a filter with the same filter order as Filter I, but with the steepest possible transition bands.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Question 2: What is the filter type and the transition bandwidth of the filter you have created?
+Record its magnitude response as well as the phase response.</p>
+</div>
+</div>
+</div>
+<div class="section" id="infinite-impulse-response-filter-implementation">
+<h2>Infinite Impulse Response Filter Implementation<a class="headerlink" href="#infinite-impulse-response-filter-implementation" title="Permalink to this headline">¶</a></h2>
+<p>The second part of the lab is to implement filter I and filter II using a C program.</p>
+<ul class="simple">
+<li>Filter I must be implemented using single-precision floating point coefficients as a
+<strong>direct-form I</strong> structure using second-order-stages (SOS).</li>
+<li>Filter II must be implemented using single-precision floating point coefficients as a
+<strong>transpose direct-form II</strong> structure using second-order-stages (SOS).</li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">filterDesigner</span></code> tool will allow you to generate these coefficients as include files
+in C. To learn about the characteristics of a direct-form I and transpose direct-form II filter,
+refer to lecture 5 or to the textbook Chapter 4.2.</p>
+<p>The format of the include files generated by Matlab deserves a closer look. Here is an example
+of a fourth-order Butterworth filter generated as two second-order-stages (SOS).</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="comment preproc">#define MWSPT_NSEC 5
+</span><span class="ln"> 2 </span><span class="comment preproc"></span><span class="keyword">const</span> <span class="keyword type">int</span> <span class="name">NL</span><span class="punctuation">[</span><span class="name">MWSPT_NSEC</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="literal number integer">1</span><span class="punctuation">,</span><span class="literal number integer">3</span><span class="punctuation">,</span><span class="literal number integer">1</span><span class="punctuation">,</span><span class="literal number integer">3</span><span class="punctuation">,</span><span class="literal number integer">1</span> <span class="punctuation">};</span>
+<span class="ln"> 3 </span><span class="keyword">const</span> <span class="name">real32_T</span> <span class="name">NUM</span><span class="punctuation">[</span><span class="name">MWSPT_NSEC</span><span class="punctuation">][</span><span class="literal number integer">3</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="punctuation">{</span>
+<span class="ln"> 4 </span>  <span class="punctuation">{</span>
+<span class="ln"> 5 </span>     <span class="literal number float">0.4433953762</span><span class="punctuation">,</span>              <span class="literal number integer">0</span><span class="punctuation">,</span>              <span class="literal number integer">0</span>
+<span class="ln"> 6 </span>  <span class="punctuation">},</span>
+<span class="ln"> 7 </span>  <span class="punctuation">{</span>
+<span class="ln"> 8 </span>                <span class="literal number integer">1</span><span class="punctuation">,</span>              <span class="literal number integer">0</span><span class="punctuation">,</span>             <span class="operator">-</span><span class="literal number integer">1</span>
+<span class="ln"> 9 </span>  <span class="punctuation">},</span>
+<span class="ln">10 </span>  <span class="punctuation">{</span>
+<span class="ln">11 </span>     <span class="literal number float">0.4433953762</span><span class="punctuation">,</span>              <span class="literal number integer">0</span><span class="punctuation">,</span>              <span class="literal number integer">0</span>
+<span class="ln">12 </span>  <span class="punctuation">},</span>
+<span class="ln">13 </span>  <span class="punctuation">{</span>
+<span class="ln">14 </span>                <span class="literal number integer">1</span><span class="punctuation">,</span>              <span class="literal number integer">0</span><span class="punctuation">,</span>             <span class="operator">-</span><span class="literal number integer">1</span>
+<span class="ln">15 </span>  <span class="punctuation">},</span>
+<span class="ln">16 </span>  <span class="punctuation">{</span>
+<span class="ln">17 </span>                <span class="literal number integer">1</span><span class="punctuation">,</span>              <span class="literal number integer">0</span><span class="punctuation">,</span>              <span class="literal number integer">0</span>
+<span class="ln">18 </span>  <span class="punctuation">}</span>
+<span class="ln">19 </span><span class="punctuation">};</span>
+<span class="ln">20 </span><span class="keyword">const</span> <span class="keyword type">int</span> <span class="name">DL</span><span class="punctuation">[</span><span class="name">MWSPT_NSEC</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="literal number integer">1</span><span class="punctuation">,</span><span class="literal number integer">3</span><span class="punctuation">,</span><span class="literal number integer">1</span><span class="punctuation">,</span><span class="literal number integer">3</span><span class="punctuation">,</span><span class="literal number integer">1</span> <span class="punctuation">};</span>
+<span class="ln">21 </span><span class="keyword">const</span> <span class="name">real32_T</span> <span class="name">DEN</span><span class="punctuation">[</span><span class="name">MWSPT_NSEC</span><span class="punctuation">][</span><span class="literal number integer">3</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="punctuation">{</span>
+<span class="ln">22 </span>  <span class="punctuation">{</span>
+<span class="ln">23 </span>                <span class="literal number integer">1</span><span class="punctuation">,</span>              <span class="literal number integer">0</span><span class="punctuation">,</span>              <span class="literal number integer">0</span>
+<span class="ln">24 </span>  <span class="punctuation">},</span>
+<span class="ln">25 </span>  <span class="punctuation">{</span>
+<span class="ln">26 </span>                <span class="literal number integer">1</span><span class="punctuation">,</span>   <span class="operator">-</span><span class="literal number float">1.159571767</span><span class="punctuation">,</span>   <span class="literal number float">0.5372180343</span>
+<span class="ln">27 </span>  <span class="punctuation">},</span>
+<span class="ln">28 </span>  <span class="punctuation">{</span>
+<span class="ln">29 </span>                <span class="literal number integer">1</span><span class="punctuation">,</span>              <span class="literal number integer">0</span><span class="punctuation">,</span>              <span class="literal number integer">0</span>
+<span class="ln">30 </span>  <span class="punctuation">},</span>
+<span class="ln">31 </span>  <span class="punctuation">{</span>
+<span class="ln">32 </span>                <span class="literal number integer">1</span><span class="punctuation">,</span>   <span class="literal number float">0.2169253677</span><span class="punctuation">,</span>   <span class="literal number float">0.3766086996</span>
+<span class="ln">33 </span>  <span class="punctuation">},</span>
+<span class="ln">34 </span>  <span class="punctuation">{</span>
+<span class="ln">35 </span>                <span class="literal number integer">1</span><span class="punctuation">,</span>              <span class="literal number integer">0</span><span class="punctuation">,</span>              <span class="literal number integer">0</span>
+<span class="ln">36 </span>  <span class="punctuation">}</span>
+<span class="ln">37 </span><span class="punctuation">};</span>
+</pre>
+<ul class="simple">
+<li>The <code class="docutils literal notranslate"><span class="pre">NUM</span></code> array contains the numerator of the transfer function, and it holds
+the <code class="docutils literal notranslate"><span class="pre">b[k]</span></code> coefficients. The <code class="docutils literal notranslate"><span class="pre">DEN</span></code> array contains the denominator of the
+transfer function, and it holds the <code class="docutils literal notranslate"><span class="pre">a[k]</span></code> coefficients.</li>
+<li>There are five rows in each of <code class="docutils literal notranslate"><span class="pre">NUM</span></code> and <code class="docutils literal notranslate"><span class="pre">DEN</span></code>. Each second-order stage
+uses two rows, while the final row describes a global gain <img class="math" src="_images/math/dee63237674afc3154c2e33b7b68d67f85f2ee0a.png" alt="G"/>.
+The transfer function of the filter can be described as <img class="math" src="_images/math/c8ea4add5b7580c7c7705e0fab01af7bede0e75c.png" alt="H[z] = \frac{GN . ( N1[z] . N2[z] )}{GD . ( D1[z] . D2[z] )}"/>.
+where <img class="math" src="_images/math/d0d7583e2f5cb35ef2498920aa12a93e115c6a35.png" alt="\frac{N1[z]}{D1[z]}"/> is the first second-order stage, <img class="math" src="_images/math/87417c44fe3842ce56df46c21757721fcee72846.png" alt="\frac{N2[z]}{D2[z]}"/> is the second second-order stage, and
+<img class="math" src="_images/math/28e1ea953401a8bc94e749a061b6dc061ed9954a.png" alt="\frac{GN}{GD}"/> is the global gain <img class="math" src="_images/math/dee63237674afc3154c2e33b7b68d67f85f2ee0a.png" alt="G"/>.</li>
+<li>In each row pair that captures a second-order stage, the first row represents
+a gain while the second row represents the filter coefficients. For example, the first
+two rows of <code class="docutils literal notranslate"><span class="pre">NUM</span></code> specify the following transfer function: <img class="math" src="_images/math/549e3a6a5a547693f41f13caf47f4eed03192b84.png" alt="N1[z] = 0.4433953762 . ( 1 + 0.z^{-1} - 1.z^{-2} )"/>.</li>
+</ul>
+<pre class="code c literal-block">
+<span class="ln">1 </span>  <span class="keyword">const</span> <span class="name">real32_T</span> <span class="name">NUM</span><span class="punctuation">[</span><span class="name">MWSPT_NSEC</span><span class="punctuation">][</span><span class="literal number integer">3</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="punctuation">{</span>
+<span class="ln">2 </span>  <span class="punctuation">{</span>
+<span class="ln">3 </span>     <span class="literal number float">0.4433953762</span> <span class="comment multiline">/* N0 */</span><span class="punctuation">,</span>              <span class="literal number integer">0</span><span class="punctuation">,</span>              <span class="literal number integer">0</span>
+<span class="ln">4 </span>  <span class="punctuation">},</span>
+<span class="ln">5 </span>  <span class="punctuation">{</span>
+<span class="ln">6 </span>                <span class="literal number integer">1</span> <span class="comment multiline">/* b0 */</span><span class="punctuation">,</span>              <span class="literal number integer">0</span> <span class="comment multiline">/* b1 */</span><span class="punctuation">,</span>             <span class="operator">-</span><span class="literal number integer">1</span> <span class="comment multiline">/* b2 */</span>
+<span class="ln">7 </span>  <span class="punctuation">},</span>
+</pre>
+<ul class="simple">
+<li>Similarly, the first two rows of <code class="docutils literal notranslate"><span class="pre">DEN</span></code> specific the following transfer function:
+<img class="math" src="_images/math/56a40b9b799fc6dae46afdcb4b1fc62a9a761673.png" alt="D0[z] = 1 . ( 1 - 1.159571767.z^{-1} + 0.5372180343.z^{-2} )"/>.</li>
+</ul>
+<pre class="code c literal-block">
+<span class="ln">1 </span>  <span class="punctuation">{</span>
+<span class="ln">2 </span>                <span class="literal number integer">1</span> <span class="comment multiline">/* D0 */</span><span class="punctuation">,</span>              <span class="literal number integer">0</span><span class="punctuation">,</span>              <span class="literal number integer">0</span>
+<span class="ln">3 </span>  <span class="punctuation">},</span>
+<span class="ln">4 </span>  <span class="punctuation">{</span>
+<span class="ln">5 </span>                <span class="literal number integer">1</span> <span class="comment multiline">/* a0 */</span><span class="punctuation">,</span>   <span class="operator">-</span><span class="literal number float">1.159571767</span> <span class="comment multiline">/* a1 */</span><span class="punctuation">,</span>   <span class="literal number float">0.5372180343</span> <span class="comment multiline">/* a2 */</span>
+<span class="ln">6 </span>  <span class="punctuation">},</span>
+</pre>
+<ul class="simple">
+<li>The last row of both <code class="docutils literal notranslate"><span class="pre">NUM</span></code> and <code class="docutils literal notranslate"><span class="pre">DEN</span></code> specify an overall gain factor</li>
+</ul>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Question 3:
+Write a C program implementation of a direct-form I Butterworth bandpass filter according to the specifications
+of <strong>Filter I</strong> in the previous specification.</p>
+<p class="last">Next, Write a C program implementation of a transpose direct-form II bandpass filter according to the specifications
+of <strong>Filter II</strong> in the previous specification.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It’s a good idea to try to use the coefficients directly as generated from the Matlab include file. The include file generate from Matlab’s filter designer defines a single-precision floating point type as <code class="docutils literal notranslate"><span class="pre">real32_T</span></code> whereas the ARM DSP library uses the <code class="docutils literal notranslate"><span class="pre">float32_t</span></code>. It also makes use of an external include file <code class="docutils literal notranslate"><span class="pre">twmtypes.h</span></code>. You can either cut-and-paste the coefficient values into your C program, or else include the generated coefficient file and ensure that the C compiler understands that <code class="docutils literal notranslate"><span class="pre">real32_T</span></code> and <code class="docutils literal notranslate"><span class="pre">float32_t</span></code> are the same data type.</p>
+</div>
+</div>
+<div class="section" id="infinite-impulse-response-filter-evaluation">
+<h2>Infinite Impulse Response Filter Evaluation<a class="headerlink" href="#infinite-impulse-response-filter-evaluation" title="Permalink to this headline">¶</a></h2>
+<p>As the third step in the design of IIR filters, you will compute their amplitude response, and determine their computational load on the processor. In the last lab, you completed these two steps as follows.</p>
+<ul class="simple">
+<li>To compute the spectrum, make use of the spectrum function on the oscilloscope.</li>
+<li>To compute the performance, make use of the <code class="docutils literal notranslate"><span class="pre">uint32_t</span> <span class="pre">measurePerfSample(msp432_sample_process_t</span> <span class="pre">_cb)</span></code> function provided in <code class="docutils literal notranslate"><span class="pre">MSP432_BOOSTXL_LIB</span></code>.</li>
+</ul>
+<p>In this lab, we will study two additional techniques to complete these tasks.</p>
+<div class="section" id="compute-the-spectrum-using-matlab">
+<h3>Compute the spectrum using Matlab<a class="headerlink" href="#compute-the-spectrum-using-matlab" title="Permalink to this headline">¶</a></h3>
+<p>Most USB scopes, including the Bitscope BS05 used in this course, allow to download captured
+data to your PC. The ‘recorder’ function enables you to download multiple traces in the form
+of a comma-separated-value (CSV) file. Please study the
+<a class="reference external" href="https://docs.bitscope.com/KLTUKBXN/#ks76kbqkanvx">Capture Control Functions</a> to find how
+to record the waveform. Keep in mind that the waveform comes with a specific sample frequency
+and trace length (the number of samples per trace). The sample frequency of the scope may be
+different from the sample frequency of your filter.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/lab3-grab.jpg" src="_images/lab3-grab.jpg" />
+</div>
+<p>Using a set of traces stored in a CSV, you can next import these into Matlab and analyze them
+using the <code class="docutils literal notranslate"><span class="pre">pwelch</span></code> function. Read the documentation that comes with the <code class="docutils literal notranslate"><span class="pre">pwelch</span></code> function
+to study how to use it. The following is a recipe to obtain such a spectrum.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Keep in mind that the following is just an example. You have to fine-tune the settings for your application; you have to read the documentation to understand each of these commands and their parameters.</p>
+</div>
+<ol class="arabic simple">
+<li>Set the scope recording configuration so that the sample rate shown is at the sample rate of the board, or double of it. For example, if you design your filter at 16KHz sample rate, set the trace sample rate at 16KHz or 32KHz. You cannot set this number directly; you have to to it indirectly by choosing the proper timebase (ms/div), and the proper buffer sample size.</li>
+</ol>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/lab3setting.jpg" src="_images/lab3setting.jpg" />
+</div>
+<ol class="arabic simple" start="2">
+<li>Make sure that the filter application is running, and that you feed noise at the filter input, so that the signal recorded on the oscilloscope is filtered noise.</li>
+<li>Press ‘RECORDER’ followed by ‘New’. You can now specify a file name that will record the traces. Now, press ‘Ready’ followed by ‘Record’. The traces are now written in a file.</li>
+<li>After some time, press ‘Recording’ followed by ‘Close’. This ends the recording process.</li>
+<li>Open Matlab, and read in the trace file. The following commands assume the file name used is ‘trace.csv’.</li>
+</ol>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span> <span class="n">read</span> <span class="n">the</span> <span class="n">CSV</span> <span class="n">file</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">readtable</span><span class="p">(</span><span class="s1">&#39;trace.csv&#39;</span><span class="p">);</span>
+
+<span class="o">%</span> <span class="n">extract</span> <span class="n">the</span> <span class="n">trace</span> <span class="n">data</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">table2array</span><span class="p">(</span><span class="n">T</span><span class="p">(:,</span><span class="mi">10</span><span class="p">:</span><span class="n">size</span><span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="mi">2</span><span class="p">)));</span>
+
+<span class="o">%</span> <span class="n">show</span> <span class="n">to</span> <span class="n">pwelch</span> <span class="n">spectrum</span><span class="p">,</span> <span class="n">eliminate</span> <span class="n">DC</span> <span class="n">offset</span>
+<span class="n">pwelch</span><span class="p">(</span><span class="n">a</span><span class="s1">&#39; - mean(a&#39;</span><span class="p">));</span>
+
+<span class="o">%</span> <span class="n">extract</span> <span class="n">pwelch</span> <span class="n">spectrum</span> <span class="k">for</span> <span class="n">each</span> <span class="n">trace</span>
+<span class="p">[</span><span class="n">f</span><span class="p">,</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">pwelch</span><span class="p">(</span><span class="n">a</span><span class="s1">&#39; - mean(a&#39;</span><span class="p">));</span>
+
+<span class="o">%</span> <span class="n">plot</span> <span class="n">the</span> <span class="n">average</span> <span class="n">power</span> <span class="n">spectrum</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;)));</span>
+</pre></div>
+</div>
+<p>This shows the following power spectrum; note that this spectrum is sampled
+at twice the sample frequency of the DSP program, so you see an additional
+image as well.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/pwelchdemo.jpg" src="_images/pwelchdemo.jpg" />
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Question 4: Compute the spectrum of <strong>Filter I</strong> using Matlab. Compare the measure result to
+the spectrum computed in <code class="docutils literal notranslate"><span class="pre">filterDesigner</span></code>.</p>
+<p class="last">Next, compute the spectrum of <strong>Filter II</strong> using Matlab. Compare the measure result to
+the spectrum computed in <code class="docutils literal notranslate"><span class="pre">filterDesigner</span></code>.</p>
+</div>
+</div>
+<div class="section" id="measure-the-filter-performance-using-a-scope">
+<h3>Measure the filter performance using a scope<a class="headerlink" href="#measure-the-filter-performance-using-a-scope" title="Permalink to this headline">¶</a></h3>
+<p>Rather than measuring clock cycle, you can also directly measure the time spent during the
+computation. The <code class="docutils literal notranslate"><span class="pre">MSP432_BOOSTXL_LIB</span></code> toggles a GPIO pin just before calling the
+<code class="docutils literal notranslate"><span class="pre">processSample</span></code> function. Consult the source code (<code class="docutils literal notranslate"><span class="pre">msp432_boostxl_init.c</span></code>) and the
+ADC interrupt function in particular. Note how the ‘duty pin’ is toggled right before and
+after the user callback is called. The duty pin is on GPIO port 5 pin 7; consult
+the <a class="reference external" href="https://www.ti.com/lit/pdf/slau597">MSP-EXP432P401R Development Kit User’s Guide</a> to
+identify the proper pin on your MSPEXP432P401R kit where you can record this signal.</p>
+<pre class="code c literal-block">
+<span class="ln"> 1 </span><span class="keyword type">void</span> <span class="name function">ADC14_IRQHandler</span><span class="punctuation">(</span><span class="keyword type">void</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln"> 2 </span>    <span class="keyword type">uint64_t</span> <span class="name">status</span><span class="punctuation">;</span>
+<span class="ln"> 3 </span>    <span class="keyword">static</span> <span class="keyword type">int</span> <span class="name">recursive</span> <span class="operator">=</span> <span class="literal number integer">0</span><span class="punctuation">;</span>
+<span class="ln"> 4 </span>
+<span class="ln"> 5 </span>    <span class="keyword">if</span> <span class="punctuation">(</span><span class="name">recursive</span><span class="punctuation">)</span> <span class="name">errorledon</span><span class="punctuation">();</span>
+<span class="ln"> 6 </span>
+<span class="ln"> 7 </span>    <span class="name">status</span> <span class="operator">=</span> <span class="name">ADC14_getEnabledInterruptStatus</span><span class="punctuation">();</span>
+<span class="ln"> 8 </span>    <span class="name">ADC14_clearInterruptFlag</span><span class="punctuation">(</span><span class="name">status</span><span class="punctuation">);</span>
+<span class="ln"> 9 </span>
+<span class="ln">10 </span>    <span class="keyword">if</span> <span class="punctuation">(</span><span class="name">status</span> <span class="operator">&amp;</span> <span class="name">ADC_INT0</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="ln">11 </span>        <span class="name">glbPingADC</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">ADC14_getResult</span><span class="punctuation">(</span><span class="name">ADC_MEM0</span><span class="punctuation">);</span>
+<span class="ln">12 </span>
+<span class="ln">13 </span>        <span class="name">recursive</span> <span class="operator">=</span> <span class="literal number integer">1</span><span class="punctuation">;</span>
+<span class="ln">14 </span>        <span class="name">dutypinhigh</span><span class="punctuation">();</span>
+<span class="ln">15 </span>        <span class="name">glbPingDAC</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="name">glbSampleCallback</span><span class="punctuation">(</span><span class="name">glbPingADC</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]);</span>
+<span class="ln">16 </span>        <span class="name">dutypinlow</span><span class="punctuation">();</span>
+<span class="ln">17 </span>        <span class="name">recursive</span> <span class="operator">=</span> <span class="literal number integer">0</span><span class="punctuation">;</span>
+<span class="ln">18 </span>
+<span class="ln">19 </span>        <span class="name">DAC8311_updateDacOut</span><span class="punctuation">(</span><span class="name">glbPingDAC</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]);</span>
+<span class="ln">20 </span>    <span class="punctuation">}</span>
+<span class="ln">21 </span>
+<span class="ln">22 </span><span class="punctuation">}</span>
+</pre>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Question 5: Measure the time needed to compute <strong>Filter I</strong> as accurately as possible
+using a scope, by observing the toggle duration on the duty pin as described above.</p>
+<p>Next, measure the time needed to compute <strong>Filter II</strong> as accurately as possible
+using a scope, by observing the toggle duration on the duty pin as described above.</p>
+<p class="last">Finally, compare both times and explain any differences you observe.</p>
+</div>
+</div>
+</div>
+<div class="section" id="wrapping-up">
+<h2>Wrapping Up<a class="headerlink" href="#wrapping-up" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The answer to this lab consists of a written report which will be submitted on Canvas by the deadline. Refer to the General Lab Report Guidelines for details on report formatting. You will only submit your written report on Canvas. All code developed must be returned through github.</li>
+<li>Follow the principal structure of the report you’ve used for Lab 2 (taking into account any feedback you have received).</li>
+<li>Follow the five questions outlined above to structure your report.  Use figures, screenshots and code examples where appropriate. Please work out the answers in sufficient detail to show your <em>analysis</em>.</li>
+<li>Make sure that you add newly developed projects to github: Use the Team - Share pop-up menu and select your repository for this lab. Further, make sure that you commit and push all changes to the github repository on GitHub classroom. Use the Team - Commit pop-up menu and push all changes.</li>
+<li>Be aware that each of the laboratory assignments in ECE4703 will require a significant investment in time and preparation if you expect to have a working system by the assignment’s due date. This course is run in “open lab” mode where it is not expected that you will be able to complete the laboratory in the scheduled official lab time. It is in your best interest to plan ahead so that you can use the TA and instructor’s office hours most efficiently.</li>
+</ul>
+<p><em>Good Luck</em></p>
+</div>
+<div class="section" id="grading-rubric">
+<h2>Grading Rubric<a class="headerlink" href="#grading-rubric" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="83%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Requirement</th>
+<th class="head">Points</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Question 1 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-odd"><td>Question 2 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-even"><td>Question 3 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-odd"><td>Question 4 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-even"><td>Question 5 Analysis</td>
+<td>15</td>
+</tr>
+<tr class="row-odd"><td>All projects build without errors or warnings</td>
+<td>5</td>
+</tr>
+<tr class="row-even"><td>Code is well structured and commented</td>
+<td>5</td>
+</tr>
+<tr class="row-odd"><td>Git Repository is complete and up to date</td>
+<td>5</td>
+</tr>
+<tr class="row-even"><td>Overall Report Quality (Format, Outline, Grammar)</td>
+<td>10</td>
+</tr>
+<tr class="row-odd"><td><strong>TOTAL</strong></td>
+<td><strong>100</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lab4.html" class="btn btn-neutral float-right" title="Lab 4" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lab2.html" class="btn btn-neutral" title="Lab 2" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,651 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>L9: Adaptive Filters &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="L10: Frequency Synthesis and Detection" href="lecture10.html" />
+    <link rel="prev" title="L8: DMA and the ARM CMSIS Library" href="lecture8.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="lectures.html">Lectures</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture1.html">L1: Sampling and Quantization, Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture2.html">L2: Real-Time Input Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture3.html">L3: DTFT, z-transform, and FIR filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture4.html">L4: FIR filter implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture5.html">L5: IIR filters, and their implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture6.html">L6: Fixed Point Arithmetic in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture7.html">L7: Performance Optimization in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture8.html">L8: DMA and the ARM CMSIS Library</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">L9: Adaptive Filters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-adaptive-filter">Basic Adaptive Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#system-identification">System Identification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#noise-cancellation">Noise Cancellation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#equalization">Equalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adaptive-prediction">Adaptive Prediction</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#computing-the-coefficients-of-an-adaptive-filter">Computing the coefficients of an adaptive filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples-of-lms-filters">Examples of LMS Filters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Basic Adaptive Filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#noise-filtering">Noise Filtering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">System Identification</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lecture10.html">L10: Frequency Synthesis and Detection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="labs.html">Labs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="lectures.html">Lectures</a> &raquo;</li>
+        
+      <li>L9: Adaptive Filters</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lecture9.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="l9-adaptive-filters">
+<h1>L9: Adaptive Filters<a class="headerlink" href="#l9-adaptive-filters" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this lecture is as follows.</p>
+<ul class="simple">
+<li>To discuss the purpose of adaptive filters</li>
+<li>To illustrate common applications solved using adaptive filters</li>
+<li>To describe the Least-Mean-Squares algorithm to adapt and optimize filter coefficients</li>
+<li>To illustrate adaptive filter applications on the MSP432 kit with BoostXL Audio Interface</li>
+</ul>
+<div class="section" id="basic-adaptive-filter">
+<h2>Basic Adaptive Filter<a class="headerlink" href="#basic-adaptive-filter" title="Permalink to this headline">¶</a></h2>
+<p>An adaptive filter is a filter with non-constant coefficients. The filter coefficients
+are adjusted based on an criterium which is often defined to optimize the performance
+of the filter in its ability to estimate an unknown quantity in an input signal.</p>
+<p>In this lecture, we will limit ourselves to adaptive FIR filters. The basic outline
+of an adaptive FIR filter is shown in the following figure. The filter
+accepts an input signal x and produces an output signal y. The FIR coefficients
+of this filter are adjustable, meaning that at every new sample of x,
+the coefficients can take on a new value. The new value of filter coefficients
+is determined using a coefficient update algorithm, which computes an adjustment
+for each filter coefficient based on an error signal e. The error signal e
+is typically computed as the difference between the actual output signal y and
+a desired output signal d.</p>
+<div class="figure align-center" style="width: 400px">
+<img alt="_images/adaptive.jpg" src="_images/adaptive.jpg" />
+</div>
+<p>The desired output signal d depends on the specific application
+of the adaptive filter. However, the adaptive algorithm will change the coefficients
+so as to minimize the mean squared value of the error signal e.
+That is, given that the filter output is defined by filter coefficients <img class="math" src="_images/math/ffbc42b62505c4e3aaa3564ca4475be0591a31f1.png" alt="\boldsymbol{w(n)} = [w_0(n) w_1(n) .. w_{N-1}(n)]^T"/>, we try to minimize the expected square error:</p>
+<div class="math">
+<p><img src="_images/math/6f3d0aab9abae44f64872b698467dc5a2dd101c3.png" alt="\min_{\boldsymbol{w}(n)} E[ e^2(n)]"/></p>
+</div><p>There are generally four different configurations common for an adaptive filter:</p>
+<ol class="arabic simple">
+<li>System Identification</li>
+<li>Noise Cancellation</li>
+<li>Equalization</li>
+<li>Adaptive Prediction</li>
+</ol>
+<div class="section" id="system-identification">
+<h3>System Identification<a class="headerlink" href="#system-identification" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-center" style="width: 350px">
+<img alt="_images/systemid.jpg" src="_images/systemid.jpg" />
+</div>
+<p>In system identification, we observe an unknown system and compare its output
+to an adaptive filter. By applying broadband noise to the input, and by minimizing
+the error signal, the filter coefficients will converge to a set of coefficients that
+reflect the characteristic
+of the unknown system. This approximation is best-effort; known the filter coefficients
+of the adaptive filter does not imply that we can reveal the internal structure of
+the unknown system. For example, the unknown system could be an IIR filter, while the
+adaptive filter has an FIR design. Or, the unknown system could include non-linear
+behavior, while the adaptive filter has an FIR design.</p>
+</div>
+<div class="section" id="noise-cancellation">
+<h3>Noise Cancellation<a class="headerlink" href="#noise-cancellation" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-center" style="width: 400px">
+<img alt="_images/noisecancellation.jpg" src="_images/noisecancellation.jpg" />
+</div>
+<p>In Noise Cancellation, we are interested in removing a known disturbance <img class="math" src="_images/math/4a1ada7f07fee07e6484ff0e83a87b4150ef81e8.png" alt="n_1"/> from a signal.
+The disturbance is affected by the system dynamics <img class="math" src="_images/math/b2bb814f83e453bb6e93d3545dd2698eaab88e9d.png" alt="H(z)"/> into <img class="math" src="_images/math/3b78f198bc9adf1b3d09796fea98f76696a20aa4.png" alt="n_0"/>, so that we are unsure how much the input signal is affected by the disturbance. Using an adaptive filter, we
+estimate the system dynamics (in a similar fashion as with system identification), and
+we remove the filtered disturbance from the output signal. The output signal, in the case of
+noise cancellation, is created out of the error signal, which in this case will closely
+resembly the input signal <img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/>.</p>
+<div class="figure align-center" style="width: 475px">
+<img alt="_images/echocancellation.jpg" src="_images/echocancellation.jpg" />
+</div>
+<p>A well-known application for this setup is echo cancellation in speakerphone design. In this case,
+the input signal is the speech signal from the local side, and the disturbance is the speech signal
+from the remote side. The remote speech signal is played back on the local speaker and picked up
+by the local microphone. The adaptive filter will estimate this local feedback and remote it from
+the output signal, thereby preventing the return of an echo to the remote side.</p>
+</div>
+<div class="section" id="equalization">
+<h3>Equalization<a class="headerlink" href="#equalization" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-center" style="width: 500px">
+<img alt="_images/equalization.jpg" src="_images/equalization.jpg" />
+</div>
+<p>In equalization, we are using an adaptive filter to remove (linear) distortions from
+a received signal. This is a common problem in data communictions, when signals are
+distored by a non-allpass communications channel. The adaptive filter creates
+an inverse response to the distortion, using a delayed version of the correct input
+signal <img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/>, in order to restore the received signal to its original form.</p>
+<p>One may wonder how such a delayed version of <img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/> can be transmitted, when
+it’s not possible to transmit the real-time version <img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/>. The answer is that
+this delayed <img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/> does not have to be identical to the real-time <img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/>. In other words,
+the equalizer can first go through a training phase, during which the coefficients
+are adapted in order to match the characteristics of the communications channel. Next,
+the adaptive filter coefficients are fixed, and the real-time <img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/> transmission
+can start.</p>
+<p>A well-known example of an equalizer training sequence can be heard
+in the startup sequence of an voiceband modem. While voiceband modems are
+largely a thing of the past now, <a class="reference external" href="https://www.youtube.com/watch?v=gsNaR6FRuO0">this youtube link</a> gives you an idea how that sounded like.</p>
+</div>
+<div class="section" id="adaptive-prediction">
+<h3>Adaptive Prediction<a class="headerlink" href="#adaptive-prediction" title="Permalink to this headline">¶</a></h3>
+<p>A final configuration for adaptive filters is in adaptive prediction, where an adaptive filter
+is used to predict the future value of a signal. The adaptive filter coefficients form a prediction, which can be used for signal encoding. For example, speech can be compressed to a few kilobit per second for use in cell phone applications.</p>
+</div>
+</div>
+<div class="section" id="computing-the-coefficients-of-an-adaptive-filter">
+<h2>Computing the coefficients of an adaptive filter<a class="headerlink" href="#computing-the-coefficients-of-an-adaptive-filter" title="Permalink to this headline">¶</a></h2>
+<p>An adaptive filter implemented as an FIR with N taps and weights <img class="math" src="_images/math/b8ff249cd72f21f78167460ac1cfd3d7cda8a6ff.png" alt="\boldsymbol{w}(n) = [w_0(n) w_1(n) .. w_{N-1}(n)]^T"/> filters input samples  <img class="math" src="_images/math/96e3023d86e6a15a05ddf2ab6d2ffd82db3f543c.png" alt="\boldsymbol{x}(n) = [x_0(n) x_1(n) .. x_{N-1}(n)]^T"/>. At the nth sample instant, the output of the filter is given by the dot product of <img class="math" src="_images/math/97994f07ee25688e9595b91796937e78b9d52074.png" alt="\boldsymbol{w}(n)"/> and <img class="math" src="_images/math/d1a4483bc675dfdcca3ffe9d854642941a50a393.png" alt="\boldsymbol{x}(n)"/>:</p>
+<div class="math">
+<p><img src="_images/math/c8f06eeaac606fed00bd0f6929fda2d9de7b222a.png" alt="y(n) = \boldsymbol{x}^T(n) \boldsymbol{w}(n)"/></p>
+</div><p>The instantaneous error at the nth sample instant is given by the difference of <img class="math" src="_images/math/4bc8496b648781c3bb62f7d01068d03ff1b22f0e.png" alt="d(n)"/> and <img class="math" src="_images/math/31c2d9defa3bb02c0275338bb2f283fed0222da6.png" alt="y(n)"/>.</p>
+<div class="math">
+<p><img src="_images/math/0c0ecee43fbe5193282c231562fcc357336b6772.png" alt="e(n) =&amp; d(n) - y(n)  \\
+     =&amp; d(n) - \boldsymbol{x}^T(n) \boldsymbol{w}(n)"/></p>
+</div><p>The instantaneous squared error signal is given by:</p>
+<div class="math">
+<p><img src="_images/math/58e8483c728b2f5831db6b4a859c465abbf38d4b.png" alt="e^2(n) = d^2(n) - 2d(n) \boldsymbol{x}^T(n) \boldsymbol{w}(n) + \boldsymbol{w}^T(n) \boldsymbol{x}(n) \boldsymbol{x}^T(n) \boldsymbol{w}(n)"/></p>
+</div><p>Note that we make use of the property <img class="math" src="_images/math/8a6d5e3ad50493d055ef9b5e6bb5b4d153d21411.png" alt="(\boldsymbol{a}^T \boldsymbol{b})^2 = \boldsymbol{b}^T \boldsymbol{a} . \boldsymbol{a}^T \boldsymbol{b}"/>.</p>
+<p>We are interested in minimizing the expected value of the squared error signal, and we will do this by making changes to the
+filter weights <img class="math" src="_images/math/97994f07ee25688e9595b91796937e78b9d52074.png" alt="\boldsymbol{w}(n)"/>. Hence, we differentiate the expression for <img class="math" src="_images/math/f159f11a1875435a6cab417092d12d026c3596c0.png" alt="e^2(n)"/> with respect to <img class="math" src="_images/math/97994f07ee25688e9595b91796937e78b9d52074.png" alt="\boldsymbol{w}(n)"/>
+and look for a minimum.</p>
+<div class="math">
+<p><img src="_images/math/8e945f0bbf99ffa5886ecee2b1bc50949c4fadea.png" alt="\frac{\delta e^2(n)}{\delta \boldsymbol{w}(n)} &amp;= - 2d(n) \boldsymbol{x}(n) + 2 \boldsymbol{x}(n) \boldsymbol{x}^T(n) \boldsymbol{w}(n) \\
+                                               &amp;= -2 \boldsymbol{x}(n) (\boldsymbol{x}^T(n) \boldsymbol{w}(n) - d(n)) \\
+                                               &amp;= -2 e(n) \boldsymbol{x}(n)"/></p>
+</div><p>An iterative version of this algorithm will therefore use the value of this derivative to decide on how to adjust the coefficients. A well known strategy is <em>steepest decent</em>, which means that you’ll make a change which is a fraction of the derivative at the point where the derivative is computed. In other words, you compute the coefficient series as follows. In this formula, <img class="math" src="_images/math/410a9d0df9c135dd73b269cba7ef04dcfd932b1f.png" alt="\beta"/> is a constant much smaller then 1.</p>
+<div class="math">
+<p><img src="_images/math/5eb215e98857d6d1bf209c25586b2527b493f9fa.png" alt="\boldsymbol{w}(n + 1) &amp;= \boldsymbol{w}(n) - \beta \frac{\delta e^2(n)}{\delta \boldsymbol{w}(n)} \\
+                      &amp;= \boldsymbol{w}(n) + 2 \beta e(n) \boldsymbol{x}(n)"/></p>
+</div><p>The <strong>Least Mean Squares</strong> (or LMS) filtering algorithm is an adaptive FIR where coefficients are adjusted according to an error signal <img class="math" src="_images/math/2368015d8dc199bc67f8fda95534a9e52ff6a8e5.png" alt="e(n)"/> as in the previous formula.</p>
+<p>We will next look at several programming examples to illustrate the LMS algorithm in action.</p>
+</div>
+<div class="section" id="examples-of-lms-filters">
+<h2>Examples of LMS Filters<a class="headerlink" href="#examples-of-lms-filters" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Basic Adaptive Filter<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>We start with a basic illustration of the adaptive filter algorithm. Recall that the purpose of an LMS filter is to filter an input signal <img class="math" src="_images/math/329b5019be424c473a2d3688402a315b2682c964.png" alt="x(n)"/> into an output signal <img class="math" src="_images/math/31c2d9defa3bb02c0275338bb2f283fed0222da6.png" alt="y(n)"/>. At every sample of
+x, the filter coefficients can be adjusted in order to make the output signal <img class="math" src="_images/math/31c2d9defa3bb02c0275338bb2f283fed0222da6.png" alt="y(n)"/> more similar
+to a desired output signal <img class="math" src="_images/math/4bc8496b648781c3bb62f7d01068d03ff1b22f0e.png" alt="d(n)"/>.</p>
+<p>The following illustrates this for a 21-tap LMS filter. The input signal is a sine function (at 8 samples per sine period, i.e., with frequency <img class="math" src="_images/math/1217de662f6077b1dd20f8da489db2e91828d3c5.png" alt="f_s/8"/>). The <em>desired</em> signal is a cosine function at the same frequency, but twice the amplitude. We run the filter over a number of iterations while storing the
+computed output signal <img class="math" src="_images/math/31c2d9defa3bb02c0275338bb2f283fed0222da6.png" alt="y(n)"/> and the error signal <img class="math" src="_images/math/2368015d8dc199bc67f8fda95534a9e52ff6a8e5.png" alt="e(n)"/>. The initial filter coefficients are
+set to zero, so that the filter initially will pass no output.</p>
+<p>The following program is somewhat uncommon when compared to our previous examples, as it does not
+real-time filtering. Instead, its purpose is to illustrate how LMS filter coefficients are iteratively computed.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define BETA 0.01f</span>
+<span class="c1">#define N 21</span>
+<span class="c1">#define ITER 200</span>
+
+<span class="n">float32_t</span> <span class="n">w</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.0</span><span class="p">};</span>
+<span class="n">float32_t</span> <span class="n">x</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.0</span><span class="p">};</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="o">//</span> <span class="c1">#define PRINTOUT</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">WDT_A_hold</span><span class="p">(</span><span class="n">WDT_A_BASE</span><span class="p">);</span>
+
+    <span class="nb">int</span> <span class="n">t</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">float32_t</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">d</span><span class="p">;</span>
+    <span class="n">float32_t</span> <span class="n">y_graph</span><span class="p">[</span><span class="n">ITER</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.</span><span class="p">};</span>
+    <span class="n">float32_t</span> <span class="n">e_graph</span><span class="p">[</span><span class="n">ITER</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.</span><span class="p">};</span>
+    <span class="n">float32_t</span> <span class="n">d_graph</span><span class="p">[</span><span class="n">ITER</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.</span><span class="p">};</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;--------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">ITER</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="o">//</span> <span class="n">new</span> <span class="nb">input</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">PI</span><span class="o">*</span><span class="n">t</span><span class="o">/</span><span class="mi">8</span><span class="p">);</span>
+
+        <span class="o">//</span> <span class="n">desired</span> <span class="n">output</span>
+        <span class="n">d</span>    <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">PI</span><span class="o">*</span><span class="n">t</span><span class="o">/</span><span class="mi">8</span><span class="p">);</span>
+
+        <span class="o">//</span> <span class="n">computed</span> <span class="n">output</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">+=</span> <span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+        <span class="o">//</span> <span class="n">error</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">d</span> <span class="o">-</span> <span class="n">y</span><span class="p">;</span>
+
+        <span class="o">//</span> <span class="n">update</span> <span class="n">coefficients</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">BETA</span> <span class="o">*</span> <span class="n">e</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+        <span class="o">//</span> <span class="n">shift</span> <span class="n">delay</span> <span class="n">line</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+
+        <span class="n">y_graph</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+        <span class="n">e_graph</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span><span class="p">;</span>
+        <span class="n">d_graph</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+
+<span class="c1">#ifdef PRINTOUT</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%3d</span><span class="s2"> </span><span class="si">%+8.7f</span><span class="s2"> </span><span class="si">%+8.7f</span><span class="s2"> </span><span class="si">%+8.7f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span><span class="p">);</span>
+<span class="c1">#endif</span>
+
+    <span class="p">}</span>
+
+
+<span class="c1">#ifdef PRINTOUT</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Filter Taps:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%3d</span><span class="s2"> </span><span class="si">%+8.7f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="c1">#endif</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>While running the program, you can either print the coefficients to the terminal (by defining the macro <code class="docutils literal notranslate"><span class="pre">PRINTOUT</span></code>), or else store the relevant output in three arrays <code class="docutils literal notranslate"><span class="pre">y_graph</span></code>, <code class="docutils literal notranslate"><span class="pre">e_graph</span></code> and <code class="docutils literal notranslate"><span class="pre">d_graph</span></code>.  The latter can be used with the <a class="reference external" href="https://software-dl.ti.com/ccs/esd/documents/users_guide/ccs_debug-graphs.html">Graph Plotting facility in Code Composer Studio</a>.
+The plot of the error signal shows that the filter converges in around 100 samples to almost zero. That means that, while observing 100 samples of the <img class="math" src="_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/> signal, the output converges to the desired output signal.</p>
+<div class="figure align-center" id="id3" style="width: 400px">
+<img alt="_images/errorlms.jpg" src="_images/errorlms.jpg" />
+<p class="caption"><span class="caption-text">Error signal of the LMS filter while approximating 2*cos(2*PI*t/8) from sin(2*PI*t/8)</span></p>
+</div>
+<div class="figure align-center" id="id4" style="width: 400px">
+<img alt="_images/ylms.jpg" src="_images/ylms.jpg" />
+<p class="caption"><span class="caption-text">Output signal of the LMS filter while approximating 2*cos(2*PI*t/8) from sin(2*PI*t/8)</span></p>
+</div>
+<p>In contrast to what you’d expect, the LMS filter coefficients are not just a simple delay, but rather a combination of filter taps. Uncomment the <code class="docutils literal notranslate"><span class="pre">PRINTOUT</span></code> macro to see a list of the resulting coefficients.</p>
+</div>
+<div class="section" id="noise-filtering">
+<h3>Noise Filtering<a class="headerlink" href="#noise-filtering" title="Permalink to this headline">¶</a></h3>
+<p>The second example of an LMS filter illustrates how an LMS filter can remove a (known) noise component,  even when that noise component is bigger and more prevalent than the true signal.</p>
+<p>In the following example, a 1 KHz sine wave is injected at the input of the filter (noise signal n1).
+That noise signal is also added to the samples taken from the A/D conversion, creating a noisey input n1 +x. The output of the adaptive filter is then subtracted from the noisy input to create an error signal e. The error signal then adjusts the filter coefficients.</p>
+<p>In the application, pressing the left button clears the filter coefficients, and when that happens the output becomes severely distorted. Only when the LMS filter converges again, is the input signal restored.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define BETA 0.01f</span>
+<span class="c1">#define N 21</span>
+
+<span class="n">float32_t</span> <span class="n">w</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.0</span><span class="p">};</span>
+<span class="n">float32_t</span> <span class="n">x</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.0</span><span class="p">};</span>
+
+<span class="n">float32_t</span> <span class="n">sinlu</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+<span class="n">unsigned</span> <span class="n">luptr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="n">void</span> <span class="n">initlu</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nb">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">16</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">sinlu</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">PI</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="mf">16.0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">int</span> <span class="n">i</span><span class="p">;</span>
+
+    <span class="n">float32_t</span> <span class="n">noise</span> <span class="o">=</span> <span class="n">sinlu</span><span class="p">[</span><span class="n">luptr</span><span class="p">];</span>
+    <span class="n">luptr</span> <span class="o">=</span> <span class="p">(</span><span class="n">luptr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">16</span><span class="p">;</span>
+
+    <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">noise</span><span class="p">;</span>
+
+    <span class="n">float32_t</span> <span class="nb">input</span> <span class="o">=</span> <span class="n">adc14_to_f32</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span><span class="p">;</span>
+
+    <span class="o">//</span> <span class="n">compute</span> <span class="nb">filter</span> <span class="n">output</span>
+    <span class="n">float32_t</span> <span class="n">y</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">y</span> <span class="o">+=</span> <span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="o">//</span> <span class="n">error</span>
+    <span class="n">float32_t</span> <span class="n">e</span> <span class="o">=</span> <span class="nb">input</span> <span class="o">-</span> <span class="n">y</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">pushButtonLeftDown</span><span class="p">())</span> <span class="p">{</span>
+        <span class="o">//</span> <span class="n">clear</span> <span class="n">coefficients</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="o">//</span> <span class="n">update</span> <span class="n">coefficients</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">BETA</span> <span class="o">*</span> <span class="n">e</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="o">//</span> <span class="n">shift</span> <span class="n">delay</span> <span class="n">line</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+
+    <span class="k">return</span> <span class="n">f32_to_dac14</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">WDT_A_hold</span><span class="p">(</span><span class="n">WDT_A_BASE</span><span class="p">);</span>
+
+    <span class="n">initlu</span><span class="p">();</span>
+
+    <span class="n">msp432_boostxl_init_intr</span><span class="p">(</span><span class="n">FS_16000_HZ</span><span class="p">,</span> <span class="n">BOOSTXL_J1_2_IN</span><span class="p">,</span> <span class="n">processSample</span><span class="p">);</span>
+    <span class="n">msp432_boostxl_run</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>System Identification<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>The third example illustrates the use of an LMS to perform system identification.
+In this example, we’ll generate a noise signal and play the noise of the DAC.
+The noise is also fed as the input of an adaptive filter.
+The ADC input is used as the desired signal d, which will be approximated through
+the adaptive filter. When the average error is reduced to zero, the adaptive filter
+will have converged to represent a system that includes a DAC, an external signal
+path, and an ADC.</p>
+<div class="figure align-center" style="width: 400px">
+<img alt="_images/sysid.jpg" src="_images/sysid.jpg" />
+</div>
+<p>The following program enables you to experiment with system identification. The left button
+can be pressed to clear the filter coefficients. The right button can be pressed to
+play back the filter coefficients over the DAC output. This allows you to observe the
+filter response, and take the spectrum of it.</p>
+<p>The following are interesting experiments:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Use a simple wire to feed back the DAC output directly to the ADC input (using input <code class="docutils literal notranslate"><span class="pre">J1_2_IN</span></code>).</li>
+<li>Use a simple wire to feed back the DAC output directly to the ADC input (using input <code class="docutils literal notranslate"><span class="pre">J1_2_IN</span></code>).
+Define the macro FIRST_ORDER to introduce an artificial first-order filter in the output.</li>
+<li>Capture output through the microphone (using input <code class="docutils literal notranslate"><span class="pre">MIC_IN</span></code>) and measure the audio signal path impulse response</li>
+</ol>
+</div></blockquote>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define BETA 0.001f</span>
+<span class="c1">#define N 50</span>
+
+<span class="n">float32_t</span> <span class="n">w</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.0</span><span class="p">};</span>
+<span class="n">float32_t</span> <span class="n">x</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.0</span><span class="p">};</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="n">static</span> <span class="nb">int</span> <span class="n">luptr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="n">static</span> <span class="n">float32_t</span> <span class="n">firstorder</span><span class="p">;</span>
+
+<span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">int</span> <span class="n">i</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">pushButtonRightDown</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">luptr</span> <span class="o">=</span> <span class="p">(</span><span class="n">luptr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">N</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">f32_to_dac14</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="n">luptr</span><span class="p">]);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+
+        <span class="n">float32_t</span> <span class="nb">input</span> <span class="o">=</span> <span class="n">adc14_to_f32</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+
+        <span class="n">float32_t</span> <span class="n">rnd</span> <span class="o">=</span> <span class="p">((</span><span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mh">0x1000</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">4096.0</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">;</span> <span class="o">//</span> <span class="o">-</span><span class="mf">0.1</span> <span class="o">..</span> <span class="mf">0.1</span>
+
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">rnd</span><span class="p">;</span>
+
+        <span class="n">float32_t</span> <span class="n">y</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">y</span> <span class="o">+=</span> <span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="o">//</span> <span class="n">error</span>
+        <span class="n">float32_t</span> <span class="n">e</span> <span class="o">=</span> <span class="nb">input</span> <span class="o">-</span> <span class="n">y</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">pushButtonLeftDown</span><span class="p">())</span> <span class="p">{</span>
+            <span class="o">//</span> <span class="n">clear</span> <span class="n">coefficients</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+                <span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="o">//</span> <span class="n">update</span> <span class="n">coefficients</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+                <span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">BETA</span> <span class="o">*</span> <span class="n">e</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="o">//</span> <span class="n">shift</span> <span class="n">delay</span> <span class="n">line</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+
+                <span class="n">float32_t</span> <span class="n">output</span> <span class="o">=</span> <span class="n">rnd</span><span class="p">;</span>
+
+<span class="c1">#ifdef FIRSTORDER</span>
+           <span class="o">//</span> <span class="n">artificial</span> <span class="n">first</span> <span class="n">order</span> <span class="nb">filter</span> <span class="k">for</span> <span class="n">system</span> <span class="n">identification</span>
+           <span class="n">output</span> <span class="o">=</span> <span class="n">output</span> <span class="o">+</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">firstorder</span><span class="p">;</span>
+           <span class="n">firstorder</span> <span class="o">=</span> <span class="n">output</span><span class="p">;</span>
+<span class="c1">#endif</span>
+
+        <span class="k">return</span> <span class="n">f32_to_dac14</span><span class="p">(</span><span class="n">output</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">WDT_A_hold</span><span class="p">(</span><span class="n">WDT_A_BASE</span><span class="p">);</span>
+
+<span class="c1">#ifdef USEJ12</span>
+    <span class="n">msp432_boostxl_init_intr</span><span class="p">(</span><span class="n">FS_8000_HZ</span><span class="p">,</span> <span class="n">BOOSTXL_J1_2_IN</span><span class="p">,</span> <span class="n">processSample</span><span class="p">);</span>
+<span class="c1">#else</span>
+    <span class="n">msp432_boostxl_init_intr</span><span class="p">(</span><span class="n">FS_8000_HZ</span><span class="p">,</span> <span class="n">BOOSTXL_MIC_IN</span><span class="p">,</span> <span class="n">processSample</span><span class="p">);</span>
+<span class="c1">#endif</span>
+    <span class="n">msp432_boostxl_run</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h2>
+<p>We discussed the application and implementation of adaptive filters, which play an important role in many important
+signal processing applications (signal compression, echo cancellation, noise removal, system identification).</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lecture10.html" class="btn btn-neutral float-right" title="L10: Frequency Synthesis and Detection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lecture8.html" class="btn btn-neutral" title="L8: DMA and the ARM CMSIS Library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

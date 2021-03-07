@@ -1,0 +1,530 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>L6: Fixed Point Arithmetic in DSP &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="L7: Performance Optimization in DSP" href="lecture7.html" />
+    <link rel="prev" title="L5: IIR filters, and their implementation" href="lecture5.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="lectures.html">Lectures</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture1.html">L1: Sampling and Quantization, Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture2.html">L2: Real-Time Input Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture3.html">L3: DTFT, z-transform, and FIR filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture4.html">L4: FIR filter implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture5.html">L5: IIR filters, and their implementation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">L6: Fixed Point Arithmetic in DSP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fixed-point-data-representation">Fixed Point Data Representation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#unsigned-fixed-point-representation">Unsigned Fixed-point representation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#signed-fixed-point-representation">Signed Fixed-point representation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conversion-from-floating-point-to-fixed-point">Conversion from Floating Point to Fixed Point</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conversion-from-fixed-point-to-floating-point">Conversion from Fixed Point to Floating Point</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#fixed-point-arithmetic">Fixed Point Arithmetic</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#addition">Addition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multiplication">Multiplication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dsp-with-fixed-point-arithmetic">DSP with fixed-point arithmetic</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fixed-point-quantization-on-the-msp-432-kit">Fixed-point quantization on the MSP-432 kit</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lecture7.html">L7: Performance Optimization in DSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture8.html">L8: DMA and the ARM CMSIS Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture9.html">L9: Adaptive Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lecture10.html">L10: Frequency Synthesis and Detection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="labs.html">Labs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="lectures.html">Lectures</a> &raquo;</li>
+        
+      <li>L6: Fixed Point Arithmetic in DSP</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lecture6.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="l6-fixed-point-arithmetic-in-dsp">
+<h1>L6: Fixed Point Arithmetic in DSP<a class="headerlink" href="#l6-fixed-point-arithmetic-in-dsp" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this lecture is as follows.</p>
+<ul class="simple">
+<li>To describe fixed-point data representation of signals</li>
+<li>To describe arithmetic using fixed-point data representation</li>
+<li>To discuss the effects of fixed-point arithmetic on DSP</li>
+<li>To discuss the influence of coefficient quantization on digital filter</li>
+<li>To demonstrate the use of filter coefficient quantization in Matlab</li>
+</ul>
+<div class="section" id="fixed-point-data-representation">
+<h2>Fixed Point Data Representation<a class="headerlink" href="#fixed-point-data-representation" title="Permalink to this headline">¶</a></h2>
+<p>Floating point representation is the default representation adopted in many scientific computations, as well as in the world of signal processing. Matlab, for example, will compute the filter coefficients by default in a double-precision (64-bit) precision.</p>
+<p>On the other hand, floating point representation expensive to implement. Since a floating point number is represented using a mantissa and an exponent, every arithmetic operation involving a floating point number implies operations on both the mantissa as well as the exponent. Furthermore, floating point numbers have to be aligned before every operation, and they have to be normalized after every operation. Floating point arithmetic has a high complexity, much larger than that of typical integer arithmetic.</p>
+<p>In DSP processing applications, the increased complexity of floating point arithmetic will manifest itself in two areas.</p>
+<ul class="simple">
+<li>If the target processor includes floating-point hardware (such as the Cortex-M4F that we’re using on our MSP432 experimentation board), then the use of floating point arithmetic - as opposed to integer arithmetic - will increase the power consumption of the processor. Further, when the floating point program is about as fast as the (equivalent) integer arithmetic program, then the energy consumption for the floating point program will be higher as well.</li>
+<li>If the target processor does not include floating-point hardware (for example, because it’s a smaller microcontroller), then floating-point operations will have to be emulated in software, which will lead to a significant performance hit.</li>
+</ul>
+<p>Therefore, to optimize the performance or the power/energy footprint of a program, DSP programmers are often required to optimize the cost of the arithmetic, by converting floating point arithmetic to integer arithmetic. We will discuss a method to achieve this optimization systematically, by converting the data types in a DSP program from floating-point data representation to <strong>fixed-point data representation</strong>. The conversion process from a DSP program using floating-point data types into a DSP program using fixed-point data types, is called <strong>fixed-point refinement</strong>.</p>
+<div class="section" id="unsigned-fixed-point-representation">
+<h3>Unsigned Fixed-point representation<a class="headerlink" href="#unsigned-fixed-point-representation" title="Permalink to this headline">¶</a></h3>
+<p>Assume an unsigned integer datatype with bits <img class="math" src="_images/math/41a7ac8678ce1febc7a5d5fcbc0d3f6d3843e44e.png" alt="b_{N-1} b_{N-2} ... b_2 b_1 b_0"/>. The value of the unsigned integer number is defined as follows.</p>
+<div class="math">
+<p><img src="_images/math/9ef4028981d25eb78e3123190b9b41a6c2470059.png" alt="V_{uint&lt;N&gt;} = b_{N-1} . 2^{N-1} + b_{N-2} . 2^{N-2} + ... + b_1 . 2 + b_0"/></p>
+</div><p>In a fixed-point representation, the binary point shifts from the right-most position to a different position <img class="math" src="_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/>. Hence, a fixed-point representation is defined by the number of bits <img class="math" src="_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> as well as the position of the binary point <img class="math" src="_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/>. For an unsigned number we adopt the notation <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">ufix</span></code> means ‘unsigned fixed-point’. An unsigned integer as defined above would be <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,0&gt;</span></code>.
+The value of a fixed point number <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k&gt;</span></code> is computed as follows:</p>
+<div class="math">
+<p><img src="_images/math/346c1e460052bf2acd3d56e9e112b964798b4ab4.png" alt="V_{ufix&lt;N,k&gt;} = b_{N-k-1} . 2^{N-k-1} + b_{N-k-2} . 2^{N-2} + ... + b_0 + b_{-1} . 2^{-1} + ... +  b_{k} . 2^{-k}"/></p>
+</div><p>An <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k&gt;</span></code> fits in the same number of bits as an N-bit unsigned integer. The only difference lies in our interpretation of what these bits mean. The following is an example for a <code class="docutils literal notranslate"><span class="pre">ufix&lt;6,4&gt;</span></code>. A given bit pattern
+can be evaluated to the formulas above to compute the integer value as well as the fixed-point value.</p>
+<div class="figure align-center" style="width: 500px">
+<img alt="_images/ufix-example.jpg" src="_images/ufix-example.jpg" />
+</div>
+<p>There is a simple relationship between the value of an unsigned integer of N bits, and the value of an unsigned fixed point number <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k&gt;</span></code>.</p>
+<div class="math">
+<p><img src="_images/math/d1e8f293d84549dc024658eee6297c1a43c0ef7b.png" alt="V_{uint&lt;N&gt;} &amp;= V_{ufix&lt;N,k&gt;} . 2^k \\
+V_{ufix&lt;N,k&gt;} &amp;= V_{uint&lt;N&gt;} . 2^{-k}"/></p>
+</div></div>
+<div class="section" id="signed-fixed-point-representation">
+<h3>Signed Fixed-point representation<a class="headerlink" href="#signed-fixed-point-representation" title="Permalink to this headline">¶</a></h3>
+<p>Signed values in integer arithmetic are captured in one of three different ways. The most common method is two’s complement, and we’ll focus on this method. The two other methods are one’s complement and sign-magnitude representation.</p>
+<p>In a two’s complement representation, the value of a signed integer <code class="docutils literal notranslate"><span class="pre">int&lt;N&gt;</span></code> is defined as follows.</p>
+<div class="math">
+<p><img src="_images/math/f57d7e3cd7343a9d4caddf25669f09db7e55f27c.png" alt="V_{int&lt;N&gt;} = b_{N-1} . [-(2^{N-1})] + b_{N-2} . 2^{N-2} + ... + b_1 . 2 + b_0"/></p>
+</div><p>Thus, the weight of the most significant bit is negative. Similarly, the value of a signed fixed-point number
+<code class="docutils literal notranslate"><span class="pre">fix&lt;N,k&gt;</span></code> is defined as follows.</p>
+<div class="math">
+<p><img src="_images/math/62ff27f012112a62e1f24f3225839ea510ea1c42.png" alt="V_{fix&lt;N,k&gt;} = b_{N-k-1} . [-(2^{N-k-1})] + b_{N-k-2} . 2^{N-2} + ... + b_0 + b_{-1} . 2^{-1} + ... +  b_{k} . 2^{-k}"/></p>
+</div><div class="figure align-center" style="width: 500px">
+<img alt="_images/fix-example.jpg" src="_images/fix-example.jpg" />
+</div>
+<p>Thus the only difference between signed and unsigned representation is the weight of the most significant bit (positive for unsigned, negative for signed two’s complement.) The relationship between the value of the integer and fixed-point representation is the same as above:</p>
+<div class="math">
+<p><img src="_images/math/14266753ef1a26b49196fced69804e7af4a7f132.png" alt="V_{int&lt;N&gt;} &amp;= V_{fix&lt;N,k&gt;} . 2^k \\
+V_{fix&lt;N,k&gt;} &amp;= V_{int&lt;N&gt;} . 2^{-k}"/></p>
+</div></div>
+<div class="section" id="conversion-from-floating-point-to-fixed-point">
+<h3>Conversion from Floating Point to Fixed Point<a class="headerlink" href="#conversion-from-floating-point-to-fixed-point" title="Permalink to this headline">¶</a></h3>
+<p>N-bit fixed-point numbers can be conveniently represented as N-bit integers,
+and in a C program we will use integer data types (<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">unsigned</span></code>) to
+store fixed-point numbers. A floating-point number is converted to a fixed-point number by proper scaling and conversion to an integer data
+type.</p>
+<p>To convert a floating point number to fixed point, we first scale it by <img class="math" src="_images/math/76a781b2409a864f3234599fc4ebc8c0f755be9f.png" alt="2^k"/> up so that the least significant fractional bit gets unit weight. This conversion can lead to precision loss (at the LSB side) and overflow (at the MSB side). The following program illustrates the conversion to a <code class="docutils literal notranslate"><span class="pre">fix&lt;8,6&gt;</span></code> datatype.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="n">void</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nb">float</span> <span class="n">taps</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">};</span>
+
+  <span class="nb">int</span> <span class="n">taps_8_6</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>    <span class="o">//</span> <span class="n">a</span> <span class="n">fix</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="o">&gt;</span> <span class="nb">type</span>
+  <span class="n">unsigned</span> <span class="n">i</span><span class="p">;</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="n">taps_8_6</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span><span class="p">));</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%+4.2f</span><span class="s2"> </span><span class="si">%10d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">taps_8_6</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The program generates the following output:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+</span><span class="mf">0.10</span>          <span class="mi">6</span>
+<span class="o">+</span><span class="mf">1.20</span>         <span class="mi">76</span>
+<span class="o">-</span><span class="mf">0.30</span>        <span class="o">-</span><span class="mi">19</span>
+<span class="o">+</span><span class="mf">3.40</span>        <span class="mi">217</span>
+<span class="o">-</span><span class="mf">1.50</span>        <span class="o">-</span><span class="mi">96</span>
+</pre></div>
+</div>
+<p>The value of a <code class="docutils literal notranslate"><span class="pre">fix&lt;8,6&gt;</span></code> lies between -2 (for pattern 10000000)
+and 1.984375 (for pattern 01111111), which corresponds to integer values -128 to 127. Hence, the floating value +3.40 has suffered overflow during the conversion; its integer value is 217.</p>
+<p>In addition, some of the floating point
+numbers (like 0.1) cannot be expressed exactly. Indeed, the value 6
+maps to the bit pattern 00000110, or 0.09375. Hence, that conversion
+suffered precision loss.</p>
+<p>Note that negative numbers are printed negative because of sign extension. For example, -19 corresponds to the bit pattern equals 1111…11101101. To lower 8 bits are 11101101, while the upper 24 bits are all 1, extending the sign bit of fix&lt;8,6&gt;.</p>
+<p>Overflow is a highly non-linear effect with dramatic impact on the results of DSP computation. It must be detected (and prevented).</p>
+</div>
+<div class="section" id="conversion-from-fixed-point-to-floating-point">
+<h3>Conversion from Fixed Point to Floating Point<a class="headerlink" href="#conversion-from-fixed-point-to-floating-point" title="Permalink to this headline">¶</a></h3>
+<p>After computations in fixed point precision are complete, we can convert
+back to a floating point representation, in order to obtain the numerical
+result. The conversion will scale down the integer value of a fixed-point
+number by a factor <img class="math" src="_images/math/76a781b2409a864f3234599fc4ebc8c0f755be9f.png" alt="2^k"/>, so that the least significant bit gets
+its actual weight.</p>
+<p>Special care has to be taken if the MSB of the fixed point representation is not located at the MSB of the integer representation. Indeed, we obtain the correct sign in the converted result, we have to replicate the MSB of the fixed point representation to get sign extension. The following program illustrates the conversion from a <code class="docutils literal notranslate"><span class="pre">fix&lt;8,6&gt;</span></code> datatype.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="n">void</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nb">int</span> <span class="n">taps_8_6</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">6</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="o">-</span><span class="mi">19</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="o">-</span><span class="mi">96</span><span class="p">};</span> <span class="o">//</span> <span class="n">a</span> <span class="n">fix</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="o">&gt;</span> <span class="nb">type</span>
+
+  <span class="nb">float</span> <span class="n">taps</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>    <span class="o">//</span> <span class="n">a</span> <span class="n">fix</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="o">&gt;</span> <span class="nb">type</span>
+  <span class="n">unsigned</span> <span class="n">i</span><span class="p">;</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+      <span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">taps_8_6</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span><span class="p">);</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%10d</span><span class="s2"> </span><span class="si">%+4.6f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">taps_8_6</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The program generates the following output:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="mi">6</span> <span class="o">+</span><span class="mf">0.093750</span>
+ <span class="mi">76</span> <span class="o">+</span><span class="mf">1.187500</span>
+<span class="o">-</span><span class="mi">19</span> <span class="o">-</span><span class="mf">0.296875</span>
+<span class="mi">127</span> <span class="o">+</span><span class="mf">1.984375</span>
+<span class="o">-</span><span class="mi">96</span> <span class="o">-</span><span class="mf">1.500000</span>
+</pre></div>
+</div>
+<p>Note that the fixed-point conversion introduces quantization which prevents  perfect reconstruction of the floating-point value. For example, float(0.1) can be converted to fix&lt;8,6&gt;(6), but the opposite conversion yields float(0.09375).</p>
+</div>
+</div>
+<div class="section" id="fixed-point-arithmetic">
+<h2>Fixed Point Arithmetic<a class="headerlink" href="#fixed-point-arithmetic" title="Permalink to this headline">¶</a></h2>
+<p>Because fixed-point representation is so strongly related to integer representation, we are able to express arithmetic operations on fixed-point numbers in terms of integer operations. Let’s first derive a few basic rules. We’ll first make the derivation for unsigned numbers.</p>
+<div class="section" id="addition">
+<h3>Addition<a class="headerlink" href="#addition" title="Permalink to this headline">¶</a></h3>
+<p>When we add two <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k&gt;</span></code> numbers, then the result is an <code class="docutils literal notranslate"><span class="pre">ufix&lt;N+1,k&gt;</span></code> number. The extra bit at the MSB side is there to capture the carry bit, in case one is generated. The subtraction of two <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k&gt;</span></code> numbers uses the same rule, since the subtraction can be defined as the addition of a <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k&gt;</span></code> with the two’s complement version of the other <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k&gt;</span></code>.</p>
+<p>When we add a <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k1&gt;</span></code> number to a <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k2&gt;</span></code> number, with k1 &gt; k2, then the two numbers have to be aligned first. This will increase the wordlength of the sum with <code class="docutils literal notranslate"><span class="pre">k1</span> <span class="pre">-</span> <span class="pre">k2</span></code> bits. However, if we desire to capture the sum as an <code class="docutils literal notranslate"><span class="pre">N+1</span></code> bit number, then there are two possible alignments.</p>
+<ol class="arabic simple">
+<li>For a <code class="docutils literal notranslate"><span class="pre">ufix&lt;N+1,k1&gt;</span></code> sum, we will have to increase the number of <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k2&gt;</span></code> fractional bits with a left-shift before addition.</li>
+<li>For a <code class="docutils literal notranslate"><span class="pre">ufix&lt;N+1,k2&gt;</span></code> sum, we will have to decrease the number of <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k1&gt;</span></code> fractional bits with a right-shift before addition.</li>
+</ol>
+<p>Since the total sum has only <code class="docutils literal notranslate"><span class="pre">N+1</span></code> bits, there is potential precision loss, as illustrated in the following figure. Left-shifting V2 may case an overflow when MSB-side bits are lost, while right-shifting V1 may cause precision loss when LSB-side bits are lost. The bottom line is that, when combining numbers with a different number of fractional bits, an alignment must be done which may cause either precision loss or else overflow.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/fracadd.jpg" src="_images/fracadd.jpg" />
+</div>
+</div>
+<div class="section" id="multiplication">
+<h3>Multiplication<a class="headerlink" href="#multiplication" title="Permalink to this headline">¶</a></h3>
+<p>When we multiply two <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k&gt;</span></code> numbers, then the result is a <code class="docutils literal notranslate"><span class="pre">ufix&lt;2N,2k&gt;</span></code> number. If the result has to be captured in an <code class="docutils literal notranslate"><span class="pre">ufix&lt;N,k&gt;</span></code>, then the result of the multiplication has to be right-shifted over k bits.
+In this case, precision loss may occur both at the MSB side as well as the LSB side.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/fracmul.jpg" src="_images/fracmul.jpg" />
+</div>
+</div>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>In C coding, we use the following precision rules.</p>
+<ol class="arabic simple">
+<li>Adding two 32-bit integers will yield a 32-bit integer. Hence, overflow is possible.</li>
+<li>Multiplying two 32-bit integers will yield a 32-bit product, which may cause overflow.</li>
+</ol>
+<p>When we write a C program using integers to emulate fixed-point data types, the same precision rules will still apply. The following example illustrates how multiplication and addition in fixed-point representation works.
+We assume a vector with <code class="docutils literal notranslate"><span class="pre">fix&lt;8,7&gt;</span></code> coefficients which is multiplied with <code class="docutils literal notranslate"><span class="pre">fix&lt;8,7&gt;</span></code> tap values. We will implement these data types in C <code class="docutils literal notranslate"><span class="pre">int</span></code> datatype.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="n">void</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nb">float</span> <span class="n">c</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">};</span>
+    <span class="nb">float</span> <span class="n">taps</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">};</span>
+    <span class="nb">float</span> <span class="n">result</span><span class="p">;</span>
+
+    <span class="nb">int</span> <span class="n">c_8_7</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+    <span class="nb">int</span> <span class="n">taps_8_7</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+    <span class="nb">int</span> <span class="n">result_16_14</span><span class="p">;</span>
+
+    <span class="nb">int</span> <span class="n">i</span><span class="p">;</span>
+
+    <span class="o">//</span> <span class="n">convert</span> <span class="n">c</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="n">to</span> <span class="n">c_8_7</span> <span class="p">(</span><span class="n">fix</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">,</span><span class="mi">7</span><span class="o">&gt;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">c_8_7</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mi">128</span><span class="p">);</span>
+
+    <span class="o">//</span> <span class="n">convert</span> <span class="n">taps</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="n">to</span> <span class="n">tapsint</span> <span class="p">(</span><span class="n">fix</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">,</span><span class="mi">7</span><span class="o">&gt;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">taps_8_7</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mi">128</span><span class="p">);</span>
+
+    <span class="o">//</span> <span class="n">perform</span> <span class="n">multiplication</span> <span class="n">on</span> <span class="n">a</span> <span class="o">&lt;</span><span class="mi">32</span><span class="p">,</span><span class="mi">14</span><span class="o">&gt;</span> <span class="n">data</span> <span class="nb">type</span>
+    <span class="o">//</span> <span class="o">&lt;</span><span class="mi">8</span><span class="p">,</span><span class="mi">7</span><span class="o">&gt;</span> <span class="o">*</span> <span class="o">&lt;</span><span class="mi">8</span><span class="p">,</span><span class="mi">7</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="o">&gt;</span>
+    <span class="n">result_16_14</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">result_16_14</span> <span class="o">+=</span> <span class="p">(</span><span class="n">c_8_7</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">taps_8_7</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+
+  <span class="o">//</span> <span class="n">perform</span> <span class="n">multiplication</span> <span class="n">on</span> <span class="n">a</span> <span class="nb">float</span> <span class="n">data</span> <span class="nb">type</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;flp: </span><span class="si">%f</span><span class="s2">  fixp: </span><span class="si">%f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">result_16_14</span> <span class="o">*</span> <span class="mf">1.0</span><span class="n">f</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">14</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note how we convert the accumulate result back to a floating point value. Since the result of the calculation is a <code class="docutils literal notranslate"><span class="pre">&lt;16,14&gt;</span></code> data type, we have to divide the result by <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;&lt;</span> <span class="pre">14</span></code> to find the equivalent real value. The output of the program is shown next.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flp</span><span class="p">:</span> <span class="mf">0.120000</span>  <span class="n">fixp</span><span class="p">:</span> <span class="mf">0.115967</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="dsp-with-fixed-point-arithmetic">
+<h2>DSP with fixed-point arithmetic<a class="headerlink" href="#dsp-with-fixed-point-arithmetic" title="Permalink to this headline">¶</a></h2>
+<p>When computing a digital filter using fixed-point arithmetic, the precision loss is more pronounced that with floating-point arithmetic. The systematic errors that occur during the computation of a digital filter add up to ** quantization noise**. We’ll discuss the nature of quantization noise by
+means of an example using computations on a <code class="docutils literal notranslate"><span class="pre">fix&lt;3,2&gt;</span></code> datatype.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/fix32quant.jpg" src="_images/fix32quant.jpg" />
+</div>
+<p>The blue staircase on the curve represents the conversion from floating point to fixed-point representation. For a <code class="docutils literal notranslate"><span class="pre">fix&lt;3,2&gt;</span></code>, the smallest quantization step is 0.25 so that the fixed point value increments for every 0.25 step. The highest positive output value, ‘011’, corresponds to floating point value 0.75. If we increase one more quantization step, overflow will occur.
+At the negative side, the staircase decreases a step for every 0.25 decrease.</p>
+<p>An alternate of overflow is <em>saturation</em>, a technique that caps the most positive or most negative value that can be held in a fixed-point representation. This decreases the highly non-linear overflow effect in DSP. The implementation of saturating arithmetic, however, is more complicated than integer arithmetic. In our implementations, we will rely on plain integer arithmetic, which has overflow.</p>
+<p>The red curve indicates the <strong>quantization error</strong>, the difference between the quantized value and the real (floating point) value. The quantization error for two’s complement fixed-point representation is always negative, which means that the value in the fixed-point representation always under-estimates the true value. The particular sawtooth shape of the error curve, however, demonstrates an important property of quantization noise: it is uniformly distributed over the range of one quantization step. In this case,
+the quantization error is uniformly distributed over the range [-0.25, 0].</p>
+<p>Quantization noise will degrade signal quality. Since it can be treated as a uniformly distributed random variable, quantization noise therefore appears a as wideband noise in the signal output.</p>
+<div class="section" id="fixed-point-quantization-on-the-msp-432-kit">
+<h3>Fixed-point quantization on the MSP-432 kit<a class="headerlink" href="#fixed-point-quantization-on-the-msp-432-kit" title="Permalink to this headline">¶</a></h3>
+<p>So far, we have converted the 14-bit ADC values into floating point values before starting the filtering, and from floating point values back into 14-bit DAC values after filtering.</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">float32_t</span> <span class="nb">input</span> <span class="o">=</span> <span class="n">adc14_to_f32</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+
+  <span class="o">//</span> <span class="o">...</span> <span class="n">processing</span>
+
+  <span class="k">return</span> <span class="n">f32_to_dac14</span><span class="p">(</span><span class="nb">input</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For fixed-point computations, we make use of one of two possible conversions to fixedpoint. <code class="docutils literal notranslate"><span class="pre">adc14_to_q15()</span></code> converts ADC samples into a fix&lt;16,15&gt; data type, while <code class="docutils literal notranslate"><span class="pre">adc14_to_q31()</span></code> converts ADC samples into a fix&lt;32,31&gt; data type.</p>
+<p>The following figure shows the correspondence between analog values, DAC and ADC codes, floating point values, and fixed-point values.</p>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/q15dac.jpg" src="_images/q15dac.jpg" />
+</div>
+<p>When writing fixed-point implementations of a filter, it’s crucial to remember the data type of the samples: <code class="docutils literal notranslate"><span class="pre">fix&lt;16,15&gt;</span></code> for a Q15, and <code class="docutils literal notranslate"><span class="pre">fix&lt;32,31&gt;</span></code> for a Q31. For example, if you multiply these samples with coefficients of type Q15 (<code class="docutils literal notranslate"><span class="pre">fix&lt;16,15&gt;</span></code>), then the result will be <code class="docutils literal notranslate"><span class="pre">fix&lt;32,30&gt;</span></code> for Q15 * Q15, and <code class="docutils literal notranslate"><span class="pre">fix&lt;48,46&gt;</span></code> for Q15 * Q31.</p>
+<p>The former case, Q15 * Q15, requires downshifting before it can be send to the DAC output. The latter case, Q15 * Q31, will require a 64-bit integer, since 48 bits do not fit into a standard 32-bit integer.</p>
+<p>Let’s look at the fixed-point implementation of the following first-order low-pass filter:</p>
+<div class="math">
+<p><img src="_images/math/6f994b552a920d5758578e32fb227e06516fb600.png" alt="H(z) = \frac{1}{1 - 0.5 . z^{-1}}"/></p>
+</div><p>A floating-point version of this filter is straightforward to capture:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">float32_t</span> <span class="n">lpfloat</span><span class="p">(</span><span class="n">float32_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">static</span> <span class="n">float32_t</span> <span class="n">state</span><span class="p">;</span>
+    <span class="n">float32_t</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">state</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">;</span>
+    <span class="n">state</span>       <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To quantize this design, we adopt a Q15 data type for the input x.
+In addition, the state variable and the coefficient 0.5 are represented
+as Q15 values as well. The complete quantized filter is given by the following
+code:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">q15_t</span> <span class="n">lpq15</span><span class="p">(</span><span class="n">q15_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">static</span> <span class="nb">int</span> <span class="n">state</span><span class="p">;</span>                           <span class="o">//</span> <span class="n">accumulate</span> <span class="k">as</span> <span class="n">fix</span><span class="o">&lt;</span><span class="mi">16</span><span class="p">,</span><span class="mi">15</span><span class="o">&gt;</span>
+    <span class="n">const</span> <span class="nb">int</span> <span class="n">coeff</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">15</span><span class="p">));</span>  <span class="o">//</span> <span class="n">coeff</span> <span class="k">as</span> <span class="o">&lt;</span><span class="mi">16</span><span class="p">,</span><span class="mi">15</span><span class="o">&gt;</span>
+    <span class="nb">int</span> <span class="n">mul</span> <span class="o">=</span> <span class="n">state</span> <span class="o">*</span> <span class="n">coeff</span><span class="p">;</span>                    <span class="o">//</span> <span class="n">mul</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="mi">32</span><span class="p">,</span><span class="mi">30</span><span class="o">&gt;</span>
+    <span class="n">state</span>   <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">mul</span> <span class="o">&gt;&gt;</span> <span class="mi">15</span><span class="p">);</span>                  <span class="o">//</span> <span class="n">add</span> <span class="o">&lt;</span><span class="mi">16</span><span class="p">,</span><span class="mi">15</span><span class="o">&gt;</span> <span class="ow">and</span> <span class="o">&lt;</span><span class="mi">17</span><span class="p">,</span><span class="mi">15</span><span class="o">&gt;</span>
+    <span class="nb">int</span> <span class="n">y</span>   <span class="o">=</span> <span class="n">state</span><span class="p">;</span>                            <span class="o">//</span> <span class="k">return</span> <span class="n">output</span>
+    <span class="k">return</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h2>
+<p>We introduced fixed-point data representation as a technique to implement DSP programs using integer arithmetic. In applications where floating point hardware is unavailable, fixed-point implementations are crucial.</p>
+<p>We discussed the representation of a fixed-point data type, as well as the rules for addition and multiplication using fixed-point data types. Crucially, in fixed-point arithmetic the programmer is responsible for data alignment of the expression operands. That alignment, in addition to ensuring that sufficient wordlengths are available (so as to prevent overflow), is the key challenge in using fixed-point arithmetic.</p>
+<p>We discussed the impact of fixed-point arithmetic on DSP, and in particular the additional quantization noise that gets generated because of fixed-point. Finally, we illustrated fixed-point arithmetic in a simple lowpass filter. A tool such as Matlab <code class="docutils literal notranslate"><span class="pre">filterDesigner</span></code> has built-in logic to quantize filter coefficients to a desired length, while analyzing the impact of quantization on the filter characteristic.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lecture7.html" class="btn btn-neutral float-right" title="L7: Performance Optimization in DSP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lecture5.html" class="btn btn-neutral" title="L5: IIR filters, and their implementation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

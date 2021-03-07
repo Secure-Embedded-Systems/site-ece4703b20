@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Midterm Questions &mdash; Real Time Digital Signal Processing B Term 2020  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Real Time Digital Signal Processing B Term 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lectures.html">Lectures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="labs.html">Labs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="techdoc.html">Technical Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How-To Guides</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Real Time Digital Signal Processing B Term 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Midterm Questions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/midb20.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="midterm-questions">
+<h1>Midterm Questions<a class="headerlink" href="#midterm-questions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="program-1">
+<span id="program1"></span><h2>Program 1<a class="headerlink" href="#program-1" title="Permalink to this headline">¶</a></h2>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;ti/devices/msp432p4xx/driverlib/driverlib.h&gt;</span>
+<span class="c1">#include &quot;msp432_boostxl_init.h&quot;</span>
+
+<span class="n">uint16_t</span> <span class="n">lookup</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mh">0x2000</span><span class="p">,</span> <span class="mh">0x2000</span><span class="p">,</span> <span class="mh">0x2000</span><span class="p">,</span> <span class="mh">0x2000</span><span class="p">,</span>
+                       <span class="mh">0x3000</span><span class="p">,</span> <span class="mh">0x3000</span><span class="p">,</span> <span class="mh">0x3000</span><span class="p">,</span> <span class="mh">0x3000</span><span class="p">,</span>
+                       <span class="mh">0x2000</span><span class="p">,</span> <span class="mh">0x2000</span><span class="p">,</span> <span class="mh">0x2000</span><span class="p">,</span> <span class="mh">0x2000</span><span class="p">};</span>
+<span class="n">static</span> <span class="nb">int</span> <span class="n">ptr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ptr</span> <span class="o">=</span> <span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">12</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">lookup</span><span class="p">[</span><span class="n">ptr</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">WDT_A_hold</span><span class="p">(</span><span class="n">WDT_A_BASE</span><span class="p">);</span>
+
+    <span class="n">msp432_boostxl_init_intr</span><span class="p">(</span><span class="n">FS_32000_HZ</span><span class="p">,</span> <span class="n">BOOSTXL_J1_2_IN</span><span class="p">,</span> <span class="n">processSample</span><span class="p">);</span>
+    <span class="n">msp432_boostxl_run</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="figure-1">
+<span id="figure1"></span><h2>Figure 1<a class="headerlink" href="#figure-1" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/midb20q2.jpg" src="_images/midb20q2.jpg" />
+</div>
+<p><strong>Option A</strong></p>
+<div class="math">
+<p><img src="_images/math/430c842c01809b89d2acd25619175effa194afb7.png" alt="H(z) = \frac{1 - z^{-1}/2 + z^{-2}/4}{1 - z^{-1}/(2 \sqrt 2)}"/></p>
+</div><p><strong>Option B</strong></p>
+<div class="math">
+<p><img src="_images/math/2c1e20bfa70e36ee96537c34136616273569676b.png" alt="H(z) = \frac{1 - z^{-2}/16}{1 - z^{-1}/2 + z^{-2}/4}"/></p>
+</div><p><strong>Option C</strong></p>
+<div class="math">
+<p><img src="_images/math/abdd8abc83e980f4aae202054e5c7144896f7113.png" alt="H(z) = \frac{1 + z^{-1}/(2 \sqrt 2) + z^{-2}/16}{1 - z^{-1}/2 + z^{-2}/4}"/></p>
+</div><p><strong>Option D</strong></p>
+<div class="math">
+<p><img src="_images/math/59ead38d694e092ecfb7aa1f822905b9df09cc79.png" alt="H(z) = \frac{1 + z^{-1}/(2 \sqrt 2) + z^{-2}/16}{1 - z^{-1}/2}"/></p>
+</div><p><strong>Option E</strong></p>
+<div class="math">
+<p><img src="_images/math/d679992189db79433c1cb2ea79b978f4653d8c3d.png" alt="H(z) = \frac{1 + z^{-1}/(2 \sqrt 2)}{1 - z^{-1}/2 - z^{-2}/4}"/></p>
+</div></div>
+<div class="section" id="figure-2">
+<span id="figure2"></span><h2>Figure 2<a class="headerlink" href="#figure-2" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" style="width: 600px">
+<img alt="_images/midb20q4.jpg" src="_images/midb20q4.jpg" />
+</div>
+</div>
+<div class="section" id="figure-3">
+<h2>Figure 3<a class="headerlink" href="#figure-3" title="Permalink to this headline">¶</a></h2>
+<p><strong>G1(z)</strong></p>
+<div class="math">
+<p><img src="_images/math/3450133b238c3ab5e128d577d670089d44af3517.png" alt="G1(z) = \frac{1}{1 - 0.5.z^{-1}}"/></p>
+</div><p><strong>G2(z)</strong></p>
+<div class="math">
+<p><img src="_images/math/d1e519669ad8f0251b56a8bb5e3edbfc9e5441c0.png" alt="G2(z) = \frac{1}{1 + 0.5.z^{-1}}"/></p>
+</div><p><strong>G3(z)</strong></p>
+<div class="math">
+<p><img src="_images/math/d23be638c241d7a0d59f1d1ed35e7785401d2c02.png" alt="G3(z) = {1 - 0.5.z^{-1}}"/></p>
+</div><p><strong>G4(z)</strong></p>
+<div class="math">
+<p><img src="_images/math/146b3543935f77f270c098d5e587ea0645519f85.png" alt="G4(z) = {1 + 0.5.z^{-1}}"/></p>
+</div></div>
+<div class="section" id="program-2">
+<span id="program2"></span><h2>Program 2<a class="headerlink" href="#program-2" title="Permalink to this headline">¶</a></h2>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;ti/devices/msp432p4xx/driverlib/driverlib.h&gt;</span>
+<span class="c1">#include &quot;msp432_boostxl_init.h&quot;</span>
+<span class="c1">#include &quot;msp432_arm_dsp.h&quot;</span>
+
+<span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+   <span class="n">float32_t</span> <span class="n">tap</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+
+   <span class="n">float32_t</span> <span class="nb">input</span> <span class="o">=</span> <span class="n">adc14_to_f32</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+
+   <span class="n">tap</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">tap</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+   <span class="n">tap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tap</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+   <span class="n">tap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+
+   <span class="k">return</span> <span class="n">f32_to_dac14</span><span class="p">((</span><span class="n">tap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">tap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">tap</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="mf">3.0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">WDT_A_hold</span><span class="p">(</span><span class="n">WDT_A_BASE</span><span class="p">);</span>
+
+    <span class="n">msp432_boostxl_init_intr</span><span class="p">(</span><span class="n">FS_32000_HZ</span><span class="p">,</span> <span class="n">BOOSTXL_J1_2_IN</span><span class="p">,</span> <span class="n">processSample</span><span class="p">);</span>
+    <span class="n">msp432_boostxl_run</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="program-3">
+<span id="program3"></span><h2>Program 3<a class="headerlink" href="#program-3" title="Permalink to this headline">¶</a></h2>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">float32_t</span> <span class="n">taps</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+<span class="n">float32_t</span> <span class="n">coeff</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>
+                       <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>
+                       <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>
+                       <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">};</span>
+
+<span class="n">uint16_t</span> <span class="n">processSample</span><span class="p">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">float32_t</span> <span class="nb">input</span> <span class="o">=</span> <span class="n">adc14_to_f32</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+
+    <span class="n">taps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">input</span><span class="p">;</span>
+
+    <span class="n">float32_t</span> <span class="n">q</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="n">uint16_t</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">16</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">+=</span> <span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">coef</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">16</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+        <span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">taps</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+
+    <span class="k">return</span> <span class="n">f32_to_dac14</span><span class="p">(</span><span class="n">q</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Patrick Schaumont.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
